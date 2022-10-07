@@ -1,0 +1,516 @@
+\documentclass[a4paper]{extarticle}
+\usepackage[utf8]{inputenc}
+\usepackage[italian]{babel}
+\selectlanguage{italian}
+\usepackage[table]{xcolor}
+\usepackage{xcolor}
+\usepackage{circuitikz}
+\usetikzlibrary{positioning, circuits.logic.US}
+\usetikzlibrary{shapes.geometric, arrows}
+\usetikzlibrary {shapes.gates.logic.US, shapes.gates.logic.IEC, calc}
+\tikzset {branch/.style={fill, shape = circle, minimum size = 3pt, inner sep = 0pt}}
+\usetikzlibrary{matrix,calc}
+\usepackage{multirow}
+\usepackage{float}
+\usepackage{geometry}
+\usepackage{tabularx}
+\usepackage{pgf-pie}
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{color, soul}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{subfig}
+\graphicspath{ {./img/} }
+\newtheorem{theorem}{Teorema}[section]
+\newtheorem{corollary}{Corollario}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+
+% Specifiche
+\geometry{
+ a4paper,
+ top=20mm,
+ left=30mm,
+ right=30mm,
+ bottom=30mm
+}
+
+\nocite{*}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LO]{\nouppercase{\leftmark}}
+\fancyfoot[CE, CO]{\thepage}
+\addtolength{\headheight}{1em}
+\addtolength{\footskip}{-0.5em}
+
+\newcommand{\quotes}[1]{``#1''}
+\renewcommand\tabularxcolumn[1]{>{\vspace{\fill}}m{#1}<{\vspace{\fill}}}
+\renewcommand\arraystretch{}
+\newcolumntype{P}{>{\centering\arraybackslash}X}
+
+\title{\textbf{Università di Trieste\\ \vspace{1em}
+Laurea in ingegneria elettronica e informatica}}
+\author{Enrico Piccin - Corso di Ricerca Operativa - Prof. Lorenzo Castelli}
+\date{Anno Accademico 2022/2023 - 3 Ottobre 2022}
+
+\begin{document}
+
+\vspace{-10mm}
+\maketitle
+
+\tableofcontents
+\newpage
+\begin{center}
+    3 Ottobre 2022
+\end{center}
+
+\vspace{1em}
+\noindent
+\section{Introduzione}
+Il termine \quotes{RICERCA OPERATIVA} sembra sia stato usato per la prima volta nel 1939, ma già precedentemente alcuni scienziati si erano occupati di problemi decisionali.\\
+Fra gli esempi isolati, ma importanti, di anticipazione dei metodi della ricerca operativa, possono essere considerati i seguenti:
+\begin{itemize}
+    \item Nel 1776, il matematico G. MONGE ha affrontato un problema di trasporti esaminandone con metodi analitici gli aspetti economici.
+    \item Nel 1885, F. W. TAYLOR ha pubblicato uno studio sui metodi di produzione
+    \item Nel 1908 A. K. ERLANG ha studiato il problema della congestione del traffico telefonico.
+\end{itemize}
+Tuttavia il progresso della ricerca operativa non si sarebbe forse verificato se non fosse stato per i suoi sviluppi nelle organizzazioni militari durante la seconda guerra mondiale.\\
+Durante la II Guerra Mondiale, infatti, i responsabili militari inglesi si rivolsero agli scienziati per chiedere il loro aiuto, quando iniziò l'attacco aereo tedesco sulla Gran Bretagna. Piccoli gruppi di scienziati, provenienti da diverse discipline, lavorarono su questi problemi con notevole successo nel periodo 1939-1940 (OR team).\\
+Tali gruppi di scienziati avevano come riferimenti i responsabili delle operazioni militari e quindi il loro lavoro divenne noto come \textit{operational research} = \textbf{ricerca delle operazioni} (militari).\\
+Dopo la guerra, questi operatori vennero, poco a poco, assorbiti dall'industria, dalle aziende di consulenza, da università e da organizzazioni statali. Oggi la maggior parte delle grandi imprese si serve della ricerca operativa.
+
+\vspace{1em}
+\noindent
+\subsection{Definizione di Ricerca Operativa}
+Di seguito si espone la definizione formale di \textbf{ricerca operativa}:
+
+% Tabella per le definizione di concetti, etc...
+\vspace{1em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{RICERCA OPERATIVA}}\\
+    \parbox{\linewidth}{La ricerca operativa è l'\textbf{applicazione del metodo} scientifico da parte di gruppi interdisciplinari a sistemi complessi e organizzati p\textbf{er fornire al personale dirigente soluzioni utilizzabili nei processi decisionali} (Morse e Kimball).\\
+    Più specificatamente, la \textbf{ricerca operativa} è la branca della \textbf{matematica applicata} in cui \textbf{problemi decisionali} complessi vengono analizzati e risolti mediante \textbf{modelli matematici} e \textbf{metodi quantitativi} avanzati (\textbf{ottimizzazione}, simulazione, ecc.) come supporto alle \textbf{decisioni} stesse. \vspace{3mm}}\\
+    \hline
+\end{tabularx}
+
+\vspace{2em}
+\noindent
+\textbf{Osservazione}: Com'è intuibile, all'interno della \textbf{Ricerca Operativa}, un ruolo di fondamentale importanza è svolto dalla \textbf{Programmazione Matematica}, che è la disciplina che ha per oggetto lo studio dei problemi in cui si vuole \textbf{minimizzare o massimizzare una funzione reale} definita su $\mathbb{R}^n$ (lo spazio delle $n$-uple reali) \textbf{le cui variabili sono vincolate ad appartenere ad una insieme prefissato}.\\
+Si tratta, quindi, di problemi di \textbf{ottimizzazione}, cioè problemi nei quali si desidera \textbf{minimizzare o massimizzare} una quantità che è espressa attraverso una funzione.
+
+\newpage
+\begin{center}
+    6 Ottobre 2022
+\end{center}
+\section{Problema di ottimizzazione}
+Di seguito si espone la definizione di \textbf{problema di ottimizzazione}:
+
+% Tabella per le definizione di concetti, etc...
+\vspace{1em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{PROBLEMA DI OTTIMIZZAZIONE}}\\
+    \parbox{\linewidth}{Un \textbf{problema di ottimizzazione} viene definito specificando:
+    \begin{itemize}
+        \item Un insieme $E$, i cui elementi si chiamano \textbf{soluzioni} (o decisioni o alternative);
+        \item Un sottoinsieme $F \subset E$ (definito \textbf{insieme ammissibile}). I suoi elementi si chiamano \textbf{soluzioni ammissibili}. Il suo complementare, $E - F$ si chiama \textbf{insieme inammissibile}: la relazione $x \in F$ prende il nome di \textbf{vincolo};
+        \item Una funzione
+        \[f : E \longmapsto \mathbb{R}\]
+        chiamata \textbf{funzione obiettivo}, che deve essere \textbf{minimizzata} o \textbf{massimizzata} a seconda dello scopo del problema.
+    \end{itemize}
+    \vspace{1mm}}\\
+    \hline
+\end{tabularx}
+
+\vspace{2em}
+\noindent
+\subsection{Soluzione ottimale}
+Di seguito si espone la definizione di \textbf{soluzione ottimale}:
+
+% Tabella per le definizione di concetti, etc...
+\vspace{1em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{SOLUZIONE OTTIMALE}}\\
+    \parbox{\linewidth}{Ogni elementi $x^* \in F$ tale che
+    \[f(x^*) \leq f(y), \forall y \in F\]
+    per un \textbf{problema di minimizzazione}, oppure $x^* \in F$ tale che
+    \[f(x^*) \geq f(y), \forall y \in F\]
+    per un \textbf{problema di massimizzazione}, prende iul nome di \textbf{optimum}, o \textbf{soluzione ottimale}.\\
+    Invece, il valore $v = f(x^*)$ della funzione in corrispondenza della soluzione ottimale, prende il nome di \textbf{valore ottimale}. Si userà, quindi, la seguente notazione per indicare valori ottimali in corrispondenza di problemi di minimizzazione e massimizzazione:
+    \begin{itemize}
+        \item $v=\min f(x), x \in F$, per la minimizzazione;
+        \item $v=\max f(x), x \in F$, per la massimizzazione.
+    \end{itemize}
+    \vspace{1mm}}\\
+    \hline
+\end{tabularx}
+
+\vspace{2em}
+\noindent
+\textbf{Osservazione}: Si osservi che un problema di massimizzazione (o minimizzazione) può essere facilmente trasformato in un problema di minimizzazione (o massimizzazione) sostituendo la funzione obiettivo $f$ con il suo opposto $-f$.
+
+\vspace{1em}
+\noindent
+\subsubsection{Classificazione dei problemi di ottimizzazione}
+I problemi di ottimizzazione vengono classificati secondo le tre categorie seguenti
+\begin{enumerate}
+    \item \textbf{Problemi di ottimizzazione nel continuo}: Le variabili decisionali possono assumere tutti i valori reali $x \in \mathbb{R}^n$. In aggiunta, si distinguono
+    \begin{enumerate}
+        \item \textbf{Ottimizzazioni vincolate}, quando l'insieme delle soluzioni ammissibili è $F \subset \mathbb{R}^n$
+        \item \textbf{Ottimizzazioni non vincolate}, quando l'insieme delle soluzioni ammissibili è $F = \mathbb{R}^n$
+    \end{enumerate}
+    \item \textbf{Problemi di ottimizzazione nel discreto}: Le variabili sono vincolate ad essere degli interi $x \in \mathbb{Z}^n$. In aggiunta, si distinguono
+    \begin{enumerate}
+        \item \textbf{Programmazione intera}, quando l'insieme delle soluzioni ammissibili è $F \subset \mathbb{Z}^n$
+        \item \textbf{Programmazione binaria (o booleana)}, quando $F \subset \{0,1\}^n$
+    \end{enumerate}
+    \item \textbf{Problemi di ottimizzazione mista}: Solamente alcune variabili decisionali sono vincolate ad essere intere.
+\end{enumerate}
+
+\vspace{1em}
+\noindent
+\textbf{Osservazione}: Non è possibile risolvere problemi di ottimizzazione discreta se non si è in grado di risolvere problemi di ottimizzazione continua.
+
+\vspace{1em}
+\noindent
+\textbf{Esempio 1}: Si consideri un'industria chimica, la quale fabbrica 4 tipi di fertilizzanti: Tipo  1,  Tipo  2,  Tipo  3 e Tipo  4,  la cui  lavorazione  è affidata a due reparti dell'industria: il reparto produzione e il reparto confezionamento. Per ottenere fertilizzante pronto per la vendita è necessaria, naturalmente, la lavorazione in entrambi i reparti.\\
+La tabella che segue riporta, per  ciascun  tipo  di  fertilizzante  i  tempi  (in ore)  necessari  di  lavorazione  in  ciascuno  dei  reparti  per  avere  una tonnellata di fertilizzante pronto per la vendita: 
+
+\vspace{1em}
+\noindent
+\begin{table}[H]
+    \rowcolors{1}{white}{white}
+    \setlength{\tabcolsep}{8pt}
+    \renewcommand{\arraystretch}{1.5}
+    \noindent
+    \centering
+    \begin{tabular}{l|cccc}
+        & Tipo 1 & Tipo 2 & Tipo 3 & Tipo 4\\
+        \hline
+        Reparto produzione      & 2   & 1.5  & 0.5  & 2.5\\
+        Reparto confezionamento & 0.5 & 0.25 & 0.25 & 1
+    \end{tabular}
+\end{table}    
+
+\vspace{1em}
+\noindent
+Dopo aver  dedotto  il  costo  del  materiale  grezzo,  ciascuna tonnellata  di  fertilizzante  dà  seguenti  profitti (prezzi espressi in Euro per tonnellata):
+
+\vspace{1em}
+\noindent
+\begin{table}[H]
+    \rowcolors{1}{white}{white}
+    \setlength{\tabcolsep}{8pt}
+    \renewcommand{\arraystretch}{1.5}
+    \noindent
+    \centering
+    \begin{tabular}{l|cccc}
+        & Tipo 1 & Tipo 2 & Tipo 3 & Tipo 4\\
+        \hline
+        Profitti netti & 250   & 230  & 110  & 350\\
+    \end{tabular}
+\end{table}    
+
+\vspace{1em}
+\noindent
+Determinare le quantità che si devono produrre settimanalmente di ciascun tipo di fertilizzante, in modo da massimizzare il profitto complessivo, sapendo che ogni settimana, il reparto produzione e il reparto confezionamento, hanno una capacità lavorativa massima rispettivamente di 100 e 50 ore.
+
+\vspace{1em}
+\noindent
+Appare naturale, in questo caso, introdurre quattro variabili decisionali reali $x_1,x_2,x_3,x_4$, rappresentative delle quantità di ciascun prodotto di Tipo 1, Tipo 2, Tipo 3 e Tipo 4, rispettivamente, da produrre in una settimana.\\
+Giacché ciascuna tonnellata di ognuno dei 4 fertilizzanti contribuisce al profitto totale, la funzione obiettivo può essere espressa come
+\[f(x_1,x_2,x_3,x_4)=250x_1+230x_2+110x_3+350x_4\]
+in quanto l'obiettivo dell'industria chimica è quello di scegliere in modo idoneo i valori delle quattro quantità $x_1,x_2,x_3,x_4$ in modo tale da massimizzare il profitto.\\
+Ovviamente, però, la capacità produttiva dell'industria limita il valore che le variabili $x_1,x_2,x_3,x_4$ potranno assumere, in quanto vi è un limite settimanale in termini di ore in cui i diversi stabilimenti potranno operare. Più precisamente, vi è un limite di 100 ore settimanali per il reparto di produzione e, siccome ogni tonnellata di fertilizzante di Tipo 1 impiega lo stabilimento produttivo per 2 ore, ogni tonnellata di fertilizzante di Tipo 2 impiega lo stabilimento produttivo per 1.5 ore e così via per gli altri tipo, si dovrà considerare il vincolo
+\[2x_1+1.5x_2+0.5x_3+2.5x_4 \leq 100\]
+Ragionando in modo analogo per lo stabilimento di confezionamento, si ottiene un secondo vincolo:
+\[0.5x_1+0.25x_2+0.25x_3+x_4 \leq 50\]
+Per essere coerenti, bisogna anche specificare un vincolo esplicito relativo al fatto che le variabili $x_1,x_2,x_3,x_4$ rappresentano quantità di prodotto che non possono essere negative, per cui si deve imporre anche che $x_1 \geq 0, x_2 \geq 0, x_3 \geq 0, x_4  \geq 0$.\\
+Ciò porta, naturalmente, a considerare il seguente insieme ammissibile $F$:
+\[F = \left\{x \in \mathbb{R}^4 \left\vert
+\rowcolors{1}{white}{white}
+\begin{array}{l}
+    2x_1+1.5x_2+0.5x_3+2.5x_4  \leq 100\\
+    0.5x_1+0.25x_2+0.25x_3+x_4 \leq 50\\
+    x_1 \geq 0, x_2 \geq 0, x_3 \geq 0, x_4  \geq 0
+\end{array}
+\right.
+\right\}\]
+Appare, quindi, evidente che vi sono dei vincoli, in quanto non si sta lavorando su tutto $\mathbb{R}^4$, ma ci sono delle limitazioni dettate dal tempo di lavorazione e confezionamento dei diversi fertilizzanti.
+
+\vspace{1em}
+\noindent
+\textbf{Esempio 2}: Si supponga di essere un investitore, il quale possiede €$1000$ da investire nel mercato finanziario, avente a disposizione $3$ opzioni di investimento (non divisibili), ciascuno caratterizzato da un costo di acquisto e da un rendimento riassunti nella tabella seguente:
+
+\begin{table}[H]
+\rowcolors{1}{white}{white}
+\setlength{\tabcolsep}{8pt}
+\renewcommand{\arraystretch}{1.5}
+\noindent
+\centering
+\begin{tabular}{l|ccc}
+    & A & B & C\\
+    \hline
+    Costo di acquisto & 750 & 200 & 800\\
+    Rendimento         & 20  & 5   & 10
+\end{tabular}
+\end{table}
+
+\vspace{1em}
+\noindent
+Procedendo sempre in modo naturalmente intuitivo, si possono introdurre $3$ variabili $x_A,x_B,x_C$ tali che
+\[x_i = \left\{
+    \rowcolors{1}{white}{white}
+    \begin{array}{ll}
+        0 & \text{ se l'investimento } i \text{-esimo non viene scelto}\\
+        1 & \text{ se l'investimento } i \text{-esimo viene scelto}\\
+    \end{array}
+\right.\]
+La funzione obiettivo da massimizzare è, ovviamente,
+\[f = 20x_A + 5x_B + 10x_C\]
+sempre tenendo in considerazione il vincolo per cui
+\[750 x_A + 200 x_B + 800 x_C \leq 1000\]
+ottenendo, quindi, l'insieme ammissibile seguente
+\[F = \{x \in \{0,1\}^3 \vert 750 x_A + 200 x_B + 800 x_C \leq 1000\}\]
+
+\newpage
+\noindent
+\section{Convessità}
+Di seguito si espone il significato di \textbf{convessità}:
+
+% Tabella per le definizione di concetti, etc...
+\vspace{1em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{CONVESSITÀ DI UNA FUNZIONE}}\\
+    \parbox{\linewidth}{Una funzione $f(x)$ di una variabile è una \textbf{funzione convessa} se, per ogni coppia $x'$ e $x''$ di valori di $x$ (con $x' < x''$) si ha
+    \[f(\lambda x'' + (1-\lambda)x') \leq \lambda f(x'') + (1-\lambda) f(x')\]
+    per ogni valore di $\lambda$ tale che $0 < \lambda < 1$.
+    \begin{itemize}
+        \item Una funzione è \textbf{strettamente convessa} se si può sostituire $\leq$ con $<$.
+        \item Una funzione è \textbf{concava} se la condizione di cui sopra vale quando si sostituisce $\leq$ con $\geq$.
+        \item Una funzione è \textbf{strettamente concava} se si può sostituire $\geq$ con $>$.
+    \end{itemize}
+    \vspace{1mm}}\\
+    \hline
+\end{tabularx}
+
+\vspace{2em}
+\noindent
+\textbf{Osservazione 1}: Ovviamente, in modo analogo, la funzione $f(x)$ è convessa se per ogni coppia di punti del grafico $f(x)$, il segmento che li congiunge sta interamente al di sopra del grafico di $f(x)$ o coincide con esso.\\
+In modo inverso, la funzione $f(x)$ è concava se per ogni coppia di punti del grafico $f(x)$, il segmento che li congiunge sta interamente al di sotto del grafico di $f(x)$ o coincide con esso.\\
+Una funzione lineare (ossia una retta) è una funzione che è sia concava che convessa.
+
+\vspace{1em}
+\noindent
+\textbf{Osservazione 2}: Sia $f(x)$ una funzione di una sola variabile che ammette derivata seconda per tutti i possibili valori di $x$. Allora $f(x)$ è:
+\begin{itemize}
+    \item convessa se e solo se 
+    \[\frac{d^2 f(x)}{dx^2} \geq 0\]
+    per ogni possibile valore di $x$
+    \item b
+    \item c
+    \item d
+\end{itemize}
+% - convessa se e solo se d2f(x) ≥ 0 per ogni possibile valore di x. dx2
+%  - strettamente convessa se e solo se d2f(x) > 0 per ogni possibile
+%  dx2
+% - concava se e solo se d2f(x) ≤ 0 per ogni possibile valore di x.
+% valore di x.
+%  dx2
+% - strettamente concava se e solo se d2f(x) < 0 per ogni possibile
+% valore di x.
+
+\vspace{1em}
+\noindent
+\textbf{Osservazione}: È facile risolvere problemi di carattere continuo in quanto la regione ammissibile è un insieme convesso, mentre nel caso di problemi discreti o binari ciò non accade.
+
+\newpage
+\begin{center}
+    7 Ottobre 2022
+\end{center}
+\vspace{1em}
+\noindent
+\section{Esempi di modelli}
+Di seguito si espongono alcuni modelli di problemi da risolvere:
+
+\vspace{1em}
+\noindent
+\subsection{La composizione ideale}
+Si consideri il seguente esempio: Si vuole realizzare una compilation ideale avendo a disposizione dei file musicali e un CD-ROM dalla capacità di 800 MB. L'indice di gradimento (in una scala da 1 a 10) e l'ingombro in MB di ogni file sono riportati nella tabella seguente:
+
+\begin{table}[H]
+\rowcolors{1}{white}{white}
+\setlength{\tabcolsep}{8pt}
+\renewcommand{\arraystretch}{1.5}
+\noindent
+\centering
+\begin{tabular}{l|cc}
+    Canzone & Gradimento & Ingombro\\
+    \hline
+    
+\end{tabular}
+\end{table}
+
+\vspace{1em}
+\noindent
+Si vuole decidere quali file inserire nel CD in modo tale da massimizzare il gradimento complessivo senza eccedere la capacità del CD.\\
+Il problema può essere modellato per mezzo di variabili decisionali binarie $x_1,x_2,x_3,x_4,x_5,x_6$ associate a ogni file musicale in modo tale che assumano valore 1 se il file in questione è inserito nel CD, il valore 0 in caso contrario. La funzione che bisogna massimizzare è
+\[f = 8 x_1 + 7 x_2 + 8.5 x_3 + 9 x_4 + 7.5 x_5 + 8 x_6\]
+rispettando il vincolo seguente
+\[210 x_1 + 190 x_2 + 235 x_3 + 250 x_4 + 200 x_5 + 220 x_6 \leq 800\]
+Generalizzando, indicato con $g_i$ il gradimento della canzone $i$-esima, con wi il suo ingombro e con C la capacità del CD il problema può essere formulato per mezzo del seguente problema PLI:
+
+\vspace{1em}
+\noindent
+\subsection{I treni combinati}
+Una compagnia ferroviaria deve decidere quanti treni combinati realizzare potendo scegliere tra due diversi modelli DeLuxe e FarWest. La composizione dei due treni è schematizzata nella tabella seguente.
+Il modo migliore per risolvere tale problema è quello di introdurre due variabili discrete $x_D$ e $x_F$, massimizzando la funzione obiettivo
+\[f = 3000 x_D + 8000 x_F\]
+rispettando, però, i seguenti vincoli
+\[\rowcolors{1}{white}{white}
+\begin{array}{l}
+    x_D + 3x_F \leq 12\\
+    x_D \leq 9\\
+    x_D \leq 10\\
+    2x_D + 3 x_f \leq 21\\
+    x_D + 2x_F \leq 10\\
+    x_D + x_F \leq 0\\
+    x_D \geq 0, x_F \geq 0
+\end{array}\]
+In cui la soluzione ottima è $x_D=6,x_F=2$ che consente di ottenere un profitto di $24000$
+
+\vspace{1em}
+\noindent
+\subsection{La raffineria}
+Una raffineria miscela quattro tipi di petrolio greggio in diverse proporzioni per ottenere tre diversi tipi di benzina: normale, blu super e V-power. La massima quantità disponibile di ciascun componente greggio e il corrispondente costo di acquisto sono indicati nella seguente tabella.
+
+\begin{table}[H]
+\rowcolors{1}{white}{white}
+\setlength{\tabcolsep}{8pt}
+\renewcommand{\arraystretch}{1.5}
+\noindent
+\centering
+\begin{tabular}{l|cc}
+    Componente & Disponibilità massima (barili) & Costo (€)\\
+    \hline
+    P1 & 500  & 9\\
+    P2 & 2400 & 7\\
+    P3 & 4000 & 12\\
+    P4 & 1500 & 6\\
+\end{tabular}
+\end{table}
+
+\vspace{1em}
+\noindent
+Per poter soddisfare le specifiche qualitative dei diversi tipi di benzina è necessario rispettare dei limiti assegnati circa la percentuale di ciascun componente impiegato. Tali limiti, insieme ai prezzi di vendita dei diversi tipi di benzina, sono indicati nella tabella che segue:
+
+\begin{table}[H]
+\rowcolors{1}{white}{white}
+\setlength{\tabcolsep}{8pt}
+\renewcommand{\arraystretch}{1.5}
+\noindent
+\centering
+\begin{tabular}{l|c|c}
+    Benzina & Specifiche qualitative & Prezzo (€ barile)\\
+    \hline
+    Normale   & almeno $20\%$ di P2 e al massimo il $30\%$ di P3  & 12\\
+    Blu super & almeno il $40\%$ di P3 & 18\\
+    V-power   & al massimo il $50\%$ di P2 & 10\\
+\end{tabular}
+\end{table}
+
+\vspace{1em}
+\noindent
+Si vuole determinare la miscela ottimale dei quattro componenti che massimizza il guadagno totale derivante dalla vendita delle benzine.\\
+Poiché bisogna decidere quale quantità di ogni componente greggio usare nella produzione di ciascun tipo di benzina, nella formulazione sono necessarie delle variabili a due indici: $x_{i,j}$ = barili di componente greggio $j$ usati nella produzione di benzina di tipo $i$.\\
+Ecco, quindi, che la funzione da massimizzare è
+\[f = \sum_{i=1}^{3} p_{i} \cdot \sum_{j=1}^{4} x_{i,j} - \sum_{i=1}^{3} \sum_{j=1}^{4} c_j \cdot x_{i,j} \]
+Rispettando, tuttavia, i seguenti vincoli
+\[\rowcolors{1}{white}{white}
+\begin{array}{l}
+    \displaystyle{x_{1,2} \geq 0.2 \cdot \sum_{j=1}^{4} x_{1,j}}\\
+    \displaystyle{x_{1,3} \leq 0,3 \cdot \sum_{j=1}^{4} x_{1,j}}\\
+    \displaystyle{x_{2,3} \geq 0.4 \cdot \sum_{j=1}^{4} x_{2,j}}\\
+    \displaystyle{x_{3,2} \leq 0,5 \cdot \sum_{j=1}^{4} x_{3,j}}\\
+    \displaystyle{\sum_{i=1}^{3} x_{i,j} \leq d_j \text{ con } j=1,\dots,4}\\
+    \displaystyle{x_{i,j} \geq 0 \text{ con } i=1,\dots,3 \text{ e } j=1,\dots,4}
+\end{array}\]
+Dove $c_j$ e $d_j$ indicano rispettivamente il costo e la disponibilità del componente greggio $j$ e $p_i$ indica il prezzo di vendita della benzina $i$.
+
+\vspace{1em}
+\noindent
+\subsection{La turnazione degli infermieri}
+Un ospedale deve organizzare i turni settimanali degli infermieri in modo da minimizzare il numero totale di persone coinvolte. Per soddisfare le esigenze di servizio occorre garantire ogni giorno la presenza di un numero minimo di infermieri, esposto nella tabella seguente:
+
+\begin{table}[H]
+\rowcolors{1}{white}{white}
+\setlength{\tabcolsep}{8pt}
+\renewcommand{\arraystretch}{1.5}
+\noindent
+\centering
+\begin{tabular}{l|c|c|c|c|c|c|c|}
+     & LUN & MAR & MER & GIO & VEN & SAB & DOM\\
+    \hline
+    Infermieri & 17 & 13 & 15 & 19 & 14 & 16 & 11\\
+    \hline
+\end{tabular}
+\end{table}
+
+\vspace{1em}
+\noindent
+I turni degli infermieri consistono in cinque giorni consecutivi di lavoro seguiti da due giorni di riposo (per esempio venerdì, sabato, domenica, lunedì, e martedì lavoro; mercoledì e giovedì riposo).\\
+Il problema può essere modellato mediante le variabili decisionali $x_i$ che rappresentano il numero di persone che iniziano il turno di
+lavoro il giorno $i$ per $i = 1,\dots,7$, in modo tale da minimizzare
+\[f = \sum_{i=7} x_i\]
+rispettando i seguenti vincoli:
+\begin{align}
+    x_1+x_2+x_3+x_4+x_5+x_6+x_7 \geq 17\\
+    x_1+x_2+x_3+x_4+x_5+x_6+x_7 \geq 13\\
+    x_1+x_2+x_3+x_4+x_5+x_6+x_7 \geq 15\\
+    x_1+x_2+x_3+x_4+x_5+x_6+x_7 \geq 19\\
+    x_1+x_2+x_3+x_4+x_5+x_6+x_7 \geq 14\\
+    x_1+x_2+x_3+x_4+x_5+x_6+x_7 \geq 16\\
+    x_1+x_2+x_3+x_4+x_5+x_6+x_7 \geq 11
+\end{align}
+
+\vspace{1em}
+\noindent
+\subsection{La campagna pubblicitaria}
+Un'agenzia di pubblicità deve realizzare una campagna promozionale avendo a disposizione due mezzi: gli annunci radiofonici e quelli su carta stampata.\\
+Sono ammessi annunci radiofonici con durata di frazione di minuto e annunci sul giornale di frazione di pagina. Le stazioni radiofoniche private praticano sconti in base alla quantità di minuti richiesti: il costo al minuto è di €100 meno €2 per ogni minuto utilizzato (in questo modo, il costo al minuto qualora se ne richiedono tre è di €94). Inoltre, le emittenti possono fornire al massimo 30 minuti di annunci in totale.\\
+I giornali, invece, richiedono un prezzo standard di €200 per pagina. Per vincoli contrattuali almeno un terzo della spesa deve consistere in annunci sui giornali. In base ai risultati statistici, si stima che tramite un minuto di annunci radiofonici si raggiungono 100.000 persone e tramite un annuncio su una pagina di giornale 15.000 persone. L'agenzia deve raggiungere almeno 3 milioni di persone minimizzando i costi della campagna.
+
+
+\vspace{1em}
+\noindent
+\subsection{Radioterapia}
+La radioterapia prevede l'utilizzo di un raggio esterno per far passare le radiazioni ionizzanti attraverso il corpo del paziente, danneggiando sia i tessuti cancerosi che quelli sani.\\
+Normalmente, diversi fasci vengono amministrati con precisione da diverse angolazioni in un piano bidimensionale. A causa dell'attenuazione, ogni raggio fornisce più radiazioni al tessuto vicino al punto di ingresso rispetto al tessuto vicino al punto di uscita. La dispersione causa anche una certa quantità di radiazione al tessuto al di fuori del percorso diretto del raggio.\\
+Poiché le cellule tumorali sono tipicamente microscopicamente intervallate tra cellule sane, il dosaggio di radiazioni in tutto la regione del tumore deve essere abbastanza grande da uccidere le cellule maligne, che sono leggermente più radiosensibili, ma abbastanza piccolo da risparmiare le cellule sane.\\
+Allo stesso tempo, la dose che colpisce i tessuti critici non deve superare i livelli di tolleranza stabiliti, al fine di prevenire complicazioni che possono essere più gravi della malattia stessa. Per la stessa ragione, la dose totale all'intera parte sana deve essere ridotta al minimo.\\
+L'obiettivo del progetto è selezionare la combinazione di raggi da utilizzare, e l'intensità di ciascuno, per generare la migliore distribuzione possibile della dose. (L'intensità della dose in qualsiasi punto del corpo viene misurata in unità chiamate kilorad.)
+
+
+
+\end{document}
