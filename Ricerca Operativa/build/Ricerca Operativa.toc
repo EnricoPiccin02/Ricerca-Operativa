@@ -7,10 +7,14 @@
 \contentsline {subsection}{\numberline {2.1}Soluzione ottimale}{3}{}%
 \contentsline {subsubsection}{\numberline {2.1.1}Classificazione dei problemi di ottimizzazione}{3}{}%
 \contentsline {section}{\numberline {3}Convessità}{6}{}%
-\contentsline {section}{\numberline {4}Esempi di modelli}{7}{}%
-\contentsline {subsection}{\numberline {4.1}La composizione ideale}{7}{}%
-\contentsline {subsection}{\numberline {4.2}I treni combinati}{7}{}%
-\contentsline {subsection}{\numberline {4.3}La raffineria}{8}{}%
-\contentsline {subsection}{\numberline {4.4}La turnazione degli infermieri}{9}{}%
-\contentsline {subsection}{\numberline {4.5}La campagna pubblicitaria}{9}{}%
-\contentsline {subsection}{\numberline {4.6}Radioterapia}{9}{}%
+\contentsline {subsection}{\numberline {3.1}Insieme convesso}{7}{}%
+\contentsline {subsubsection}{\numberline {3.1.1}Punto estremo di un insieme convesso}{7}{}%
+\contentsline {subsubsection}{\numberline {3.1.2}Massimo e minimo}{7}{}%
+\contentsline {section}{\numberline {4}Esempi di modelli}{9}{}%
+\contentsline {subsection}{\numberline {4.1}La composizione ideale}{9}{}%
+\contentsline {subsection}{\numberline {4.2}I treni combinati}{10}{}%
+\contentsline {subsection}{\numberline {4.3}La raffineria}{10}{}%
+\contentsline {subsection}{\numberline {4.4}La turnazione degli infermieri}{11}{}%
+\contentsline {subsection}{\numberline {4.5}La campagna pubblicitaria}{12}{}%
+\contentsline {subsection}{\numberline {4.6}Radioterapia}{12}{}%
+\contentsline {section}{\numberline {5}Programmazione Lineare}{14}{}%

@@ -325,25 +325,90 @@ Una funzione lineare (ossia una retta) è una funzione che è sia concava che co
 \noindent
 \textbf{Osservazione 2}: Sia $f(x)$ una funzione di una sola variabile che ammette derivata seconda per tutti i possibili valori di $x$. Allora $f(x)$ è:
 \begin{itemize}
-    \item convessa se e solo se 
+    \item \textbf{convessa} se e solo se 
     \[\frac{d^2 f(x)}{dx^2} \geq 0\]
-    per ogni possibile valore di $x$
-    \item b
-    \item c
-    \item d
+    per ogni possibile valore di $x$;
+    \item \textbf{strettamente convessa} se e solo se 
+    \[\frac{d^2 f(x)}{dx^2} > 0\]
+    per ogni possibile valore di $x$;
+    \item \textbf{concava} se e solo se 
+    \[\frac{d^2 f(x)}{dx^2} \leq 0\]
+    per ogni possibile valore di $x$;
+    \item \textbf{strettamente concava} se e solo se 
+    \[\frac{d^2 f(x)}{dx^2} < 0\]
+    per ogni possibile valore di $x$.
 \end{itemize}
-% - convessa se e solo se d2f(x) ≥ 0 per ogni possibile valore di x. dx2
-%  - strettamente convessa se e solo se d2f(x) > 0 per ogni possibile
-%  dx2
-% - concava se e solo se d2f(x) ≤ 0 per ogni possibile valore di x.
-% valore di x.
-%  dx2
-% - strettamente concava se e solo se d2f(x) < 0 per ogni possibile
-% valore di x.
+Ovviamente, però, una funzione strettamente convessa è anche convessa, ma una funzione convessa non è strettamente convessa se la sua derivata seconda è uguale a zero per alcuni valori di $x$.\\
+Analogamente una funzione strettamente concava è concava, ma non è vero il viceversa.
 
 \vspace{1em}
 \noindent
-\textbf{Osservazione}: È facile risolvere problemi di carattere continuo in quanto la regione ammissibile è un insieme convesso, mentre nel caso di problemi discreti o binari ciò non accade.
+\subsection{Insieme convesso}
+Di seguito si espone la definizione di \textbf{insieme convesso}:
+
+% Tabella per le definizione di concetti, etc...
+\vspace{1em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{INSIEME CONVESSO}}\\
+    \parbox{\linewidth}{Un insieme convesso è un insieme di punti tale che, per ogni coppia di punti dell'insieme, il segmento che li congiunge è interamente contenuto nell'insieme stesso.\vspace{3mm}}\\
+    \hline
+\end{tabularx}
+
+\vspace{1em}
+\noindent
+\textbf{Osservazione}: È facile risolvere problemi di carattere continuo in quanto la regione ammissibile è un insieme convesso, mentre nel caso di problemi discreti o binari ciò non accade.\\
+Non solo, ma è vero che l'intersezione di insiemi convessi è un insieme convesso.
+
+\vspace{1em}
+\noindent
+\subsubsection{Punto estremo di un insieme convesso}
+Di seguito si espone la definizione di \textbf{punto estremo di un insieme convesso}:
+
+% Tabella per le definizione di concetti, etc...
+\vspace{1em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{PUNTO ESTREMO DI UN INSIEME CONVESSO}}\\
+    \parbox{\linewidth}{Un \textbf{punto estremo di un insieme convesso} è punto dell'insieme che non appartiene ad alcun segmento congiungente altri due punti distinti dell'insieme stesso.\vspace{3mm}}\\
+    \hline
+\end{tabularx}
+
+\vspace{1em}
+\noindent
+\textbf{Osservazione}: Si osservi che non tutti gli insiemi convessi hanno punti estremi, come nel caso dell'insieme dei numeri reali $\mathbb{R}$.
+
+\vspace{1em}
+\noindent
+\subsubsection{Massimo e minimo}
+Data una funzione di una sola variabile e derivabile, è \textbf{condizione necessaria} affinché una particolare soluzione $x=x^*$ sia un minimo o un massimo è che
+\[\frac{d f(x)}{dx}=0 \hspace{1em} \text{ in } \hspace{1em} x=x^*\]
+Tuttavia, per avere maggiori informazioni sui punti critici (punti di minimo, di massimo o di flesso) è necessario esaminare la derivata seconda; ovviamente, se la funzione non è derivabile in tutto il dominio, la proprietà sopra enunciata non vale.\\
+Pertanto, se
+\[\frac{d^2 f(x)}{dx^2} > 0 \hspace{1em} \text{ in } \hspace{1em} x=x^*\]
+allora $x^*$ è almeno un \textbf{minimo locale} (ossia $f(x^*) \leq f(x)$ per ogni $x$ sufficientemente vicino a $x^*$); in altre parole, $x^*$ è un minimo se $f(x)$ è strettamente convessa in un intorno di $x^*$.\\
+Analogamente, una condizione sufficiente affinché $x^*$ sia un \textbf{massimo locale} (supponendo che soddisfi la condizione necessaria) è che f(x) sia strettamente concava in un intorno di $x^*$ (cioè la derivata seconda è negativa in $x^*$).\\
+Se la derivata seconda è nulla, è necessario esaminare le derivate di ordine superiore (in questo caso il punto potrebbe anche essere un punto di flesso); per individuare eventuali punti critici, se il dominio è limitato, è necessario controllare gli estremi dell'intervallo.\\
+Per determinare un \textbf{minimo globale} (cioè una soluzione $x^*$ tale che $f(x^*) \leq f(x), \forall x$) è necessario confrontare i minimi locali e identificare quello per il quale si ha il più piccolo valore di $f(x)$: se tale valore è minore di $f(x)$ per $x \to -\infty$ e per $x \to +\infty$ (o agli estremi del suo dominio, se essa è definita in un intervallo limitato), allora questo punto è un minimo globale; Il massimo globale è determinato in modo analogo.
+
+\vspace{1em}
+\noindent
+\textbf{Osservazione}: Si osservi, in particolare, che se $f(x)$ è una funzione convessa, allora una qualunque soluzione $x^*$ tale che
+\[\frac{df(x)}{dx}=0 \hspace{1em} \text{in} \hspace{1em} x=x^*\]
+è automaticamente un minimo globale; in altre parole ,questa condizione è non solo necessaria, ma anche sufficiente per un minimo globale di una funzione convessa.\\
+Tuttavia, tale soluzione non deve necessariamente essere unica, in quanto la funzione potrebbe rimanere costante in un certo intervallo nel quale la sua derivata è nulla; d'altra parte, se $f(x)$ è strettamente convessa, allora tale soluzione deve essere l'unico minimo globale.\\
+Analogamente se $f(x)$ è una funzione concava, allora la condizione 
+\[\frac{df(x)}{dx}=0 \hspace{1em} \text{in} \hspace{1em} x=x^*\]
+è sia necessaria che sufficiente affinché $x^*$ sia un massimo globale.\\
+Se la funzione, invece, non è strettamente concava o strettamente convessa ci possono essere infinite soluzioni ottime, rispettivamente massimi e minimi globali.
 
 \newpage
 \begin{center}
@@ -352,12 +417,12 @@ Una funzione lineare (ossia una retta) è una funzione che è sia concava che co
 \vspace{1em}
 \noindent
 \section{Esempi di modelli}
-Di seguito si espongono alcuni modelli di problemi da risolvere:
+Di seguito si espongono alcuni esempi di problemi da risolvere, impiegando differenti modelli matematici:
 
 \vspace{1em}
 \noindent
 \subsection{La composizione ideale}
-Si consideri il seguente esempio: Si vuole realizzare una compilation ideale avendo a disposizione dei file musicali e un CD-ROM dalla capacità di 800 MB. L'indice di gradimento (in una scala da 1 a 10) e l'ingombro in MB di ogni file sono riportati nella tabella seguente:
+Si vuole realizzare una compilation ideale avendo a disposizione dei file musicali e un CD-ROM dalla capacità di 800 MB. L'indice di gradimento (in una scala da 1 a 10) e l'ingombro in MB di ogni file sono riportati nella tabella seguente:
 
 \begin{table}[H]
 \rowcolors{1}{white}{white}
@@ -365,27 +430,65 @@ Si consideri il seguente esempio: Si vuole realizzare una compilation ideale ave
 \renewcommand{\arraystretch}{1.5}
 \noindent
 \centering
-\begin{tabular}{l|cc}
+\begin{tabular}{l|c|c}
+    \hline
     Canzone & Gradimento & Ingombro\\
     \hline
-    
+    Light my fire  & 8   & 210\\
+    Fame           & 7   & 190\\
+    I will survive & 8,5 & 235\\
+    Imagine        & 9   & 250\\
+    Let it be      & 7,5 & 200\\
+    I feel good    & 8   & 220\\
+    \hline
 \end{tabular}
 \end{table}
 
 \vspace{1em}
 \noindent
-Si vuole decidere quali file inserire nel CD in modo tale da massimizzare il gradimento complessivo senza eccedere la capacità del CD.\\
+Si vuole decidere quali file inserire nel CD in modo tale da massimizzare il gradimento complessivo, senza eccedere la capacità del CD.\\
 Il problema può essere modellato per mezzo di variabili decisionali binarie $x_1,x_2,x_3,x_4,x_5,x_6$ associate a ogni file musicale in modo tale che assumano valore 1 se il file in questione è inserito nel CD, il valore 0 in caso contrario. La funzione che bisogna massimizzare è
 \[f = 8 x_1 + 7 x_2 + 8.5 x_3 + 9 x_4 + 7.5 x_5 + 8 x_6\]
 rispettando il vincolo seguente
 \[210 x_1 + 190 x_2 + 235 x_3 + 250 x_4 + 200 x_5 + 220 x_6 \leq 800\]
-Generalizzando, indicato con $g_i$ il gradimento della canzone $i$-esima, con wi il suo ingombro e con C la capacità del CD il problema può essere formulato per mezzo del seguente problema PLI:
+Generalizzando, indicato con $g_i$ il gradimento della canzone $i$-esima, con $w_i$ il suo ingombro e con $C$ la capacità del CD, il problema può essere formulato per mezzo delle seguenti parametrizzazioni
+\[f = \sum_{i=1}^n g_i \cdot x_i\]
+con i vincoli seguenti
+\[\sum_{i=1}^n w_i \cdot x_i \leq C \hspace{1em} \text{ e } \hspace{1em} x_i \in \{0,1\} \hspace{1em} \forall i = 1,\dots,n\]
+dove $n = 6$ è il numero di file musicali. L'unico vincolo del problema consiste nel fatto che l'ingombro dei file inseriti non deve eccedere la capacità del CD.
 
 \vspace{1em}
 \noindent
 \subsection{I treni combinati}
-Una compagnia ferroviaria deve decidere quanti treni combinati realizzare potendo scegliere tra due diversi modelli DeLuxe e FarWest. La composizione dei due treni è schematizzata nella tabella seguente.
-Il modo migliore per risolvere tale problema è quello di introdurre due variabili discrete $x_D$ e $x_F$, massimizzando la funzione obiettivo
+Una compagnia ferroviaria deve decidere quanti treni combinati realizzare potendo scegliere tra due diversi modelli: DeLuxe e FarWest. La composizione dei due treni è schematizzata nella tabella seguente.
+
+\begin{table}[H]
+\rowcolors{1}{white}{white}
+\setlength{\tabcolsep}{8pt}
+\renewcommand{\arraystretch}{1.5}
+\noindent
+\centering
+\begin{tabular}{l|c|c|c}
+    \hline
+    Tipo di vagone & DeLuxe & FarWest & Disponibilità\\
+    \hline
+    Merci      & 1 & 3 & 12\\
+    WLit       & 1 & 0 & 9\\
+    Ristorante & 1 & 0 & 10\\
+    II Classe  & 2 & 3 & 21\\
+    I Classe   & 1 & 2 & 10\\
+    Motrice    & 1 & 1 & 9\\
+    \hline
+    Guadagno   & €3000 & €8000 & -\\
+    \hline
+\end{tabular}
+\end{table}
+
+\vspace{1em}
+\noindent
+Si vuole massimizzare il guadagno totale.\\
+Poiché bisogna decidere quanti treni di ciascun tipo realizzare, il problema può essere formulato per mezzo di due variabili decisionali discrete $x_D$ e $x_F$, che rappresentano rispettivamente il numero di treni Deluxe e il numero di treni Far West da realizzare: ovviamente tali variabili dovranno risultare intere e non negative.\\
+Si dovrà, quindi, massimizzare la funzione obiettivo seguente
 \[f = 3000 x_D + 8000 x_F\]
 rispettando, però, i seguenti vincoli
 \[\rowcolors{1}{white}{white}
@@ -411,7 +514,7 @@ Una raffineria miscela quattro tipi di petrolio greggio in diverse proporzioni p
 \renewcommand{\arraystretch}{1.5}
 \noindent
 \centering
-\begin{tabular}{l|cc}
+\begin{tabular}{l|c|c}
     Componente & Disponibilità massima (barili) & Costo (€)\\
     \hline
     P1 & 500  & 9\\
@@ -432,11 +535,11 @@ Per poter soddisfare le specifiche qualitative dei diversi tipi di benzina è ne
 \noindent
 \centering
 \begin{tabular}{l|c|c}
-    Benzina & Specifiche qualitative & Prezzo (€ barile)\\
+    Benzina   & Specifiche qualitative & Prezzo (€ barile)\\
     \hline
-    Normale   & almeno $20\%$ di P2 e al massimo il $30\%$ di P3  & 12\\
-    Blu super & almeno il $40\%$ di P3 & 18\\
-    V-power   & al massimo il $50\%$ di P2 & 10\\
+    Normale   & almeno $20\%$ di P2 e al massimo il $30\%$ di P3 & 12\\
+    Blu super & almeno il $40\%$ di P3                           & 18\\
+    V-power   & al massimo il $50\%$ di P2                       & 10\\
 \end{tabular}
 \end{table}
 
@@ -499,7 +602,16 @@ rispettando i seguenti vincoli:
 \subsection{La campagna pubblicitaria}
 Un'agenzia di pubblicità deve realizzare una campagna promozionale avendo a disposizione due mezzi: gli annunci radiofonici e quelli su carta stampata.\\
 Sono ammessi annunci radiofonici con durata di frazione di minuto e annunci sul giornale di frazione di pagina. Le stazioni radiofoniche private praticano sconti in base alla quantità di minuti richiesti: il costo al minuto è di €100 meno €2 per ogni minuto utilizzato (in questo modo, il costo al minuto qualora se ne richiedono tre è di €94). Inoltre, le emittenti possono fornire al massimo 30 minuti di annunci in totale.\\
-I giornali, invece, richiedono un prezzo standard di €200 per pagina. Per vincoli contrattuali almeno un terzo della spesa deve consistere in annunci sui giornali. In base ai risultati statistici, si stima che tramite un minuto di annunci radiofonici si raggiungono 100.000 persone e tramite un annuncio su una pagina di giornale 15.000 persone. L'agenzia deve raggiungere almeno 3 milioni di persone minimizzando i costi della campagna.
+I giornali, invece, richiedono un prezzo standard di €200 per pagina. Per vincoli contrattuali almeno un terzo della spesa deve consistere in annunci sui giornali. In base ai risultati statistici, si stima che tramite un minuto di annunci radiofonici si raggiungono 100.000 persone e tramite un annuncio su una pagina di giornale 15.000 persone. L'agenzia deve raggiungere almeno 3 milioni di persone minimizzando i costi della campagna.\\
+In questo caso è sufficiente introdurre due variabili decisionali $x_1$ e $x_2$ che rappresentano il numeri di minuti e il numero di pagine di giornale utilizzati nella campagna, andando a minimizzare la funzione
+\[f = (100 - 2x_1) \cdot x_1 + 200 x_2\]
+rispettando i vincoli seguenti:
+\begin{align}
+    100 x_1 + 15 x_2 \geq 3000\\
+    200 x_2 \geq \dfrac{1}{3} \cdot \left((100-x_1) \cdot x_1 + 200x_2\right)\\
+    0 \leq x_1 \leq 30, x_2 \geq 0
+\end{align}
+In cui appare evidente che non si tratta di un problema di programmazione lineare.
 
 
 \vspace{1em}
@@ -509,8 +621,133 @@ La radioterapia prevede l'utilizzo di un raggio esterno per far passare le radia
 Normalmente, diversi fasci vengono amministrati con precisione da diverse angolazioni in un piano bidimensionale. A causa dell'attenuazione, ogni raggio fornisce più radiazioni al tessuto vicino al punto di ingresso rispetto al tessuto vicino al punto di uscita. La dispersione causa anche una certa quantità di radiazione al tessuto al di fuori del percorso diretto del raggio.\\
 Poiché le cellule tumorali sono tipicamente microscopicamente intervallate tra cellule sane, il dosaggio di radiazioni in tutto la regione del tumore deve essere abbastanza grande da uccidere le cellule maligne, che sono leggermente più radiosensibili, ma abbastanza piccolo da risparmiare le cellule sane.\\
 Allo stesso tempo, la dose che colpisce i tessuti critici non deve superare i livelli di tolleranza stabiliti, al fine di prevenire complicazioni che possono essere più gravi della malattia stessa. Per la stessa ragione, la dose totale all'intera parte sana deve essere ridotta al minimo.\\
-L'obiettivo del progetto è selezionare la combinazione di raggi da utilizzare, e l'intensità di ciascuno, per generare la migliore distribuzione possibile della dose. (L'intensità della dose in qualsiasi punto del corpo viene misurata in unità chiamate kilorad.)
+L'obiettivo del progetto è selezionare la combinazione di raggi da utilizzare, e l'intensità di ciascuno, per generare la migliore distribuzione possibile della dose. (L'intensità della dose in qualsiasi punto del corpo viene misurata in unità chiamate Kilorad.)\\
+Pertanto si ha la seguente schematizzazione
 
+\begin{table}[H]
+\rowcolors{1}{white}{white}
+\setlength{\tabcolsep}{8pt}
+\renewcommand{\arraystretch}{1.5}
+\noindent
+\centering
+\begin{tabular}{l|c|c|c}
+    Area   & Raggio 1 & Raggio 2 & Restrizioni (Kilorad)\\
+    \hline
+    Anatomia sana     & 0.4 & 0.5 & minimizzare\\
+    Tessuti critici   & 0.3 & 0.1 & $\leq 2.7$\\
+    Regione tumorale  & 0.5 & 0.5 & = 6.0\\
+    Nucleo del tumore & 0.6 & 0.4 & $\geq 0.6$\\
+    \hline
+\end{tabular}
+\end{table}
+
+\vspace{1em}
+\noindent
+Le due variabili decisionali $x_1$ e $x_2$ rappresentano la dose (in Kilorad) al punto di ingresso per il Raggio 1 e il Raggio 2, rispettivamente, per cui la funzione $f$ da minimizzare è
+\[f = 0.4x_1 + 0.5x_2\]
+con i vincoli che
+\begin{align}
+    0.3x_1 + 0.1x_2 \leq 2.7\\
+    0.5x_1 + 0.5x_2 = 6\\
+    0.6x_1+0.4x_2 \geq 0.6\\
+    x_1 \geq 0, x_2 \geq 0
+\end{align}
+
+\newpage
+\begin{center}
+    10 Ottobre 2022
+\end{center}
+\section{Programmazione Lineare}
+Di seguito si espone la definizione di \textbf{problema di programmazione lineare}: 
+
+% Tabella per le definizione di concetti, etc...
+\vspace{1em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{PROBLEMA DI PROGRAMMAZIONE LINEARE}}\\
+    \parbox{\linewidth}{Un problema di programmazione lineare (LP) è un problema di ottimizzazione del tipo
+    \[z = \max \left\{c(x) : x \in X \subseteq \mathbb{R}^n \right\} \hspace{1em} \text{oppure} \hspace{1em} z = \min \left\{c(x) : x \in X \subseteq \mathbb{R}^n \right\}\]
+    in cui
+    \begin{itemize}
+        \item la funzione obiettivo
+        \[c(x) : \mathbb{R}^n \longmapsto \mathbb{R}\]
+        è \textbf{lineare}, in cui
+        \begin{itemize}
+            \item $c(0)=0$
+            \item $c(\alpha x + \beta y) = \alpha c(x) + \beta c(y)$
+        \end{itemize}
+        Ciò comporta che $c(x) = c x$ sia un vettore in $\mathbb{R}^n$.
+
+        \item L'insieme $X$ delle soluzioni ammissibili è definito tramite dei vincoli lineare come, ad esempio $h(x) = \gamma$, oppure $h(x) \leq \gamma$, oppure $h(x) \geq \gamma$ in cui
+        \[h(x) : \mathbb{R}^n \longmapsto \mathbb{R}\]
+        è una funzione lineare, mentre $\gamma$ è uno scalare in $\mathbb{R}$.
+    \end{itemize}
+    \vspace{1mm}}\\
+    \hline
+\end{tabularx}
+
+\vspace{2em}
+\noindent
+\textbf{Esempio}: Un problema di programmazione lineare può essere formulato in forma sintetica:
+\begin{align}
+    \max c{^t} x\\
+    A x \leq b\\
+    x \geq 0
+\end{align}
+in cui $c{^t}$ indica la trasposta del vettore della funzione obiettivo, in modo tale da disporre di un prodotto righe per colonne. Altrimenti, in modo più esteso si ha
+\begin{align}
+    \max z =&c_1x_1+c_2x_2+\dots+c_nx_n\\
+            &a_{1,1}x_1+a_{1,2}x_2+\dots+a_{1,n}x_n \leq b_1\\
+            &a_{2,1}x_1+a_{2,2}x_2+\dots+a_{2,n}x_n \leq b_2\\
+    \dots \hspace{2em} & \hspace{7.5em} \dots\\
+            & a_{m,1}x_1+a_{m,2}x_2+\dots+a_{m,n}x_n \leq b_m\\
+    & x_1,x_2,\dots,x_n \geq 0
+\end{align}
+
+
+$c^T x$ è la funzione obiettivo
+Dove $b$ si chiama vettore dei termini noti
+$X$ = regione ammissibile
+
+% Proprietà
+- Proporzionalità
+- Additività
+- Divisibilità (o continuità)
+- Correttezza
+
+% Derivata parziale
+
+\vspace{1em}
+\noindent
+\textbf{Esempio 1}: La funzione
+\[\max z = c_1 x_1 + c_2^2 x_2 + c_3 x_3\]
+è una funzione lineare che non viola la proporzionalità.
+
+
+\vspace{1em}
+\noindent
+\textbf{Esempio 2}: Tutti i coefficienti sono costanti reali note a priori.
+
+\vspace{1em}
+\noindent
+\textbf{Esempio 3}: Un esempio in cui le soluzione ottime sono infinite è quando voglio ottenere il minimo di una delle variabili decisionali: da $(0,0)$ a $(0,5)$ sono soluzioni ottime.
+
+\vspace{1em}
+\noindent
+\textbf{Esempio 4}: Una soluzione ottima unica è il minimo di $x_1+x_2$, che produce l'origine.
+
+
+\vspace{1em}
+\noindent
+\textbf{Esempio 4}: Un esempio in cui ci sono infinite soluzioni ottime è  quando la funzione obiettivo è parallela ad uno dei vincoli.
+
+% Iperpiano
+% Poliedro
+% Politopo
 
 
 \end{document}
