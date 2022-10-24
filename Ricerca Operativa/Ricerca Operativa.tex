@@ -8,12 +8,15 @@
 \usetikzlibrary{positioning, circuits.logic.US}
 \usetikzlibrary{shapes.geometric, arrows}
 \usetikzlibrary {shapes.gates.logic.US, shapes.gates.logic.IEC, calc}
-\tikzset {branch/.style={fill, shape = circle, minimum size = 3pt, inner sep = 0pt}}
+%\tikzset {branch/.style={fill, shape = circle, minimum size = 1pt, inner sep = 0pt}}
 \usetikzlibrary{matrix,calc}
+\usetikzlibrary{intersections}
+\usetikzlibrary{patterns}
 \usepackage{multirow}
 \usepackage{float}
 \usepackage{geometry}
 \usepackage{tabularx}
+\usepackage{pgfplots}
 \usepackage{pgf-pie}
 \usepackage{tikz}
 \usepackage{amsmath}
@@ -37,6 +40,7 @@
 }
 
 \nocite{*}
+\graphicspath{ {./img/} }
 
 \pagestyle{fancy}
 \fancyhf{}
@@ -587,7 +591,7 @@ Il problema può essere modellato mediante le variabili decisionali $x_i$ che ra
 lavoro il giorno $i$ per $i = 1,\dots,7$, in modo tale da minimizzare
 \[f = \sum_{i=7} x_i\]
 rispettando i seguenti vincoli:
-\begin{align}
+\begin{align*}
     x_1+x_2+x_3+x_4+x_5+x_6+x_7 \geq 17\\
     x_1+x_2+x_3+x_4+x_5+x_6+x_7 \geq 13\\
     x_1+x_2+x_3+x_4+x_5+x_6+x_7 \geq 15\\
@@ -595,7 +599,7 @@ rispettando i seguenti vincoli:
     x_1+x_2+x_3+x_4+x_5+x_6+x_7 \geq 14\\
     x_1+x_2+x_3+x_4+x_5+x_6+x_7 \geq 16\\
     x_1+x_2+x_3+x_4+x_5+x_6+x_7 \geq 11
-\end{align}
+\end{align*}
 
 \vspace{1em}
 \noindent
@@ -606,11 +610,11 @@ I giornali, invece, richiedono un prezzo standard di €200 per pagina. Per vinc
 In questo caso è sufficiente introdurre due variabili decisionali $x_1$ e $x_2$ che rappresentano il numeri di minuti e il numero di pagine di giornale utilizzati nella campagna, andando a minimizzare la funzione
 \[f = (100 - 2x_1) \cdot x_1 + 200 x_2\]
 rispettando i vincoli seguenti:
-\begin{align}
+\begin{align*}
     100 x_1 + 15 x_2 \geq 3000\\
     200 x_2 \geq \dfrac{1}{3} \cdot \left((100-x_1) \cdot x_1 + 200x_2\right)\\
     0 \leq x_1 \leq 30, x_2 \geq 0
-\end{align}
+\end{align*}
 In cui appare evidente che non si tratta di un problema di programmazione lineare.
 
 
@@ -646,12 +650,12 @@ Pertanto si ha la seguente schematizzazione
 Le due variabili decisionali $x_1$ e $x_2$ rappresentano la dose (in Kilorad) al punto di ingresso per il Raggio 1 e il Raggio 2, rispettivamente, per cui la funzione $f$ da minimizzare è
 \[f = 0.4x_1 + 0.5x_2\]
 con i vincoli che
-\begin{align}
+\begin{align*}
     0.3x_1 + 0.1x_2 \leq 2.7\\
     0.5x_1 + 0.5x_2 = 6\\
     0.6x_1+0.4x_2 \geq 0.6\\
     x_1 \geq 0, x_2 \geq 0
-\end{align}
+\end{align*}
 
 \newpage
 \begin{center}
@@ -693,33 +697,95 @@ Di seguito si espone la definizione di \textbf{problema di programmazione linear
 \vspace{2em}
 \noindent
 \textbf{Esempio}: Un problema di programmazione lineare può essere formulato in forma sintetica:
-\begin{align}
+\begin{align*}
     \max c{^t} x\\
     A x \leq b\\
     x \geq 0
-\end{align}
+\end{align*}
 in cui $c{^t}$ indica la trasposta del vettore della funzione obiettivo, in modo tale da disporre di un prodotto righe per colonne. Altrimenti, in modo più esteso si ha
-\begin{align}
+\begin{align*}
     \max z =&c_1x_1+c_2x_2+\dots+c_nx_n\\
             &a_{1,1}x_1+a_{1,2}x_2+\dots+a_{1,n}x_n \leq b_1\\
             &a_{2,1}x_1+a_{2,2}x_2+\dots+a_{2,n}x_n \leq b_2\\
     \dots \hspace{2em} & \hspace{7.5em} \dots\\
             & a_{m,1}x_1+a_{m,2}x_2+\dots+a_{m,n}x_n \leq b_m\\
     & x_1,x_2,\dots,x_n \geq 0
-\end{align}
+\end{align*}
+in cui
+\begin{itemize}
+    \item $m$ è il numero di righe della matrice $A$;
+    \item $n$ è la dimensione del vettore $x$ e il numero di colonne della matrice $A$;
+    \item $c$ è il vettore della funzione obiettivo;
+    \item $A$ è la cosiddetta \quotes{matrice tecnica o tecnologica};
+    \item $b$ è il vettore dei termini noti (generalmente $\geq 0$ nella forma standard);
+    \item $x$ è il vettore delle variabili decisionali;
+    \item $X = \{x \hspace{0.5em}:\hspace{0.5em} Ax \leq b, \hspace{0.5em} x \geq 0\}$ è l'insieme delle soluzioni ammissibili (detto anche \textbf{regione ammissibile}).
+\end{itemize}
 
+\vspace{1em}
+\subsection{Proprietà della programmazione lineare}
+Di seguito si espongono le quattro principali proprietà che devono essere soddisfatte in programmazione lineare:
 
-$c^T x$ è la funzione obiettivo
-Dove $b$ si chiama vettore dei termini noti
-$X$ = regione ammissibile
+\vspace{1em}
+\subsubsection{Proporzionalità}
+La funzione obiettivo e tutti i vincoli devono essere lineari rispetto ad ogni variabile decisionale; in altre parole, la misura dell'efficacia e l'uso delle risorse deve essere proporzionale al livello di ogni attività portata a termine individualmente.\\
+Pertanto, se $x_j \neq 0$ e $x_1=x_2=\dots=x_{j-1},x_{j+1}=\dots=x_{n-1}=x_n=0$, deve essere necessariamente che $X=c_j \cdot x_k$ e $a_{i,j} \cdot x_j \leq b_i, \forall i, \forall j$.\\
+Per tale ragione, le proprietà seguenti devono essere sempre soddisfatte:
+\[\frac{\partial Z}{\partial x_j} = c_j, \forall j \hspace{1em} \frac{\partial b_i}{\partial x_j} \geq a_{i,j}, \forall j\]
+ovverosia, la misura marginale dell'efficacia e l'uso marginale di ciascuna risorsa risorsa deve essere costante rispetto all'intero range di variazione dei livelli di ciascuna attività.
 
-% Proprietà
-- Proporzionalità
-- Additività
-- Divisibilità (o continuità)
-- Correttezza
+\vspace{1em}
+\noindent
+\textbf{Osservazione}: Un caso in cui non è possibile applicare la programmazione lineare è quando si ha una spesa fissa. Ciò accade quando vi è una spesa di preparazione, oppure una spesa di configurazione associata all'attività di interesse.\\
+In questo modo, se $x$ è il livello di una certa attività e la funzione obiettivo è
+\[
+    f(x) = \left\{
+        \rowcolors{1}{white}{white}
+        \begin{array}{lll}
+            0 & \text{se} & x=0\\
+            K+cx  & \text{se} & x>0
+        \end{array}
+    \right.
+\]
+Allora in questo caso la proprietà di proporzionalità viene violata. Infatti, la funzione $f(x)$ non è continua per $K \neq 0$, e quindi nemmeno derivabile.
 
-% Derivata parziale
+\vspace{1em}
+\subsubsection{Additività}
+Non ci deve essere interazione diretta tra le diverse attività; in altre parole, la misura totale dell'efficacia, derivante dall'unione (somma logica) dei risultati delle diverse attività, deve essere uguale alla somma delle quantità risultanti da ciascuna attività portata a termine individualmente.\\
+In pratica, se $c_1 x_1, c_2 x_2, \dots, c_n x_n$ è la misura dell'efficacia per le attività $1,2,\dots,n$ condotte individualmente, deve essere che
+\[Z = c_1x_1+c_2x_2+\dots+c_nx_n\]
+dove $Z$ è la misura totale dell'efficacia. Similmente dovrà essere per l'uso totale delle risorse, definito tramite vincoli non dissimili dalla funzione obiettivo, se non per l'uso di operatori di disuguaglianza.
+
+\vspace{1em}
+\subsubsection{Divisibilità (o continuità)}
+I valori $x_j$ delle variabili decisionali sono numeri reali, ovvero $x \in \mathbb{R}^n$.\\
+Da notare, inoltre, che ciò non sempre assume significato nei problemi di programmazione lineare, in quanto, molto spesso, si dovrà operare con variabili decisionali che assumono valori interi.\\
+Tuttavia, in questo caso, se la ragione ammissibile non è vuota, è sempre possibile individuare un vettore $x$ che rispetta i vincoli, anche se esso non è intero. Vero è che vengono sempre esclusi i casi in cui le variabili decisionali sono complesse.  
+
+\vspace{1em}
+\subsubsection{Certezza}
+Tutti i coefficienti del problema sono numeri reali noti a priori. Non vi è nulla di stocastico o di casuale.
+
+\vspace{1em}
+\subsection{Possibili esiti di un problema di programmazione lineare}
+Dato un problema di programmazione lineare, in vui
+\begin{align*}
+    \max \{c x : x \in X\}\\
+    X = \{x : Ax \leq b, x \geq 0\}
+\end{align*}
+Vi possono essere due ramificazioni:
+\begin{enumerate}
+    \item Non esiste una regione ammissibile: $X=\varnothing$
+    \item Esiste una regione ammissibile: $X \neq \varnothing$
+    \begin{enumerate}
+        \item Non esiste una soluzione ottimale
+        \item Esiste una soluzione ottimale
+        \begin{enumerate}
+            \item Esiste una sola soluzione ottimale
+            \item Esistono infinite soluzioni ottimali
+        \end{enumerate}
+    \end{enumerate}
+\end{enumerate}
 
 \vspace{1em}
 \noindent
@@ -727,10 +793,9 @@ $X$ = regione ammissibile
 \[\max z = c_1 x_1 + c_2^2 x_2 + c_3 x_3\]
 è una funzione lineare che non viola la proporzionalità.
 
-
 \vspace{1em}
 \noindent
-\textbf{Esempio 2}: Tutti i coefficienti sono costanti reali note a priori.
+\textbf{Esempio 2}: Tutti i coefficienti sono costanti reali noti a priori.
 
 \vspace{1em}
 \noindent
@@ -743,11 +808,1685 @@ $X$ = regione ammissibile
 
 \vspace{1em}
 \noindent
-\textbf{Esempio 4}: Un esempio in cui ci sono infinite soluzioni ottime è  quando la funzione obiettivo è parallela ad uno dei vincoli.
+\textbf{Esempio 5}: Un esempio in cui ci sono infinite soluzioni ottime è quando \textbf{la funzione obiettivo è parallela ad uno dei vincoli}.
 
-% Iperpiano
-% Poliedro
-% Politopo
+\vspace{1em}
+\subsection{Iperpiano}
+Di seguito si espone la definizione di \textbf{iperpiano}, \textbf{poliedro} e \textbf{politopo}:
 
+% Tabella per le definizione di concetti, etc...
+\vspace{1em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{IPERPIANO}}\\
+    \parbox{\linewidth}{Si chiama \textbf{iperpiano} l'insieme
+    \[H = \{x \in \mathbb{R}^n : a{^t}x=b\}\]
+    dove $a \in \mathbb{R}^n$, $a \neq 0$, $b \in \mathbb{R}$.\\
+    Le regioni $X^-=\{x \in \mathbb{R}^n : a{^t}x \leq b\}$ and $X^+ = \{x \in \mathbb{R}^n : a{^t}x \geq b \}$ prendono il nome di \textbf{semi-spazi} delimitati dall'iperpiano di supporto. \vspace{3mm}}\\
+    \hline
+\end{tabularx}
+
+% Tabella per le definizione di concetti, etc...
+\vspace{2em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{POLIEDRO}}\\
+    \parbox{\linewidth}{Si chiama \textbf{poliedro (convesso)} l'intersezione di un numero finito di semi-spazi e iperpiani.\vspace{1mm}}\\
+    \hline
+\end{tabularx}
+
+% Tabella per le definizione di concetti, etc...
+\vspace{2em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{POLITOPO}}\\
+    \parbox{\linewidth}{Si chiama \textbf{politopo} un poliedro \textbf{limitato} $P$, ossia tale per cui esiste una costante $M>0$ tale che
+    \[\left \vert \left \vert x \right \vert \right \vert \leq M, \hspace{0.5em} \forall x \in P\]
+    \vspace{-1mm}}\\
+    \hline
+\end{tabularx}
+
+\vspace{2em}
+\begin{lemma}
+    La regione ammissibile di un problema di programmazione lineare è un \textbf{poliedro convesso}.
+\end{lemma}
+
+\vspace{1em}
+\subsection{La soluzione ottimale su un vertice}
+Posto che \textbf{i punti estremi di un poliedro convesso sono chiamati vertici}, si espone di seguito un fondamentale teorema:
+
+% Tabella per le definizione di concetti, etc...
+\vspace{2em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{SOLUZIONE OTTIMALE SU UN VERTICE}}\\
+    \parbox{\linewidth}{Dato un problema di programmazione lineare, così formulato
+    \[\max cx\]
+    \[Ax = b (b \geq 0)\]
+    \[x \geq 0\]
+    in cui $X \neq \varnothing$ e presenta un numero finito di soluzioni ottimali, allora esiste un vertice di $X$ che è soluzione ottimale.
+    \vspace{3mm}}\\
+    \hline
+\end{tabularx}
+
+\vspace{1em}
+\noindent
+\textbf{Osservazione}: La dimostrazione di ciò, ovviamente, si basa sul fatto che $X$ è un poliedro convesso.\\
+Pertanto, dato un problema di programmazione lineare che presenta una soluzione ottimale e finita, poiché ne esiste certamente una su un vertice, si può pensare di limitare la ricerca della soluzione ottima all'insieme dei vertici.\\
+Si pone quindi il problema di come identificare (potenzialmente tutti) i vertici a partire da una rappresentazione del poliedro delle soluzioni ammissibili:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{Frontiera_vincolo_soluzioni_vertice}
+    \caption{Frontiera di un vincolo \& Soluzioni di vertice}
+    \label{fig:fig1}
+\end{figure}
+
+\newpage
+\begin{center}
+    13 Ottobre 2022
+\end{center}
+\section{Algoritmo del simplesso}
+Nell'algoritmo del simplesso si forniscono le seguenti definizioni:
+\begin{itemize}
+    \item la \textbf{frontiera} di un vincolo è una linea che forma il confine di ciò che è permesso dal vincolo corrispondente.
+    \item i punti di intersezione sono le \textbf{soluzioni di vertice} del problema. Le cinque che si trovano agli angoli della regione ammissibile della Figura \ref{fig:fig1} - (0, 0), (0, 6), (2, 6), (4, 3) e (4, 0) - sono le \textbf{soluzioni ammissibile di vertici} (\textbf{soluzioni CPF}).\\
+    Le altre tre - (0, 9), (4, 6) e (6, 0) - sono chiamate soluzioni non ammissibili in un angolo.
+\end{itemize}
+
+\noindent
+Nell'esempio di Figura \ref{fig:fig1}, ogni soluzione di vertice si trova all'intersezione della frontiera di $2$ vincoli. Per un problema di programmazione lineare con $n$ variabili decisionali, ciascuna delle sue soluzioni di vertice si trova all'intersezione di $n$ frontiere di vincolo.
+
+\vspace{1em}
+\subsection{Soluzioni adiacenti}
+Alcune coppie di soluzioni CPF  condividono un confine di vincolo, mentre altre coppie non lo condividono. Sarà importante distinguere tra questi casi utilizzando la seguente definizione generale:
+
+% Tabella per le definizione di concetti, etc...
+\vspace{1em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{SOLUZIONI ADIACENTI}}\\
+    \parbox{\linewidth}{Per qualsiasi problema di programmazione lineare con $n$ variabili decisionali, due \textbf{soluzioni CPF sono adiacenti} se condividono $n - 1$ vincoli.\\
+    Le due soluzioni CPF adiacenti sono collegate da un segmento di linea che giace su queste stesse frontiere di vincolo condivise. Tale segmento di linea viene definito \textbf{bordo (spigolo)} della regione ammissibile. \vspace{3mm}}\\
+    \hline
+\end{tabularx}
+
+\vspace{1em}
+\noindent
+Posto nell'esempio $n = 2$, due delle sue soluzioni CPF sono adiacenti se condividono un confine di vincolo; ad esempio, (0, 0) e (0, 6) sono adiacenti perché condividono il confine di vincolo $x_1 = 0$, com'è facile vedere dall'immagine:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{Frontiera_vincolo_soluzioni_vertice}
+    \caption{Frontiera di un vincolo \& Soluzioni di vertice}
+    \label{fig:fig1_1}
+\end{figure}
+
+\noindent
+La regione ammissibile ha cinque spigoli, costituiti dai cinque segmenti di linea che formano il confine di tale regione. Si noti che da ogni soluzione CPF partono due spigoli. Pertanto, ogni soluzione CPF ha due soluzioni CPF adiacenti (ognuna delle quali si trova all'altra estremità di uno dei due spigoli), come elencato nella Tabella \ref{tab:tab1}:
+
+\noindent
+\begin{table}[H]
+    \rowcolors{1}{white}{white}
+    \setlength{\tabcolsep}{8pt}
+    \renewcommand{\arraystretch}{1.5}
+    \noindent
+    \centering
+    \begin{tabular}{c|c}
+        \hline
+        Soluzione CPF & Soluzioni CPF adiacenti\\
+        \hline
+        (0,0) & (0,6) e (4,0)\\
+        (0,6) & (0,0) e (2,6)\\
+        (2,6) & (4,3) e (0,6)\\
+        (4,3) & (4,0) e (2,6)\\
+        (4,0) & (0,0) e (4,3)\\
+        \hline
+    \end{tabular}
+    \caption{Soluzioni CPF adiacenti}
+    \label{tab:tab1}
+\end{table}   
+
+\vspace{1em}
+\subsection{La soluzione ottima in un vertice}
+\label{sec:prop1}
+Come esposto in precedenza, valgono le seguenti proprietà:
+
+% Tabella per le definizione di concetti, etc...
+\vspace{1em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{SOLUZIONE OTTIMA IN UN VERTICE}}\\
+    \parbox{\linewidth}{
+        \begin{enumerate}
+            \item Se esiste esattamente una soluzione ottima, allora deve essere una soluzione CPF.
+            \item Se esistono più soluzioni ottime (e una regione ammissibile delimitata), almeno due devono essere soluzioni CPF adiacenti.
+        \end{enumerate}
+    \vspace{1mm}}\\
+    \hline
+\end{tabularx}
+
+\vspace{1em}
+\noindent
+\textbf{Dimostrazione 1}: Per assurdo, si assuma che esista esattamente una soluzione ottima e che non sia una soluzione CPF. Dal momento che, secondo la definizione, una soluzione CPF è una soluzione ammissibile che non si trova su nessun segmento di linea che collega altre due soluzioni ammissibili, dal momento che si è assunto che la soluzione ottima $x^*$ non è una soluzione CPF, ciò implica che devono esistere altre due soluzioni ammissibili tali che il segmento di retta che le unisce contenga la soluzione ottima.\\
+I vettori $x'$ e $x''$ denotano tali altre due soluzioni ammissibili e $Z_1$ e $Z_2$ i rispettivi valori della funzione obiettivo. Come ogni altro punto del segmento di retta che collega $x'$ e $x''$
+\[x^* = \alpha x'' + (1-\alpha) x'\]
+per un valore di $\alpha$ tale che $0 < \alpha < 1$. Pertanto
+\[Z^* = \alpha \cdot Z_2 + (1 - \alpha) \cdot Z_1\]
+Poiché i pesi $\alpha$ e $1 - \alpha$ sommano a $1$, le uniche possibilità di confronto tra $Z^*$, $Z_1$ e $Z_2$ sono
+\begin{enumerate}
+    \item $Z^* = Z_1 = Z_2$
+    \item $Z_1 < Z^* < Z_2$
+    \item $Z_1 > Z^* > Z_2$
+\end{enumerate}
+La prima possibilità implica che anche $x'$ e $x''$ siano ottimali, il che contraddice l'ipotesi che esista esattamente una soluzione ottimale. Entrambe le ultime possibilità contraddicono l'ipotesi che $x^*$ (che non è una soluzione CPF) sia ottimale. La conclusione che ne deriva è che è impossibile avere un'unica soluzione ottimale che non sia una soluzione CPF.
+
+\vspace{1em}
+\noindent
+\textbf{Dimostrazione 2}: Ciò che accade quando si risolve graficamente è che la linea della funzione obiettivo continua ad alzarsi finché non contiene il segmento di linea che collega le due soluzioni CPF.\\
+La stessa cosa accadrebbe in dimensioni superiori, tranne per il fatto che un iperpiano della funzione obiettivo continuerebbe a essere innalzato fino a contenere il segmento o i segmenti di linea che collegano due (o più) soluzioni CPF adiacenti.\\
+Di conseguenza, tutte le soluzioni ottimali possono essere ottenute come medie ponderate di soluzioni CPF ottimali.
+
+\vspace{1em}
+\subsection{Numero finito di soluzioni CPF}
+Di seguito si espone la proprietà di \textbf{finitezza del numero di soluzioni CPF}:
+
+% Tabella per le definizione di concetti, etc...
+\vspace{1em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{FINITEZZA DI SOLUZIONI CPF}}\\
+    \parbox{\linewidth}{C'è solo un numero finito di soluzioni CPF. \vspace{3mm}}\\
+    \hline
+\end{tabularx}
+
+\vspace{1em}
+\noindent
+Ogni soluzione CPF è la soluzione simultanea di un sistema di $n$ delle $m+n$ equazioni vincolate. Il numero di combinazioni diverse di $m + n$ equazioni prese $n$ alla volta è
+\[\binom{m+n}{n} = \frac{(m+n)!}{m! \cdot n!}\]
+che è un numero finito.\\
+Un'enumerazione esaustiva potrebbe non essere possibile: un problema di programmazione lineare piuttosto piccolo con
+solo $m = 50$ e $n = 50$ avrebbe 
+\[\frac{100!}{(50!) \cdot 2} \cong 10^{29}\]
+sistemi di equazioni da risolvere!\\
+Al contrario, il metodo del simplesso (esposto di seguito) dovrebbe esaminare solo circa $100$ soluzioni CPF per un problema di queste dimensioni.
+
+\vspace{1em}
+\subsection{La regione ammissibile è convessa}
+Di seguito si espone la proprietà di \textbf{convessità della regione ammissibile}:
+
+% Tabella per le definizione di concetti, etc...
+\vspace{1em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{CONVESSITÀ DELLA REGIONE AMMISSIBILE}}\\
+    \parbox{\linewidth}{Se una soluzione CPF non ha soluzioni CPF adiacenti migliori (misurate da $Z$), allora non esistono soluzioni CPF migliori per la funzione obiettivo: la migliore è quella considerata in principio.\\
+    Pertanto, tale soluzione CPF è garantita come soluzione ottimale (dalla proprietà § \ref{sec:prop1}), assumendo solo che il problema possieda almeno una soluzione ottimale (garantita se il problema possiede soluzioni ammissibile e una regione ammissibile limitata). \vspace{3mm}}\\
+    \hline
+\end{tabularx}
+
+\vspace{1em}
+\subsection{Test di ottimalità}
+Di seguito si espone il funzionamento del \textbf{test di ottimalità}:
+
+% Tabella per le definizione di concetti, etc...
+\vspace{1em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{TEST DI OTTIMALITÀ}}\\
+    \parbox{\linewidth}{Dato un qualsiasi problema di programmazione lineare che possieda almeno una soluzione ottimale. Se una soluzione CPF non ha soluzioni CPF adiacenti migliori (misurate da $Z$), allora deve essere una soluzione ottimale. \vspace{3mm}}\\
+    \hline
+\end{tabularx}
+
+\newpage
+\noindent
+\textbf{Osservazione}: Quindi, ancora una volta, dato l'esempio seguente
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{Frontiera_vincolo_soluzioni_vertice}
+    \caption{Frontiera di un vincolo \& Soluzioni di vertice}
+    \label{fig:fig1_2}
+\end{figure}
+
+\noindent
+Il vertice $(2,6)$ deve essere ottimale semplicemente perché il suo corrispondente valore per la funzione obiettivo è $Z=36$ che, ovviamente, è maggiore di $Z=30$ per $(0,6)$ e di $Z=27$ per $(4,3)$. Questo test di ottimalità è quello utilizzato dal metodo del simplesso per determinare quando è stata raggiunta una soluzione ottimale.
+
+\vspace{1em}
+\subsection{Algoritmo del simplesso}
+Di seguito si espongono i passi dell'\textbf{algoritmo del simplesso}, specificatamente nell'esempio preso in considerazione fino a questo momento:
+
+\begin{itemize}
+    \item \textbf{Inizializzazione}: Si sceglie $(0,0)$ come soluzione CPF iniziale da esaminare. Ovviamente $(0,0)$ è una scelta conveniente perché non sono necessari calcoli per identificare tale soluzione CPF.
+    \item \textbf{Test di ottimalità}: Si conclude che $(0,0)$ non è una soluzione ottimale, in quanto le soluzioni CPF adiacenti $(4,0)$ e $(0,6)$ sono migliori: per la prima $Z=12$, per la seconda $Z=30$.
+    \item \textbf{Iterazione 1}: Si consideri la soluzione CPF adiacente migliore che, in questo caso, è proprio $(0,6)$. Per farlo, si eseguono le tre fasi seguenti:
+    \begin{itemize}
+        \item Considerando i due bordi della regione ammissibile che partono da $(0,0)$, ci si sposta lungo il bordo che conduce all'asse $x_2$.\\
+        Questo perché, con una funzione obiettivo pari a $Z=3x_1 + 5x_2$, l'aumento marginale di $Z$ è maggiore per $x_2$ rispetto ad uno spostamento lungo l'asse $x_1$.
+        \item Fermarsi al primo nuovo limite di vincolo, dato da $2x_2 = 12$. Infatti, spostandosi oltre nella direzione selezionata nel passo precedente, si esce dalla regione ammissibile; nell'esempio considerato, spostandosi lungo $x_2$, ma fermandosi al secondo nuovo limite di vincolo, si ottiene $(0,9)$, che è una soluzione non ammissibile in un vertice.
+        \item Risolvendo l'intersezione del nuovo insieme di vincoli: $x_1 = 0$ e $2x_2 = 12$ si ottiene immediatamente la soluzione $(0,6)$.
+    \end{itemize}
+    \item \textbf{Test di ottimalità}: Ancora una volta si conclude che $(0,6)$ non è una soluzione ottimale, in quanto la soluzioni CPF adiacente $(2,6)$ non ancora analizzata (in quanto $(0,0)$ era la soluzione CPF di partenza) è migliore, in quanto $Z=36$.
+    \item \textbf{Iterazione 2}: Si consideri la soluzione CPF adiacente migliore che, ossia $(2,6)$. Per farlo, si eseguono le tre fasi seguenti:
+    \begin{itemize}
+        \item Considerando i due bordi della regione ammissibile che partono da $(0,6)$, si sceglie di spostarsi lungo il bordo che porta a destra, in quanto lo spostamento lungo tale bordo aumenta $Z$, mentre l'indietreggiare lungo l'asse $x_2$ diminuisce $Z$.
+        \item Ci si arresta al primo nuovo limite di vincolo incontrato muovendosi in quella direzione: $3x_1 + 2x_2 = 18$. Infatti, spostandosi ulteriormente nella direzione selezionata al passo precedente, si esce dalla regione ammissibile.
+        \item Risolvendo l'intersezione del nuovo insieme di vincoli: $3x_1 + 2x_2 = 18$ e $2x_2 = 12$ si ottiene immediatamente la soluzione $(2,6)$.
+    \end{itemize}
+    \item \textbf{Test di ottimalità}: Infine si conclude che $(2,6)$ è la soluzione ottimale, in quanto nessuna delle soluzioni CPF adiacenti (ossia $(0,6)$ e $(4,3)$) è migliore: per la prima $Z=30$, per la seconda $Z=27$.
+\end{itemize}
+
+\vspace{1em}
+\noindent
+\subsection{Relazione tra soluzioni ottimali e CPF}
+Di seguito si espone la \textbf{relazione tra soluzioni ottimali e CPF}:
+
+% Tabella per le definizione di concetti, etc...
+\vspace{1em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{RELAZIONE TRA SOLUZIONI OTTIMALI E CPF}}\\
+    \parbox{\linewidth}{Il metodo del simplesso si concentra esclusivamente sulle soluzioni CPF. Per qualsiasi problema che abbia almeno una soluzione ottimale, per trovarla è sufficiente trovare la migliore soluzione CPF. \vspace{3mm}}\\
+    \hline
+\end{tabularx}
+
+\vspace{1em}
+\noindent
+\textbf{Osservazione}: Poiché il numero di soluzioni fattibili è generalmente infinito, la riduzione del numero di soluzioni da esaminare a un piccolo numero finito (solo tre nell'esempio considerato) rappresenta un'enorme semplificazione.
+
+\vspace{1em}
+\subsection{Flusso del metodo del simplesso}
+Il metodo del simplesso è un algoritmo iterativo con la seguente struttura:
+\begin{itemize}
+    \item Configurare l'algoritmo andando a determinare una prima soluzione CPF ammissibile;
+    \item Se la soluzione CPF è ottimale, ci si arresta. Altrimenti si prosegue con un'ulteriore iterazioni fino a trovare una migliore soluzione CPF.
+\end{itemize}
+Per la risoluzione dell'esempio risolto, tale diagramma di flusso è stato seguito attraverso due iterazioni fino a trovare una soluzione ottimale.
+
+\vspace{1em}
+\noindent
+\subsection{Inizializzazione dell'algoritmo del simplesso}
+Di seguito si espone il concetto chiave di \textbf{inizializzazione dell'algoritmo del simplesso}:
+
+% Tabella per le definizione di concetti, etc...
+\vspace{1em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{INIZIALIZZAZIONE DELL'ALGORITMO DEL SIMPLESSO}}\\
+    \parbox{\linewidth}{Quando possibile, per l'inizializzazione dell'algoritmo del simplesso, si sceglie l'origine $(0,0)$, ponendo tutte le variabili decisionali pari a $0$ come soluzione CPF iniziale.\\
+    Infatti, quando le variabili decisionali sono troppe per trovare una soluzione CPF iniziale graficamente, tale scelta elimina la necessità di utilizzare procedure algebriche per trovare e risolvere una prima soluzione CPF. \vspace{3mm}}\\
+    \hline
+\end{tabularx}
+
+\vspace{1em}
+\noindent
+\textbf{Osservazione}: La scelta dell'origine è comunemente possibile quando tutte le variabili decisionali hanno vincoli di non negatività, perché l'intersezione dei confini di questi vincoli produce l'origine come soluzione angolare: tale soluzione è quindi una soluzione CPF, a meno che non sia inaffrontabile perché viola uno o più vincoli.\\
+Se non è ammissibile, sono necessarie procedure speciali per trovare la soluzione CPF iniziale: in particolare, nel caso in cui $(0,0)$ non sia una soluzione ammissibile, si creerà un problema alternativo, forzando $(0,0)$ come vertice ammissibile iniziale, tramite l'individuazione di variabili artificiali.
+
+\vspace{1em}
+\subsection{Scelta di una soluzione CPF migliore ad ogni iterazione}
+Di seguito si espone la logica alla base della \textbf{scelta di una soluzione CPF migliore ad ogni iterazione}:
+
+% Tabella per le definizione di concetti, etc...
+\vspace{1em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{SCELTA DEL MIGLIORE VERTICE CPF AD OGNI ITERAZIONE}}\\
+    \parbox{\linewidth}{Data una soluzione CPF, è molto più veloce, dal punto di vista computazionale, raccogliere informazioni sulle \textbf{soluzioni CPF adiacenti} che sulle altre soluzioni CPF.\\
+    Pertanto, ogni volta che l'algoritmo del simplesso esegue un'iterazione per passare dalla soluzione CPF corrente ad una migliore, si sceglie \textbf{sempre} una \textbf{soluzione CPF adiacente} a quella corrente, escludendo altre soluzioni CPF; di conseguenza, l'intero percorso seguito per raggiungere una soluzione ottimale è \textbf{lungo i bordi della regione ammissibile}.\\
+    Dopo aver identificato la soluzione CPF corrente, l'algoritmo del simplesso esamina ciascuno degli spigoli della regione ammissibile che si diramano da questa soluzione CPF e identifica il tasso di miglioramento per $Z$ che si otterrebbe spostandosi lungo tale spigolo. Tra gli spigoli con un tasso di miglioramento positivo per $Z$, si sceglie quindi di spostarsi lungo quello con il tasso di miglioramento maggiore per $Z$.\\
+    L'iterazione viene, dunque, completata risolvendo prima la soluzione CPF adiacente all'altra estremità di questo spigolo e poi considerando tale nuova soluzione CPF adiacente come soluzione CPF corrente per il test di ottimalità e (se necessario) per l'iterazione successiva.\vspace{3mm}}\\
+    \hline
+\end{tabularx}
+
+\vspace{1em}
+\noindent
+\textbf{Osservazione}: Riprendendo in considerazione l'esempio di partenza:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{Frontiera_vincolo_soluzioni_vertice}
+    \caption{Frontiera di un vincolo \& Soluzioni di vertice}
+    \label{fig:fig1_3}
+\end{figure}
+
+\vspace{1em}
+\noindent
+\textbf{Osservazione 1}: Nella prima iterazione, spostandosi da $(0,0)$ lungo il bordo sull'asse $x_1$ si otterrebbe un tasso di miglioramento di $Z$ pari a $3$, in quanto
+\[\frac{\partial Z}{\partial x_1} = 3\]
+per cui $Z$ aumenta di $3$ per ogni aumento unitario di $x_1$, mentre spostandosi lungo il bordo sull'asse $x_2$ si otterrebbe un tasso di miglioramento di $Z$ pari a $5$, in quanto
+\[\frac{\partial Z}{\partial x_2} = 5\]
+per cui $Z$ aumenta di $5$ per ogni aumento unitario di $x_2$; da tale evidenza è facile decidere di spostarsi lungo quest'ultimo bordo.\\
+Alla seconda iterazione, invece, l'unico bordo che si dirama da $(0,6)$ e che produce un tasso di miglioramento positivo in $Z$ è il bordo che porta a $(2,6)$, per cui si decide di spostarsi lungo tale bordo.
+
+\vspace{1em}
+\noindent
+\textbf{Osservazione 2}: Tuttavia, non è sempre garantito a priori che sia una buona strada quella di spostarsi lungo il bordo con il maggior tasso di miglioramento per $Z$.\\
+Pertanto, in generale, tutte le scelte sono arbitrarie ed ugualmente valide, dal punto di vista della correttezza, ma non dell'efficienza.
+
+\vspace{1em}
+\subsection{Eseguire il test di ottimalità efficacemente}
+Di seguito si espone il metodo con cui eseguire il \textbf{test di ottimalità efficacemente}:
+
+% Tabella per le definizione di concetti, etc...
+\vspace{1em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{TEST DI OTTIMALITÀ EFFICACE}}\\
+    \parbox{\linewidth}{Un tasso di miglioramento positivo per la funzione obiettivo $Z$ implica che la soluzione CPF adiacente sia migliore della soluzione CPF corrente, mentre un tasso di miglioramento negativo in $Z$ implica che la soluzione CPF adiacente sia peggiore.\\
+    Pertanto, il test di ottimalità consiste semplicemente nel verificare se uno qualsiasi degli spigoli produce un tasso di miglioramento positivo per $Z$. Se nessuno di essi lo dà, allora la soluzione CPF attuale è ottimale.\vspace{3mm}}\\
+    \hline
+\end{tabularx}
+
+\vspace{1em}
+\noindent
+\textbf{Osservazione 1}: Nell'esempio considerato, infatti, spostandosi lungo uno dei due bordi che si diramano da $(2,6)$, il valore della funzione obiettivo $Z$ diminuisce. Poiché le richieste del problema prevedono di massimizzare $Z$, questo fatto porta immediatamente alla conclusione che $(2,6)$ è ottimale.
+
+\vspace{1em}
+\noindent
+\textbf{Osservazione 2}: Il vertice CPF $(2,6)$ è il punto di intersezione tra $2x_2 = 12$ (cioè $x_2 = 6$) e $3x_1 + 2x_2 = 18$; quest'ultimo vincolo può anche essere scritto come
+\[x_1 = 6 - \frac{2}{3}x_2\]
+Quindi, quando $Z = 3x_1 + 5x_2$ si muove lungo tale vincolo, si ha che 
+\[Z = 3 \cdot \left(6-\frac{2}{3}\right)x_2+5x_2 \hspace{1em} \rightarrow \hspace{1em} Z = 18+3x_2\]
+Se $x_2 = 6$, pertanto, si ottiene che $Z = 36$. Quindi, se $x_2 < 6$, $Z$ diminuisce e quindi non è un'opzione praticabile. Poiché anche spostarsi lungo $x_2 = 6$ non consente di aumentare $Z$, ne consegue che (2, 6) è la soluzione ottimale.\\
+Analogamente, se si considera
+\[x_2 = 9 - \frac{3}{2}x_1 \hspace{1em} \text{allora} \hspace{1em} Z = 45 - \frac{9}{2} x_1\]
+per cui in $x_1 = 2$, $Z = 36$ e tale valore diminuisce finché $x_1$ aumenta.
+
+\vspace{1em}
+\noindent
+\textbf{Esercizio}: Un ragionamento analogo può essere eseguito ponendo come funzione obiettivo $Z = 3x_1 + x_2$. In questo caso si osserverà che (2, 6) non è ottimale.
+
+\newpage
+\begin{center}
+    14 Ottobre 2022
+\end{center}
+È noto che la soluzione ottima si trova sempre su un vertice. Secondo l'algoritmo del simplesso, in particolare, partendo da un vertice della regione ammissibile, ci si sposta verso un vertice adiacente, senza analizzare tutti i vertici ammissibili, necessariamente, in modo tale da massimizzare la funzione obiettivo.
+Per la convessità della regione ammissibile, ogni qualvolta ci si sposta da un vertice ad un altro adiacente, e il valore della funzione obiettivo non migliora, allora la soluzione CPF considerata in principio è quella ottimale.
+
+\vspace{1em}
+\subsection{Forma standard e soluzioni di base}
+Un qualunque problema di programmazione lineare può sempre essere espresso in \textbf{forma standard}, come segue
+\begin{align*}
+    \max z = c x\\
+    A x = b (b \geq 0)\\
+    x \geq 0
+\end{align*}
+Pertanto, dato un problema formulato come sopra, posto il $rg(A)=m$, ossia il numero di colonne linearmente indipendenti della matrice $A$ è $m$. Giacché $m < n$, eventualmente riordinando le colonne, si può porre
+\[A = \left[B \vert N\right]\]
+in cui
+\begin{itemize}
+    \item $B$ è una matrice quadrata non singolare $m \times m$ detta \textbf{matrice delle colonne in base};
+    \item $N$ è una matrice $m \times (n-m)$ detta \textbf{matrice delle colonne fuori base};
+\end{itemize}
+La matrice $B$ è composta da $m$ colonne di $A$ linearmente indipendenti che formano una base nello spazio vettoriale ad $m$ dimensioni delle colonne di $A$.\\
+In corrispondenza di una scelta di $B$ ed $N$ si può partizionare anche il vettore delle $x$, ottenendo
+\[x = \left[
+    \rowcolors{1}{white}{white}
+    \begin{array}{c}
+        x_B\\
+        x_N
+    \end{array}
+\right] 
+\rowcolors{1}{white}{white}
+\begin{array}{l}
+    \text{con } m \text{ componenti}\\
+    \text{con } m-n \text{ componenti}\\
+\end{array}\]
+in cui
+\begin{itemize}
+    \item $x_B$ è detto \textbf{vettore delle variabili in base} (\textbf{vettore di base});
+    \item $x_N$ è detto \textbf{vettore delle variabili fuori base}.
+\end{itemize}
+Il sistema di equazioni lineari $Ax = b$ si può riscrivere come
+\[\left[B \vert N\right] \cdot \left[
+    \rowcolors{1}{white}{white}
+    \begin{array}{c}
+        x_B\\
+        x_N
+    \end{array}
+\right] = b \hspace{1em} \rightarrow \hspace{1em} B x_B + N x_N = b\]
+Moltiplicando per l'inversa della matrice delle colonne in base $B$, si ottiene
+\[\boxed{x_B = B^{-1}b - B^{-1}N x_N}\]
+Per ogni base $B$ ogni soluzione del sistema $Ax = b$ corrisponde a determinare il valore per $m$ variabili $x_B$ avendo fissato arbitrariamente il valore per le restanti $n-m$ variabili $x_N$.\\
+Una scelta particolarmente importante è porre $x_N=0$, da cui si ottiene la corrispondente soluzione di base
+\[x=\left[
+    \rowcolors{1}{white}{white}
+    \begin{array}{c}
+        x_B\\
+        x_N
+    \end{array}
+\right]=\left[
+    \rowcolors{1}{white}{white}
+    \begin{array}{c}
+        B^{-1} b\\
+        0
+    \end{array}
+\right]\]
+per cui se $B^{-1}b \geq 0$ si ottiene una soluzione di base ammissibile (BFS) per il sistema
+\[Ax = b, \hspace{1em} x \geq 0\]
+
+\vspace{1em}
+\subsection{Vertici e BFS}
+Si espone di seguito un importante considerazione in merito alla relazione tra \textbf{vertici e BFS}:
+
+% Tabella per le definizione di concetti, etc...
+\vspace{1em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{VERTICI E BFS}}\\
+    \parbox{\linewidth}{Dato il problema $Ax = b, x \geq 0$, una soluzione $x$ è un vertice del poliedro $P(A, b)$ \textbf{se e solo se} $x$ è una BFS.\\
+    Questo perché un punto di un poliedro è un vertice (punto estremo) se e solo se soddisfa all'uguaglianza $n$ vincoli linearmente indipendenti, quindi basta dimostrare che ogni BFS soddisfa $n$ vincoli linearmente indipendenti tra $Ax = b, x \geq 0$.\\
+    Per definizione ogni BFS soddisfa all'uguaglianza ($n-m$) vincoli $x \geq 0$ e gli $m$ vincoli di $Ax = b$. I vincoli stringenti sono linearmente indipendenti poiché la matrice dei loro coefficienti è certamente non singolare essendo della forma
+    \[\left(
+            \begin{array}{cc}
+                B & N\\
+                0 & I_{n-m}
+            \end{array}
+    \right)\]
+    \vspace{-1mm}}\\
+    \hline
+\end{tabularx}
+
+\vspace{2em}
+\noindent
+\textbf{Esempio}: Si consideri il seguente problema, così formulato:
+\begin{align*}
+    \max z = 2 x_1 + x_2\\
+    x_1+x_2 \leq 5\\
+    -x_1+x_2 \leq 0\\
+    6x_1 + 2x_2 \leq 21\\
+    x_1,x_2 \geq 0
+\end{align*}
+Tale sistema non è in forma standard, ma espresso solo in termini delle variabili strutturali (cioè quelle che hanno un immediata corrispondenza fisica col sistema reale che viene modellato).\\
+Per manipolarlo opportunamente, lo si trasforma in forma standard introducendo le \textbf{variabili di slack} $x_3$, $x_4$, $x_5$, ottenendo
+\begin{align*}
+    \max z = 2 x_1 + x_2\\
+    x_1+x_2+x_3=5\\
+    -x_1+x_2+x_4=0\\
+    6x_1 + 2x_2+x_5=21\\
+    x_1,x_2,x_3,x_4,x_5 \geq 0
+\end{align*}
+in cui è essenziale capire che le variabili di slack sono sempre \textbf{non negative}, per dei vincoli di $\leq$. È fondamentale ciò, perché se fossero negative, significherebbe, nel caso della prima diseguaglianza, per esempio, che $x_1+x_2 \geq 5$, che contraddice il vincolo di partenza.\\
+Per ogni vincolo $\leq$, pertanto, si deve introdurre una variabile di slack non negativa. Ecco che ora si è trasformato il problema in forma standard, per cui
+\[A = \left[
+    \rowcolors{1}{white}{white}
+    \begin{array}{ccccc}
+        1 & 1 & 1 & 0 & 0\\
+        -1 & 1 & 0 & 1 & 0\\
+        6 & 2 & 0 & 0 & 1
+    \end{array}
+\right] \hspace{1em} \text{e} \hspace{1em} b = \left[
+    \rowcolors{1}{white}{white}
+    \begin{array}{c}
+        5\\
+        0\\
+        21
+    \end{array}
+\right]\]
+Per individuare i vertici, avendo $n=5$ variabili e $m=3$ vincoli, si pongono a $0$ due variabili (le cosiddette \textbf{variabili fuori base}) in tutti i modi possibili, ottenendo un sistema di equazioni con $m=3$ equazioni e $3$ incognite che è risolubile e, non solo, la soluzione è un punto, ossia il vertice cercato.
+
+\vspace{1em}
+\noindent
+\textbf{Esercizio}: Si pongano a $0$ le variabili $x_4,x_5$ di slack, considerando
+\[x_N = \left[
+    \rowcolors{1}{white}{white}
+    \begin{array}{c}
+        x_4\\
+        x_5
+    \end{array}
+\right] = 0\]
+Ciò porta a dover determinare
+\[x_B = \left[
+    \rowcolors{1}{white}{white}
+    \begin{array}{c}
+        x_1\\
+        x_2\\
+        x_3
+    \end{array}
+\right] = B^{-1} \cdot b\]
+Giacché $B$ è la matrice quadrata dei corrispondenti vettori dei coefficienti per $x_1$, $x_2$ e $x_3$, si ottiene, dalla matrice $A$ di partenza
+\[B = \left[
+    \rowcolors{1}{white}{white}
+    \begin{array}{ccc}
+        1 & 1 & 1\\
+        -1 & 1 & 0\\
+        6 & 2 & 0
+    \end{array}
+\right]\]
+Per invertire tale matrice, se ne calcola il determinante e la matrice dei cofattori, per cui
+\[\det(B) = -1 \cdot 2 - 6 \cdot 1 = -8 \hspace{1em} \text{e} \hspace{1em} \text{cof} B = \left[
+    \rowcolors{1}{white}{white}
+    \begin{array}{ccc}
+        0 & 0 & -8\\
+        2 & -6 & 4\\
+        -1 & -1 & 2
+    \end{array}
+\right]\]
+per cui la matrice inversa cercata è
+\[B^{-1} = \frac{1}{\det(B)} \cdot \text{cof}^{t}(B) = \frac{1}{8} \cdot \left[
+    \rowcolors{1}{white}{white}
+    \begin{array}{ccc}
+        0 & 2 & -1\\
+        0 & -6 & -1\\
+        -8 & 4 & 2
+    \end{array}
+\right]
+\]
+pertanto si può ottenere il vettore $x_B$ come segue
+\[x_B=B^{-1} \cdot b = \frac{1}{\det(B)} \cdot \text{cof}^{t}(B) = \frac{1}{8} \cdot \left[
+    \rowcolors{1}{white}{white}
+    \begin{array}{ccc}
+        0 & 2 & -1\\
+        0 & -6 & -1\\
+        -8 & 4 & 2
+    \end{array}
+\right] \cdot \left[
+    \rowcolors{1}{white}{white}
+    \begin{array}{c}
+        5\\
+        0\\
+        21
+    \end{array}
+\right] = \left[
+    \rowcolors{1}{white}{white}
+    \begin{array}{c}
+        \dfrac{21}{8}\\
+        \dfrac{21}{8}\\
+        -\dfrac{1}{4}\\
+    \end{array}
+\right]\]
+Tuttavia, tale soluzione non risulta ammissibile in quanto si è ottenuto vettore con componenti non tutte $\geq 0$, come richiesto dai vincoli.
+
+\vspace{1em}
+\noindent
+\textbf{Osservazione}: Attenzione che, con questo approccio, si individuano tutti i vertici possibili, pari a
+\[\binom{n}{n-m} = \frac{n!}{m! \cdot (n-m)!}\]
+Tuttavia non è detto che siano tutte ammissibili, in quanto per essere un vertice ammissibile deve soddisfare tutti i vincoli del problema. Non solo, ma è anche possibile che con questo metodo si individui un numero di vertici ammissibile maggiore del numero effettivo dei vertici, in quanto uno stesso vertice può essere intersezione di più di due vincoli.\\
+Per esempio, nel caso di una prima intersezione, denotata con $P_1$, le variabili poste a $0$ sono $x_1$, $x_2$ e $x_4$, per cui le coppie di vincoli che producono come intersezione $P_1$ sono $x_1$ e $x_2$, $x_1$ e $x_4$, $x_2$ e $x_4$, per un totale di
+\[\binom{3}{2}=3\]
+Pertanto, siccome il limite superiore delle possibili basi è
+\[\binom{n}{n-m} = \binom{5}{2} = 10\]
+non tutte le basi corrispondono ad una soluzione ammissibile BFS, ma solamente $6$ sono ammissibili. Siccome i vertici sono $4$, vi saranno BFS \textbf{degeneri}.
+
+\vspace{1em}
+\subsection{Variabili di surplus}
+Se in un problema di programmazione lineare vi sono dei vincoli di $\geq$, per trasformare il problema in forma standard si introducono delle \textbf{variabili di surplus} con segno opposto, ad esempio
+\[-3x_1 + 2x_2 \geq 5 \hspace{1em} \rightarrow \hspace{1em} -3x_1 + 2x_2 - x_6 = 5\]
+in modo tale da rispettare il vincolo di $\geq 0$ di partenza.
+
+\vspace{1em}
+\subsection{Funzione obiettivo in forma matriciale}
+Esplicitando la funzione obiettivo
+\[z = c x = \left[c_B \cdot c_N\right] \cdot \left[
+\rowcolors{1}{white}{white}
+\begin{array}{c}
+    x_b\\
+    x_N
+\end{array}
+\right] = c_B x_B + c_N x_N 
+\]
+e sostituendo a $x_B$ la forma ottenuta in precedenza, ossia
+\[x_B = B^{-1} b - B^{-1} N x_N\]
+si ottiene
+\[z=c_B B^{-1}b - \left(c_B B^{-1}N - c_N\right) \cdot x_N\]
+per cui il valore dell'obiettivo corrispondente alla base $B$ è quindi
+\[\boxed{Z(B) = c_B B^{-1} b}\]
+
+\newpage
+\begin{center}
+    17 Ottobre 2022
+\end{center}
+\textbf{Esercizio 1}: Si consideri il seguente problema di programmazione lineare, così formalizzato
+\begin{align*}
+    &\max z = 2x_1+x_2\\
+    &x_2 \leq 10\\
+    &2x_1+5x_2 \leq 60\\
+    &x_1+x_2 \leq 18\\
+    &3x_1+x_2 \leq 44\\
+    &x_1 \geq 0, x_2 \geq 0
+\end{align*}
+Allora si rappresenti sul diagramma seguente la regione ammissibile, considerando $x_1$ in ascissa e $x_2$ in ordinata
+
+\begin{figure}[H]
+    \pgfplotsset{compat = newest}
+    \begin{tikzpicture}
+ 
+        \begin{axis}[
+            xmin = 0, xmax = 21,
+            ymin = 0, ymax = 21,
+            xtick distance = 3,
+            ytick distance = 5,
+            grid = both,
+            minor tick num = 1,
+            major grid style = {lightgray},
+            minor grid style = {lightgray!25},
+            width = \textwidth,
+            height = 0.5\textwidth]
+            \addplot[
+                name path global=vin1,
+                domain = 0:30,
+                samples = 200,
+                smooth,
+                thick,
+                red,
+            ] {10};
+            \addplot[
+                name path global=vin2,
+                domain = 0:30,
+                samples = 200,
+                smooth,
+                thick,
+                blue,
+            ] {12-2/5*x};
+            \addplot[
+                name path global=vin3,
+                domain = 0:30,
+                samples = 200,
+                smooth,
+                thick,
+                orange,
+            ] {18-x};
+            \addplot[
+                name path global=vin4,
+                domain = 0:30,
+                samples = 200,
+                smooth,
+                thick,
+                green,
+            ] {44-3*x};
+            \fill[name intersections={of=vin1 and vin2,by=point1},
+            name intersections={of=vin2 and vin3,by=point2},
+            name intersections={of=vin3 and vin4,by=point3},
+            ][very thick,draw=orange,pattern=crosshatch dots,pattern color=green!60!white] (0,0)--(0,10)--(point1)--(point2)--(point3)--(14.7,0)--(0,0);
+            \coordinate[label=above:$A$] (A) at ([yshift=+1.5mm]point1);
+            \coordinate[label=above:$B$] (B) at ([yshift=+1.5mm]point2);
+            \coordinate[label=above:$C$] (C) at ([yshift=+1.5mm]point3);
+            \node at (point1)[violet!50,circle,fill,inner sep=-0.5pt]{$A$};
+            \node at (point2)[violet!50,circle,fill,inner sep=-0.5pt]{$B$};
+            \node at (point3)[violet!50,circle,fill,inner sep=-0.5pt]{$C$};
+        \end{axis}
+        \end{tikzpicture}
+\end{figure}
+
+\vspace{1em}
+\noindent
+\textbf{Esercizio 3}: Si consideri il seguente problema di programmazione lineare
+\begin{align*}
+    &\max z = 5x_1+2x_2\\
+    &2x_1-x_2 \leq -1\\
+    &-x_1+2x_2 \leq -1\\
+    &x_1 \geq 0, x_2 \geq 0
+\end{align*}
+La rappresentazione grafica produce il risultato seguente:
+
+\begin{figure}[H]
+    \pgfplotsset{compat = newest}
+    \begin{tikzpicture}
+ 
+        \begin{axis}[
+            xmin = 0, xmax = 21,
+            ymin = 0, ymax = 21,
+            xtick distance = 3,
+            ytick distance = 5,
+            grid = both,
+            minor tick num = 1,
+            major grid style = {lightgray},
+            minor grid style = {lightgray!25},
+            width = \textwidth,
+            height = 0.5\textwidth]
+            \addplot[
+                name path global=xdown,
+                domain = 0:30,
+                samples = 200,
+                smooth,
+                very thin,
+                black,
+            ] {0};
+            \addplot[
+                name path global=y21,
+                domain = 0:30,
+                samples = 200,
+                smooth,
+                very thin,
+                black,
+            ] coordinates {(21,0)(21,21)};
+            \addplot[
+                name path global=xtop,
+                domain = 0:30,
+                samples = 200,
+                smooth,
+                very thin,
+                black,
+            ] {21};
+            \addplot[
+                name path global=y0,
+                domain = 0:30,
+                samples = 200,
+                smooth,
+                very thin,
+                black,
+            ] coordinates {(0,0)(0,21)};
+            \addplot[
+                name path global=vin1,
+                domain = 0:30,
+                samples = 200,
+                smooth,
+                thick,
+                red,
+            ] {1+2*x};
+            \addplot[
+                name path global=vin2,
+                domain = 0:30,
+                samples = 200,
+                smooth,
+                thick,
+                blue,
+            ] {-1/2+1/2*x};
+        \end{axis}
+        \fill[name intersections={of=vin1 and y0,by=point1},
+            name intersections={of=y0 and xtop,by=point2},
+            name intersections={of=vin1 and xtop,by=point3},
+            ][very thick,draw=orange,pattern=crosshatch dots,pattern color=green!60!white] ([yshift=-1.5mm]point1)--([yshift=-1.5mm]point2)--([yshift=-1.5mm]point3)--([yshift=-1.5mm]point1);
+
+        \fill[name intersections={of=vin2 and xdown,by=point1},
+            name intersections={of=vin2 and y21,by=point2},
+            name intersections={of=y21 and xdown,by=point3},
+            ][very thick,draw=cyan,pattern=crosshatch dots,pattern color=magenta!60!white] ([yshift=-1.5mm]point1)--([yshift=-1.5mm]point2)--([yshift=-1.5mm]point3)--([yshift=-1.5mm]point1);
+        \end{tikzpicture}
+\end{figure}
+
+% Importante per capire qual'è la regione ammissibile: verificare se (0,0) soddisfa la disequazione del vincolo
+% Importante per capire la direzione della funzione obiettivo: a seconda della massimizzazione o minimizzazione e dei segni di x_1 e x_2
+
+\vspace{1em}
+\noindent
+\textbf{Esercizio 4}: Si consideri il seguente problema di programmazione lineare
+\begin{align*}
+    &\min z = 40x_1+50x_2\\
+    &2x_1+3x_2 \geq 30\\
+    &x_1+x_2 \geq 12\\
+    &2x_1+x_2 \geq 20\\
+    &x_1 \geq 0, x_2 \geq 0
+\end{align*}
+La rappresentazione grafica produce il risultato seguente:
+
+\begin{figure}[H]
+    \pgfplotsset{compat = newest}
+    \begin{tikzpicture}
+ 
+        \begin{axis}[
+            xmin = 0, xmax = 16,
+            ymin = 0, ymax = 21,
+            xtick distance = 3,
+            ytick distance = 5,
+            grid = both,
+            minor tick num = 1,
+            major grid style = {lightgray},
+            minor grid style = {lightgray!25},
+            width = \textwidth,
+            height = 0.5\textwidth]
+            \addplot[
+                name path global=xdown,
+                domain = 0:30,
+                samples = 200,
+                smooth,
+                very thin,
+                black,
+            ] {0};
+            \addplot[
+                name path global=y21,
+                domain = 0:30,
+                samples = 200,
+                smooth,
+                very thin,
+                black,
+            ] coordinates {(21,0)(21,21)};
+            \addplot[
+                name path global=xtop,
+                domain = 0:30,
+                samples = 200,
+                smooth,
+                very thin,
+                black,
+            ] {21};
+            \addplot[
+                name path global=y0,
+                domain = 0:30,
+                samples = 200,
+                smooth,
+                very thin,
+                black,
+            ] coordinates {(0,0)(0,21)};
+            \addplot[
+                name path global=vin1,
+                domain = 0:30,
+                samples = 200,
+                smooth,
+                thick,
+                red,
+            ] {10-2/3*x};
+            \addplot[
+                name path global=vin2,
+                domain = 0:30,
+                samples = 200,
+                smooth,
+                thick,
+                blue,
+            ] {12-x};
+            \addplot[
+                name path global=vin3,
+                domain = 0:30,
+                samples = 200,
+                smooth,
+                thick,
+                orange,
+            ] {20-2*x};
+        \fill[name intersections={of=vin1 and y0,by=point1},
+            name intersections={of=vin1 and vin2,by=point2},
+            name intersections={of=vin2 and vin3,by=point3},
+            name intersections={of=vin3 and xdown,by=point4},
+            ][very thick,draw=orange,pattern=crosshatch dots,pattern color=green!60!white] (0,0)--(point1)--(point2)--(point3)--(point4)--(0,0);
+            \coordinate[label=above:$A$] (A) at ([xshift=+1.5mm,yshift=+1mm]point1);
+            \coordinate[label=above:$B$] (B) at ([xshift=-1mm,yshift=+1.5mm]point2);
+            \coordinate[label=above:$C$] (C) at ([yshift=+1.5mm]point3);
+            \coordinate[label=above:$D$] (D) at ([xshift=-1mm,yshift=+1.5mm]point4);
+            \node at (point1)[violet!50,circle,fill,inner sep=-0.5pt]{$A$};
+            \node at (point2)[violet!50,circle,fill,inner sep=-0.5pt]{$B$};
+            \node at (point3)[violet!50,circle,fill,inner sep=-0.5pt]{$C$};
+            \node at (point4)[violet!50,circle,fill,inner sep=-0.5pt]{$D$};
+        \end{axis}
+        \end{tikzpicture}
+\end{figure}
+
+\vspace{1em}
+\noindent
+\textbf{Esercizio 5}: Si consideri il seguente problema di programmazione lineare
+\begin{align*}
+    &\max z = 4500x_1+4500x_2\\
+    &x_1 \leq 1\\
+    &x_2 \geq 1\\
+    &4500x_1+4500x_2 \leq 6000\\
+    &500x_1+500x_2   \leq 600\\
+    &x_1 \geq 0, x_2 \geq 0
+\end{align*}
+La rappresentazione grafica produce il risultato seguente:
+
+\begin{figure}[H]
+    \pgfplotsset{compat = newest}
+    \begin{tikzpicture}
+ 
+        \begin{axis}[
+            xmin = 0, xmax = 1.5,
+            ymin = 0, ymax = 1.5,
+            xtick distance = 0.5,
+            ytick distance = 0.5,
+            grid = both,
+            minor tick num = 1,
+            major grid style = {lightgray},
+            minor grid style = {lightgray!25},
+            width = \textwidth,
+            height = 0.5\textwidth]
+            \addplot[
+                name path global=xdown,
+                domain = 0:30,
+                samples = 200,
+                smooth,
+                very thin,
+                black,
+            ] {0};
+            \addplot[
+                name path global=y1,
+                domain = 0:30,
+                samples = 200,
+                smooth,
+                thick,
+                orange,
+            ] coordinates {(1,0)(1,2)};
+            \addplot[
+                name path global=xtop,
+                domain = 0:30,
+                samples = 200,
+                smooth,
+                thick,
+                green,
+            ] {1};
+            \addplot[
+                name path global=y0,
+                domain = 0:30,
+                samples = 200,
+                smooth,
+                very thin,
+                black,
+            ] coordinates {(0,0)(0,21)};
+            \addplot[
+                name path global=vin1,
+                domain = 0:30,
+                samples = 200,
+                smooth,
+                thick,
+                red,
+            ] {60/45-x};
+            \addplot[
+                name path global=vin2,
+                domain = 0:30,
+                samples = 200,
+                smooth,
+                thick,
+                blue,
+            ] {6/5-x};
+        \fill[name intersections={of=y0 and xtop,by=point1},
+            name intersections={of=xtop and vin2,by=point2},
+            name intersections={of=vin2 and y1,by=point3},
+            ][very thick,draw=orange,pattern=crosshatch dots,pattern color=green!60!white] (0,0)--(point1)--(point2)--(point3)--(1,0)--(0,0);
+            \coordinate[label=above:$A$] (A) at ([xshift=+1.5mm,yshift=+1mm]point1);
+            \coordinate[label=above:$B$] (B) at ([xshift=-1mm,yshift=+1.5mm]point2);
+            \coordinate[label=above:$C$] (C) at ([xshift=-1.8mm,yshift=+1.5mm]point3);
+            \coordinate[label=above:$D$] (D) at (1.05,0.01);
+            \node at (point1)[violet!50,circle,fill,inner sep=-0.5pt]{$A$};
+            \node at (point2)[violet!50,circle,fill,inner sep=-0.5pt]{$B$};
+            \node at (point3)[violet!50,circle,fill,inner sep=-0.5pt]{$C$};
+            \node at (1,0)[violet!50,circle,fill,inner sep=-0.5pt]{$D$};
+        \end{axis}
+        \end{tikzpicture}
+\end{figure}
+
+\newpage
+\begin{center}
+    20 Ottobre 2022
+\end{center}
+\subsection{Metodo del simplesso in forma matriciale}
+L'insieme dei vincoli e della funzione obiettivo possono essere scritti come un sistema lineare rispetto al quale si può supporre di aver individuato una base $B$ ammissibile, ovvero
+\[
+    \left[
+        \rowcolors{1}{white}{white}
+        \begin{array}{cc}
+            1 & -c{^T}\\
+            0 & A
+        \end{array}
+    \right]
+    \cdot
+    \left[
+        \rowcolors{1}{white}{white}
+        \begin{array}{c}
+            z\\
+            x
+        \end{array}
+    \right]
+    =
+    \left[
+        \rowcolors{1}{white}{white}
+        \begin{array}{c}
+            0\\
+            b
+        \end{array}
+    \right]
+    \hspace{1em} \leftrightarrow \hspace{1em}
+    \left[
+        \rowcolors{1}{white}{white}
+        \begin{array}{ccc}
+            1 & -c_B{^T} & -c_N{^T}\\
+            0 & B & N
+        \end{array}
+    \right]
+    \cdot
+    \left[
+        \rowcolors{1}{white}{white}
+        \begin{array}{c}
+            z\\
+            x_B\\
+            x_N
+        \end{array}
+    \right]
+    =
+    \left[
+        \rowcolors{1}{white}{white}
+        \begin{array}{c}
+            0\\
+            b
+        \end{array}
+    \right]
+\]
+La quasi (manca la prima colonna) matrice estesa di questo sistema, composto dalle righe dei vincoli e dalla riga della funzione obiettivo, è detta \textbf{tableau}:
+\[
+    \left[
+        \rowcolors{1}{white}{white}
+        \begin{array}{cc}
+            -c{^T} & 0\\
+            A & b
+        \end{array}
+    \right]
+    =
+    \left[
+        \rowcolors{1}{white}{white}
+        \begin{array}{ccc}
+            -c_B{^T} & -c_N{^T} & 0\\
+            B & N & b
+        \end{array}
+    \right]
+\]
+
+\vspace{1em}
+\noindent
+\subsubsection{Tableau iniziale}
+Il \textbf{tableau iniziale}, prima della relativizzazione rispetto alla base $B$ scelta, si presenta come segue
+
+\vspace{1em}
+\noindent
+\begin{table}[H]
+    \rowcolors{1}{white}{white}
+    \setlength{\tabcolsep}{8pt}
+    \renewcommand{\arraystretch}{1.5}
+    \noindent
+    \centering
+    \begin{tabular}{|c|ccccc|ccccc|c|}
+        & \cellcolor{red!25!white}$x_{B_1}$ & \cellcolor{red!25!white}\dots & \cellcolor{red!25!white}$x_{B_r}$ & \cellcolor{red!25!white}\dots & \cellcolor{red!25!white}$x_{B_m}$ & \cellcolor{blue!25!white} \dots & \cellcolor{blue!25!white} $x_j$ & \cellcolor{blue!25!white} \dots &  \cellcolor{blue!25!white} $x_k$ &  \cellcolor{blue!25!white}\dots & \\
+        \hline
+        $z$ & \cellcolor{green!25!white}$c_{B_1}$ & \cellcolor{green!25!white}\dots & \cellcolor{green!25!white}$c_{B_r}$ & \cellcolor{green!25!white}\dots & \cellcolor{green!25!white}$c_{B_m}$ & \cellcolor{green!25!white}\dots & \cellcolor{green!25!white}$c_j$ & \cellcolor{green!25!white}\dots & \cellcolor{green!25!white}$c_k$ & \cellcolor{green!25!white}\dots & \cellcolor{green}$0$\\
+        \hline
+        \cellcolor{red!25!white}$x_{B_1}$ & \cellcolor{red!50!white}$a_{1,B_1}$ & \cellcolor{red!50!white}\dots & \cellcolor{red!50!white}$a_{1,B_r}$ & \cellcolor{red!50!white}\dots & \cellcolor{red!50!white}$a_{1,B_m}$ & \cellcolor{blue!50!white}\dots & \cellcolor{blue!50!white}$a_{1,j}$ & \cellcolor{blue!50!white}\dots & \cellcolor{blue!50!white}$a_{1,k}$ & \cellcolor{blue!50!white}\dots & \cellcolor{orange!25!white}$b_1$\\
+        \cellcolor{red!25!white}$\vdots$ & \cellcolor{red!50!white}$\vdots$ & \cellcolor{red!50!white}$\ddots$ & \cellcolor{red!50!white}$\vdots$ & \cellcolor{red!50!white}$\ddots$ & \cellcolor{red!50!white}$\vdots$ & \cellcolor{blue!50!white}$\ddots$ & \cellcolor{blue!50!white}$\vdots$ & \cellcolor{blue!50!white}$\ddots$ & \cellcolor{blue!50!white}$\vdots$ & \cellcolor{blue!50!white}$\ddots$ & \cellcolor{orange!25!white}$\vdots$\\
+        \cellcolor{red!25!white}$x_{B_r}$ & \cellcolor{red!50!white}$a_{r,B_1}$ & \cellcolor{red!50!white}\dots & \cellcolor{red!50!white}$a_{r,B_r}$ & \cellcolor{red!50!white} \dots & \cellcolor{red!50!white}$a_{r,B_m}$ &\cellcolor{blue!50!white} \dots & \cellcolor{blue!50!white}$a_{r,j}$ & \cellcolor{blue!50!white}\dots & \cellcolor{blue!50!white}$a_{r,k}$ & \cellcolor{blue!50!white}\dots & \cellcolor{orange!25!white}$b_r$\\
+        \cellcolor{red!25!white}$\vdots$ & \cellcolor{red!50!white}$\vdots$ & \cellcolor{red!50!white}$\ddots$ & \cellcolor{red!50!white}$\vdots$ & \cellcolor{red!50!white}$\ddots$ & \cellcolor{red!50!white}$\vdots$ & \cellcolor{blue!50!white}$\ddots$ & \cellcolor{blue!50!white}$\vdots$ & \cellcolor{blue!50!white}$\ddots$ & \cellcolor{blue!50!white}$\vdots$ & \cellcolor{blue!50!white}$\ddots$ & \cellcolor{orange!25!white}$\vdots$\\
+        \cellcolor{red!25!white}$x_{B_m}$ & \cellcolor{red!50!white}$a_{m,B_1}$ & \cellcolor{red!50!white}\dots & \cellcolor{red!50!white}$a_{m,B_r}$ & \cellcolor{red!50!white}\dots & \cellcolor{red!50!white}$a_{m,B_m}$ & \cellcolor{blue!50!white}\dots & \cellcolor{blue!50!white}$a_{m,j}$ & \cellcolor{blue!50!white}\dots & \cellcolor{blue!50!white}$a_{m,k}$ & \cellcolor{blue!50!white}\dots & \cellcolor{orange!25!white}$b_m$\\
+        \hline
+    \end{tabular}
+\end{table}
+
+\vspace{1em}
+\noindent
+in cui
+\begin{itemize}
+    \item le variabili $x_{B_1},\dots,x_{B_m}$ denotate in \textcolor{red!25!white}{rosso chiaro} sono le \textcolor{red!25!white}{variabili in base $B$};
+    \item i coefficienti $a_{1,B_1},\dots,a_{m,B_m}$ denotati in \textcolor{red!50!white}{rosso scuro} sono i \textcolor{red!50!white}{coefficienti delle variabili in base $B$};
+    \item le variabili $x_{j},\dots,x_{k}$ denotate in \textcolor{blue!25!white}{blu chiaro} sono le \textcolor{red!25!white}{variabili fuori base $N$};
+    \item i coefficienti $a_{1,j},\dots,a_{m,k}$ denotati in \textcolor{blue!50!white}{blu scuro} sono i \textcolor{blue!50!white}{coefficienti delle variabili fuori base $N$};
+    \item i coefficienti $c_{B_1},\dots,c_{B_m},\dots,c_j,\dots,c_k$ denotati in \textcolor{green!75!white}{verde chiaro} sono i \textcolor{green!75!white}{coefficienti della funzione obiettivo};
+    \item il valore $0$ denotato in \textcolor{green!100!white}{verde scuro} è il \textcolor{green!100!white}{valore della funzione obiettivo}, ossia il valore della soluzione corrente;
+    \item i coefficienti $b_{1},\dots,b_m$ denotati in \textcolor{orange!25!white}{arancione chiaro} sono i \textcolor{orange!25!white}{valori delle variabili in base}, sempre in funzione della soluzione corrente;
+\end{itemize}
+
+\vspace{1em}
+\noindent
+\textbf{Esempio}: Sia dato il problema di programmazione lineare formalizzato come segue:
+\begin{align*}
+    &\max z = 2x_1 + x_2\\
+    &x_1+x_2 \leq 5\\
+    &-x_1+x_2 \leq 0\\
+    &6x_1+2x_2 \leq 21\\
+    &x_1 \geq 0, x_2 \geq 0
+\end{align*}
+Tale sistema, ovviamente, \textbf{non} è in \textbf{forma standard}, ma espresso solo in termini delle variabili strutturali (cioè quelle che hanno un immediata corrispondenza fisica col sistema reale che viene modellato).\\
+Pertanto lo si trasforma in forma standard introducendo le \textbf{variabili di slack} $x_3$, $x_4$ e $x_5$, ottenendo
+\begin{align*}
+    &\max z = 2 x_1 + x_2\\
+    &x_1+x_2+x_3=5\\
+    &-x_1+x_2+x_4=0\\
+    &6x_1 + 2x_2+x_5=21\\
+    &x_1,x_2,x_3,x_4,x_5 \geq 0
+\end{align*}
+Pertanto ora è possibile realizzare il \textbf{tableau iniziale}:
+
+\vspace{1em}
+\noindent
+\begin{table}[H]
+    \rowcolors{1}{white}{white}
+    \setlength{\tabcolsep}{4pt}
+    \renewcommand{\arraystretch}{1.2}
+    \noindent
+    \centering
+    \begin{tabular}{|c|ccccc|c|}
+        & $x_1$ & $x_2$ & $x_3$ & $x_4$ & $x_5$ &\\
+        \hline
+        $z$ & $-2$ & $-1$ & $0$ & $0$ & $0$ & $0$\\
+        \hline
+        $x_3$ & $1$ & $1$ & $1$ & $0$ & $0$ & $5$\\
+        $x_4$ & $-1$ & $1$ & $0$ & $1$ & $0$ & $0$\\
+        $x_5$ & $6$ & $2$ & $0$ & $0$ & $1$ & $21$\\
+        \hline
+    \end{tabular}
+\end{table}   
+
+\vspace{1em}
+\noindent
+Sapendo, però, per ipotesi che le colonne $3$,$4$,$1$ formano una base iniziale ammissibile, è possibile riordinare le colonne del \textbf{tableau iniziale}, ottenendo:
+
+\vspace{1em}
+\noindent
+\begin{table}[H]
+    \rowcolors{1}{white}{white}
+    \setlength{\tabcolsep}{4pt}
+    \renewcommand{\arraystretch}{1.2}
+    \noindent
+    \centering
+    \begin{tabular}{|c|ccc|cc|c|}
+        & $x_3$ & $x_4$ & $x_1$ & $x_5$ & $x_2$ &\\
+        \hline
+        $z$ & $0$ & $0$ & $-2$ & $0$ & $-1$ & $0$\\
+        \hline
+        $x_3$ & \cellcolor{red!50!white}$1$ & \cellcolor{red!50!white}$0$ & \cellcolor{red!50!white}$1$ & \cellcolor{blue!50!white}$0$ & \cellcolor{blue!50!white}$0$ & \cellcolor{orange!25!white}$1$\\
+        $x_4$ & \cellcolor{red!50!white}$0$ & \cellcolor{red!50!white}$1$ & \cellcolor{red!50!white}$-1$ & \cellcolor{blue!50!white}$0$ & \cellcolor{blue!50!white}$0$ & \cellcolor{orange!25!white}$1$\\
+        $x_1$ & \cellcolor{red!50!white}$0$ & \cellcolor{red!50!white}$0$ & \cellcolor{red!50!white}$6$ & \cellcolor{blue!50!white}$1$ & \cellcolor{blue!50!white}$1$ & \cellcolor{orange!25!white}$2$\\
+        \hline
+    \end{tabular}
+\end{table}
+
+\vspace{1em}
+\noindent
+Esplicitando la funzione obiettivo
+\[z = c x = \left[c_B \cdot c_N\right] \cdot \left[
+\rowcolors{1}{white}{white}
+\begin{array}{c}
+    x_b\\
+    x_N
+\end{array}
+\right] = c_B x_B + c_N x_N 
+\]
+e sostituendo a $x_B$ la forma ottenuta in precedenza, ossia
+\[x_B = B^{-1} b - B^{-1} N x_N\]
+si ottiene
+\[z=c_B B^{-1}b - \left(c_B B^{-1}N - c_N\right) \cdot x_N\]
+per cui il valore dell'obiettivo corrispondente alla base $B$ è quindi
+\[\boxed{Z(B) = c_B B^{-1} b}\]
+
+\vspace{1em}
+\noindent
+Le ultime due relazioni esprimono rispettivamente i vincoli e la funzione obiettivo in funzione delle variabili fuori base.
+Raccogliendo le $m + 1$ equazioni (in quanto $m$ sono per $x_B$ e $1$ per $z$) di tali relazioni in forma matriciale si ottiene:
+\[
+    \left[
+    \rowcolors{1}{white}{white}
+    \begin{array}{c}
+        z\\
+        x_B
+    \end{array}
+    \right]
+    =
+    \left[
+    \rowcolors{1}{white}{white}
+    \begin{array}{c}
+        c_B \cdot B^{-1} \cdot b\\
+        B^{-1} \cdot b
+    \end{array}
+    \right]
+    -
+    \left[
+    \rowcolors{1}{white}{white}
+    \begin{array}{c}
+        c_B \cdot B^{-1} \cdot N - c_N\\
+        B^{-1} \cdot N
+    \end{array}
+    \right]
+    \cdot x_N
+\]
+per cui il corrispondente tableau risulta essere
+\[
+    \left[
+    \rowcolors{1}{white}{white}
+    \begin{array}{ccc}
+        0 & c_B \cdot B^{-1} \cdot N - c_N & c_B \cdot B^{-1} \cdot b\\
+        I & B^{-1} \cdot N & B^{-1} \cdot b
+    \end{array}
+    \right]
+\]
+Nell'esempio considerato, per costruire il tableau di lavoro, si deve partire dal tableau iniziale riordinato:
+
+\vspace{1em}
+\noindent
+\begin{table}[H]
+    \rowcolors{1}{white}{white}
+    \setlength{\tabcolsep}{4pt}
+    \renewcommand{\arraystretch}{1.2}
+    \noindent
+    \centering
+    \begin{tabular}{|c|ccc|cc|c|}
+        & $x_3$ & $x_4$ & $x_1$ & $x_5$ & $x_2$ &\\
+        \hline
+        $z$ & $0$ & $0$ & $-2$ & $0$ & $-1$ & $0$\\
+        \hline
+        $x_3$ & \cellcolor{red!50!white}$1$ & \cellcolor{red!50!white}$0$ & \cellcolor{red!50!white}$1$ & \cellcolor{blue!50!white}$0$ & \cellcolor{blue!50!white}$0$ & \cellcolor{orange!25!white}$1$\\
+        $x_4$ & \cellcolor{red!50!white}$0$ & \cellcolor{red!50!white}$1$ & \cellcolor{red!50!white}$-1$ & \cellcolor{blue!50!white}$0$ & \cellcolor{blue!50!white}$0$ & \cellcolor{orange!25!white}$1$\\
+        $x_1$ & \cellcolor{red!50!white}$0$ & \cellcolor{red!50!white}$0$ & \cellcolor{red!50!white}$6$ & \cellcolor{blue!50!white}$1$ & \cellcolor{blue!50!white}$1$ & \cellcolor{orange!25!white}$2$\\
+        \hline
+    \end{tabular}
+\end{table}
+
+\vspace{1em}
+\noindent
+E considerare la base $B$ evidenziata in \textcolor{red!50!white}{rosso scuro} e calcolare la sua inversa, ovvero
+\[B^{-1}=\frac{1}{\det(B)} \cdot \text{cof}{^T}(B)=\frac{1}{6} \cdot \left[
+    \rowcolors{1}{white}{white}
+    \begin{array}{ccc}
+        6 & 0 & 0\\
+        0 & 6 & 0\\
+        -1 & 1 & 1
+    \end{array}
+\right]{^T} = \frac{1}{6} \cdot \left[
+    \rowcolors{1}{white}{white}
+    \begin{array}{ccc}
+        6 & 0 & -1\\
+        0 & 6 & 1\\
+        0 & 0 & 1
+    \end{array}
+\right] = \left[
+    \rowcolors{1}{white}{white}
+    \begin{array}{ccc}
+        1 & 0 & -\dfrac{1}{6}\\
+        0 & 1 & \dfrac{1}{6}\\
+        0 & 0 & \dfrac{1}{6}
+    \end{array}
+\right]\]
+Ciò permette facilmente di costruire il nuovo tableau:
+
+\vspace{1em}
+\noindent
+\begin{table}[H]
+    \rowcolors{1}{white}{white}
+    \setlength{\tabcolsep}{4pt}
+    \renewcommand{\arraystretch}{2.2}
+    \noindent
+    \centering
+    \begin{tabular}{|c|ccc|cc|c|}
+        & $x_3$ & $x_4$ & $x_1$ & $x_5$ & $x_2$ &\\
+        \hline
+        $z$ & $0$ & $0$ & $0$ & $\dfrac{1}{3}$ & $-\dfrac{1}{3}$ & $7$\\
+        \hline
+        $x_3$ & \cellcolor{red!50!white}$1$ & \cellcolor{red!50!white}$0$ & \cellcolor{red!50!white}$0$ & \cellcolor{blue!50!white}$-\dfrac{1}{6}$ & \cellcolor{blue!50!white}$\dfrac{2}{3}$ & \cellcolor{orange!25!white}$\dfrac{3}{2}$\\
+        $x_4$ & \cellcolor{red!50!white}$0$ & \cellcolor{red!50!white}$1$ & \cellcolor{red!50!white}$0$ & \cellcolor{blue!50!white}$\dfrac{1}{6}$ & \cellcolor{blue!50!white}$\dfrac{4}{3}$ & \cellcolor{orange!25!white}$\dfrac{7}{2}$\\
+        $x_1$ & \cellcolor{red!50!white}$0$ & \cellcolor{red!50!white}$0$ & \cellcolor{red!50!white}$1$ & \cellcolor{blue!50!white}$\dfrac{1}{6}$ & \cellcolor{blue!50!white}$\dfrac{1}{3}$ & \cellcolor{orange!25!white}$\dfrac{7}{2}$\\
+        \hline
+    \end{tabular}
+\end{table}
+
+\vspace{1em}
+\noindent
+Al fine di una scrittura più compatta, si ponga $\mathcal{S}$ l'insieme degli indici delle variabili in base (ossia le colonne di $B$) e $\mathcal{R}$ l'insieme degli indici delle variabili fuori base (ossia le colonne di $N$), e si definisca
+\[
+    y_0 = \left[
+        \rowcolors{1}{white}{white}
+        \begin{array}{c}
+            c_BB^{-1}b\\
+            B^{-1}b
+        \end{array}
+    \right]=
+    \left[
+    \rowcolors{1}{white}{white}
+    \begin{array}{c}
+        y_{0,0}\\
+        y_{1,0}\\
+        \vdots\\
+        y_{m,0}
+    \end{array}
+    \right] \hspace{1em} \text{e} \hspace{1em}
+    y_j = \left[
+        \rowcolors{1}{white}{white}
+        \begin{array}{c}
+            c_BB^{-1}A_{\cdot,j}-c_j\\
+            B^{-1}A_{\cdot,j}
+        \end{array}
+    \right]=
+    \left[
+    \rowcolors{1}{white}{white}
+    \begin{array}{c}
+        y_{0,j}\\
+        y_{1,j}\\
+        \vdots\\
+        y_{m,j}
+    \end{array}
+    \right]
+    \hspace{1em} \forall j \in \mathcal{R}
+\]
+dove $A_{\cdot,j}$ e $c_j$ sono rispettivamente la colonna di $N$ ed il coefficiente di $c$ che moltiplicano la $j$-ma variabile fuori base.\\
+La componente $i$-ma della BFS e la funzione obiettivo si possono quindi riscrivere come
+\[z=y_{0,0}-\sum_{j \in \mathcal{R}} y_{0,j} \cdot x_j \hspace{1em} \text{e} \hspace{1em} x_{B_i}=y_{i,0}-\sum_{j \in \mathcal{R}} y_{i,j} \cdot x_j\]
+per cui il nuovo tableau, adattato alla notazione appena introdotta, diviene:
+
+\vspace{1em}
+\noindent
+\begin{table}[H]
+    \rowcolors{1}{white}{white}
+    \setlength{\tabcolsep}{8pt}
+    \renewcommand{\arraystretch}{1.5}
+    \noindent
+    \centering
+    \begin{tabular}{|c|ccccc|ccccc|c|}
+        & \cellcolor{red!25!white}$x_{B_1}$ & \cellcolor{red!25!white}\dots & \cellcolor{red!25!white}$x_{B_r}$ & \cellcolor{red!25!white}\dots & \cellcolor{red!25!white}$x_{B_m}$ & \cellcolor{blue!25!white} \dots & \cellcolor{blue!25!white} $x_j$ & \cellcolor{blue!25!white} \dots &  \cellcolor{blue!25!white} $x_k$ &  \cellcolor{blue!25!white}\dots & \\
+        \hline
+        $z$ & \cellcolor{green!25!white}$0$ & \cellcolor{green!25!white}\dots & \cellcolor{green!25!white}$0$ & \cellcolor{green!25!white}\dots & \cellcolor{green!25!white}$0$ & \cellcolor{green!25!white}\dots & \cellcolor{green!25!white}$y_{0,j}$ & \cellcolor{green!25!white}\dots & \cellcolor{green!25!white}$y_{0,k}$ & \cellcolor{green!25!white}\dots & \cellcolor{green}$y_{0,0}$\\
+        \hline
+        \cellcolor{red!25!white}$x_{B_1}$ & \cellcolor{red!50!white}$1$ & \cellcolor{red!50!white}\dots & \cellcolor{red!50!white}$0$ & \cellcolor{red!50!white}\dots & \cellcolor{red!50!white}$0$ & \cellcolor{blue!50!white}\dots & \cellcolor{blue!50!white}$y_{1,j}$ & \cellcolor{blue!50!white}\dots & \cellcolor{blue!50!white}$y_{1,k}$ & \cellcolor{blue!50!white}\dots & \cellcolor{orange!25!white}$y_{1,0}$\\
+        \cellcolor{red!25!white}$\vdots$ & \cellcolor{red!50!white}$\vdots$ & \cellcolor{red!50!white}$\ddots$ & \cellcolor{red!50!white}$\vdots$ & \cellcolor{red!50!white}$\ddots$ & \cellcolor{red!50!white}$\vdots$ & \cellcolor{blue!50!white}$\ddots$ & \cellcolor{blue!50!white}$\vdots$ & \cellcolor{blue!50!white}$\ddots$ & \cellcolor{blue!50!white}$\vdots$ & \cellcolor{blue!50!white}$\ddots$ & \cellcolor{orange!25!white}$\vdots$\\
+        \cellcolor{red!25!white}$x_{B_r}$ & \cellcolor{red!50!white}$0$ & \cellcolor{red!50!white}\dots & \cellcolor{red!50!white}$1$ & \cellcolor{red!50!white} \dots & \cellcolor{red!50!white}$0$ &\cellcolor{blue!50!white} \dots & \cellcolor{blue!50!white}$y_{r,j}$ & \cellcolor{blue!50!white}\dots & \cellcolor{blue!50!white}$y_{r,k}$ & \cellcolor{blue!50!white}\dots & \cellcolor{orange!25!white}$y_{r,0}$\\
+        \cellcolor{red!25!white}$\vdots$ & \cellcolor{red!50!white}$\vdots$ & \cellcolor{red!50!white}$\ddots$ & \cellcolor{red!50!white}$\vdots$ & \cellcolor{red!50!white}$\ddots$ & \cellcolor{red!50!white}$\vdots$ & \cellcolor{blue!50!white}$\ddots$ & \cellcolor{blue!50!white}$\vdots$ & \cellcolor{blue!50!white}$\ddots$ & \cellcolor{blue!50!white}$\vdots$ & \cellcolor{blue!50!white}$\ddots$ & \cellcolor{orange!25!white}$\vdots$\\
+        \cellcolor{red!25!white}$x_{B_m}$ & \cellcolor{red!50!white}$0$ & \cellcolor{red!50!white}\dots & \cellcolor{red!50!white}$0$ & \cellcolor{red!50!white}\dots & \cellcolor{red!50!white}$1$ & \cellcolor{blue!50!white}\dots & \cellcolor{blue!50!white}$y_{m,j}$ & \cellcolor{blue!50!white}\dots & \cellcolor{blue!50!white}$y_{m,k}$ & \cellcolor{blue!50!white}\dots & \cellcolor{orange!25!white}$y_{m,0}$\\
+        \hline
+    \end{tabular}
+\end{table}
+
+\vspace{1em}
+\noindent
+Nell'esempio considerato, pertanto, la funzione obiettivo può essere descritta come
+\[z=y_{0,0}-\sum_{j \in \mathcal{R}} y_{0,j} \cdot x_j = 7 - \frac{1}{3}x_5+\frac{1}{3}x_2\]
+e le variabili in base saranno sempre ottenute come
+\[x_{B_i}=y_{i,0}-\sum_{j \in \mathcal{R}} y_{i,j} \cdot x_j\]
+che si traduce in
+\begin{align*}
+    &x_3=\frac{3}{2}+\frac{1}{6}x_5-\frac{2}{3}x_2\\
+    &x_4=\frac{7}{2}-\frac{1}{6}x_5-\frac{4}{3}x_2\\
+    &x_1=\frac{7}{2}-\frac{1}{6}x_5-\frac{1}{3}x_2\\
+\end{align*}
+
+\vspace{1em}
+\noindent
+\subsection{Verifica dell'ottimalità della soluzione corrente}
+L'obiettivo
+\[z=y_{0,0} - \sum_{j \in \mathcal{R}} y_{0,j} \cdot x_j\]
+data la corrente BFS vale $z(B) = y_{0,0}$.\\
+Se esiste un coefficiente $y_{0,k} < 0$ con $k \in \mathcal{R}$, facendo diventare positiva la variabile fuori base $x_k$ attualmente nulla, l'obiettivo aumenta di valore
+\[z = y_{0,0} - y_{0,k} \cdot x_k > y_{0,0} = z(B)\]
+allora, compatibilmente col rispetto dei vincoli, conviene aumentare il più possibile il valore della variabile $x_k$.
+
+\vspace{1em}
+\noindent
+\subsection{Rispetto dell'ammissibilità}
+Il vincolo generico associato all'elemento in base $i$-esimo
+\[x_{B,i} = y_{i,0} - \sum_{j \in \mathcal{R}} y_{i,j} \cdot x_j \geq 0\]
+è rispettato dalla BFS corrente, poiché $y_{i,0} \geq 0$ e $x_j = 0$ per $j \in \mathcal{R}$. Tale vincolo, rispetto alla variabile fuori base che si vuole incrementare, diventa
+\[x_{B,i} = y_{i,0} - y_{i,k} \cdot x_k \geq 0\]
+per cui
+\begin{itemize}
+    \item se il coefficiente $y_{i,k}$ è non positivo, $x_k$ può incrementare a piacere senza violare la non negatività di $x_{B,i}$,
+    \item se il coefficiente $y_{i,k}$ è positivo, $x_k$, per rispettare la non negatività di $x_{B,i}$, può incrementare solo fino al valore
+    \[\frac{y_{i,0}}{y_{i,k}}\]
+    che si ottiene quando la variabile $x_{B,i}$ va a $0$
+\end{itemize}
+Pertanto, il massimo valore che $x_k$ può assumere è quindi
+\[x_k \leftarrow \min \left\{\frac{y_{i,0}}{y_{i,k}} \hspace{0.5em} \text{tale che} \hspace{0.5em} k \in \mathcal{R}, \hspace{0.5em} \text{con} \hspace{0.5em} y_{i,k} > 0\right\}\]
+
+\vspace{1em}
+\noindent
+\textbf{Esempio}: Per esempio, data la soluzione corrente
+\[z=7 - \frac{1}{3}x_5+\frac{1}{3}x_2\]
+il coefficiente di $x_2$ è positivo, quindi conviene rendere il più positivo possibile $x_2$, compatibilmente con i vincoli:
+\begin{align*}
+    &x_3=\frac{3}{2}+\frac{1}{6}x_5-\frac{2}{3}x_2 \geq 0 & \rightarrow & \frac{3}{2}-\frac{2}{3}x_2 \geq 0\\
+    &x_4=\frac{7}{2}-\frac{1}{6}x_5-\frac{4}{3}x_2 \geq 0 & \rightarrow & \frac{7}{2}-\frac{4}{3}x_5 \geq 0\\
+    &x_1=\frac{7}{2}-\frac{1}{6}x_5-\frac{1}{3}x_2 \geq 0 & \rightarrow & \frac{7}{2}-\frac{1}{3}x_2 \geq 0\\
+\end{align*}
+per cui il valore massimo che può assumere $x_2$ è
+\[x_2 = \min \left\{\frac{9}{2},\frac{21}{8},\frac{21}{2}\right\} = \frac{9}{4}\]
+
+\vspace{1em}
+\noindent
+\subsection{Cambio di base}
+Sia $y_{r,k}$ il valore per cui si ottiene il 
+\[\min \left\{\frac{y_{i,0}}{y_{i,k}} \hspace{0.5em} \text{tale che} \hspace{0.5em} k \in \mathcal{R}, \hspace{0.5em} \text{con} \hspace{0.5em} y_{i,k} > 0\right\}\]
+allora tale valore è detto \textbf{pivot}. Se $x_k$ assume il massimo valore ammissibile, allora i valori delle componenti di $x$, in particolare quelle in base che, quindi, dipendono da $x_k$, variano nel modo seguente:
+\begin{align*}
+    &x_k \leftarrow \dfrac{y_{r,0}}{y_{r,k}}\\
+    &x_j \leftarrow 0, \hspace{0.25em} \forall j \in \mathcal{R}-\{k\}\\
+    &x_{B_i} \leftarrow y_{i,0}-y_{i,k} \cdot \dfrac{y_{r,0}}{y_{r,k}}, \hspace{0.25em} \forall i \in \mathcal{S}
+\end{align*}
+e quindi
+\[x_{B_r} \leftarrow 0\]
+
+\vspace{1em}
+\noindent
+Per potere iterare il ragionamento conviene esprimere le soluzioni del sistema $Ax = b$, in funzione delle variabili che dopo l'aggiornamento hanno certamente valore nullo. Le equazioni associate alla componente $i$-ma della BFS e l'obiettivo si dovranno quindi riscrivere come:
+\[z=y_{0,0}-y_{0,k} \cdot \frac{y_{r,0}}{y_{r,k}} - \sum_{j \in \mathcal{R} - \{k\}} \left(y_{0,j}-y_{0,k} \cdot \frac{y_{r,j}}{y_{r,k}}\right) \cdot x_j + \frac{y_{0,k}}{y_{r,k}} \cdot x_{B_r}\]
+
+% z = y00 − y0kyr0/yrk − xBi = yi0 − yjkyr0/yrk −
+% ∑
+% (y0j − y0kyrj/yrk)xj + y0k/yrkxBr (yij − yikyrj/yrk)xj + yjk/yrkxBr
+% xk = yr0/yrk −
+% ∑
+% j∈R−{k}
+% j∈R−{k}
+% (yrj/yrkxj + 1/yrkxBr)
+% ovvero si è cambiata la base
+% j∈R−{k} ∑
+% ∀i ∈ S − {r}
+% S ← S ∪ {k} − {r} R ← R∪{r}−{k}
+
+\vspace{1em}
+\noindent
+Dovendo uscire $x_3$ dalla base $B$ ed entrare $x_2$, si ricostruisce nuovamente il tableau, riutilizzando il medesimo approccio di partenza, andando ad individuare la base $B$ (e successivamente la sua inversa), la base $N$
+
+\vspace{1em}
+\noindent
+\begin{table}[H]
+    \rowcolors{1}{white}{white}
+    \setlength{\tabcolsep}{4pt}
+    \renewcommand{\arraystretch}{2.2}
+    \noindent
+    \centering
+    \begin{tabular}{|c|ccc|cc|c|}
+        & $x_2$ & $x_4$ & $x_1$ & $x_5$ & $x_3$ &\\
+        \hline
+        $z$ & $0$ & $0$ & $0$ & $\dfrac{1}{3}$ & $-\dfrac{1}{3}$ & $7$\\
+        \hline
+        $x_3$ & \cellcolor{red!50!white}$1$ & \cellcolor{red!50!white}$0$ & \cellcolor{red!50!white}$0$ & \cellcolor{blue!50!white}$-\dfrac{1}{6}$ & \cellcolor{blue!50!white}$\dfrac{2}{3}$ & \cellcolor{orange!25!white}$\dfrac{3}{2}$\\
+        $x_4$ & \cellcolor{red!50!white}$0$ & \cellcolor{red!50!white}$1$ & \cellcolor{red!50!white}$0$ & \cellcolor{blue!50!white}$\dfrac{1}{6}$ & \cellcolor{blue!50!white}$\dfrac{4}{3}$ & \cellcolor{orange!25!white}$\dfrac{7}{2}$\\
+        $x_1$ & \cellcolor{red!50!white}$0$ & \cellcolor{red!50!white}$0$ & \cellcolor{red!50!white}$1$ & \cellcolor{blue!50!white}$\dfrac{1}{6}$ & \cellcolor{blue!50!white}$\dfrac{1}{3}$ & \cellcolor{orange!25!white}$\dfrac{7}{2}$\\
+        \hline
+    \end{tabular}
+\end{table}
+
+\vspace{1em}
+\noindent
+\textbf{Esempio}: Si consideri il seguente problema di programmazione lineare, formalizzato come segue:
+\begin{align*}
+    &\max z = 3 x_1 + 5x_2\\
+    &x_1 \leq 4\\
+    &2x_2 \leq 12\\
+    &3x_1 + 2x_2 \leq 18\\
+    &x_1,x_2 \geq 0
+\end{align*}
+Tale sistema non è in forma standard, ma espresso solo in termini delle variabili strutturali (cioè quelle che hanno un immediata corrispondenza fisica col sistema reale che viene modellato).\\
+Per manipolarlo opportunamente, lo si trasforma in forma standard introducendo le \textbf{variabili di slack} $x_3$, $x_4$, $x_5$, ottenendo
+\begin{align*}
+    &\max z = 3 x_1 + 5x_2\\
+    &x_1 + x_3 = 4\\
+    &2x_2 + x_4 = 12\\
+    &3x_1 + 2x_2 + x_5 = 18\\
+    &x_1,x_2 \geq 0
+\end{align*}
+Ovviamente è noto il metodo per individuare quali vertici costituiscono delle soluzioni ammissibili. Ma senza svolgere alcun calcolo, inizialmente, è possibile partire da un vertice che sicuramente appartiene alla regione ammissibile, con soluzione $x_1=0$ e $x_2=0$ (ovvero queste ultime sono le variabili fuori base). Ciò permette facilmente di capire che le altre variabili (che sono le variabili in base $B$), avranno valore
+\begin{itemize}
+    \item $x_3=4$
+    \item $x_4=12$
+    \item $x_5=18$
+\end{itemize}
+Il tableau opportunamente riordinato è
+\vspace{1em}
+\noindent
+\begin{table}[H]
+    \rowcolors{1}{white}{white}
+    \setlength{\tabcolsep}{4pt}
+    \renewcommand{\arraystretch}{2.2}
+    \noindent
+    \centering
+    \begin{tabular}{|c|ccc|cc|c|}
+        & $x_3$ & $x_4$ & $x_5$ & $x_1$ & $x_2$ &\\
+        \hline
+        $z$ & $0$ & $0$ & $0$ & $-3$ & $-5$ & $0$\\
+        \hline
+        $x_3$ & \cellcolor{red!50!white}$1$ & \cellcolor{red!50!white}$0$ & \cellcolor{red!50!white}$0$ & \cellcolor{blue!50!white}$1$ & \cellcolor{blue!50!white}$0$ & \cellcolor{orange!25!white}$4$\\
+        $x_4$ & \cellcolor{red!50!white}$0$ & \cellcolor{red!50!white}$1$ & \cellcolor{red!50!white}$0$ & \cellcolor{blue!50!white}$0$ & \cellcolor{blue!50!white}$2$ & \cellcolor{orange!25!white}$12$\\
+        $x_5$ & \cellcolor{red!50!white}$0$ & \cellcolor{red!50!white}$0$ & \cellcolor{red!50!white}$1$ & \cellcolor{blue!50!white}$3$ & \cellcolor{blue!50!white}$2$ & \cellcolor{orange!25!white}$18$\\
+        \hline
+    \end{tabular}
+\end{table}
+Ciò permette di evincere che
+\[z=0+3x_1+5x_2\]
+per cui, ovviamente, non si è ottenuta la soluzione ottima, in quanto aumentando sia $x_1$ che $x_2$ la soluzione ottima può aumentare. Tuttavia, conviene procedere aumentando $x_2$, per cui $x_2$ entra in base e per capire chi esce, si calcola
+\begin{align*}
+    &x_3=4-x_1 \geq 0\\
+    &x_4=12-2x_2 \geq 0 & \rightarrow & x_2 \geq 6\\
+    &x_5=18-3x_1-2x_2 \geq 0 & \rightarrow & x_2 \leq 9
+\end{align*}
+e il minimo valore tra quelli ottenuti è ovviamente $6$, per cui si ottiene che il valore $2$ è della seconda riga è il pivot. Per cui la variabile uscente è $x_4$. Si deve ora ricostruire il tableau, in modo tale da ottenere i coefficienti della funzione obiettivo delle variabili in base pari a $0$, mentre la matrice dei coefficienti delle variabili in base corrisponda esattamente ad una matrice unità $I_n$. Per farlo si effettuano delle operazioni elementari in modo tale da rendere unitario il pivot corrispondente della variabile $x_2$ che è entrata in base. Non solo, ma dovendo creare una colonna con un solo un $1$ si somma o si sottrae in modo tale da annullare il coefficiente cercato.\\
+Dopodiché, per esprimere la funzione obiettivo in funzione unicamente delle variabili fuori base $x_1$ e $x_4$ si esegue sempre una somma o sottrazione, in modo tale da annullare il coefficiente cercato.\\
+Dato, quindi, il sistema seguente:
+\vspace{1em}
+\noindent
+\begin{table}[H]
+    \rowcolors{1}{white}{white}
+    \setlength{\tabcolsep}{4pt}
+    \renewcommand{\arraystretch}{2.2}
+    \noindent
+    \centering
+    \begin{tabular}{c|ccc|cc|c}
+            & $x_3$ & $x_4$ & $x_5$ & $x_1$ & $x_2$ & \\
+        \hline
+        $z$   & $0$   & $0$   & $0$   & $-3$  & $-5$  & $0$\\
+        \hline
+        $x_3$ & $1$   & $0$   & $0$   & $1$   & $0$   & $4$\\ 
+        $x_4$ & $0$   & $1$   & $0$   & $0$   & $2$   & $12$\\
+        $x_5$ & $0$   & $0$   & $1$   & $3$   & $2$   & $18$\\
+    \end{tabular}
+\end{table}
+\noindent
+Bisogna rendere la colonna di $x_2$ esattamente identica alla colonna di $x_4$, essendo la prima variabile entrante e la seconda uscente. Basterà sostituire la penultima riga con la sua metà, per cui
+\vspace{1em}
+\noindent
+\begin{table}[H]
+    \rowcolors{1}{white}{white}
+    \setlength{\tabcolsep}{4pt}
+    \renewcommand{\arraystretch}{2.2}
+    \noindent
+    \centering
+    \begin{tabular}{c|ccc|cc|c}
+        & $x_3$ & $x_4$ & $x_5$ & $x_1$ & $x_2$ & \\
+        \hline
+        $z$   & $0$   & $0$   & $0$   & $-3$  & $-5$  & $0$\\
+        \hline
+        $x_3$ & $1$   & $0$   & $0$   & $1$   & $0$   & $4$\\ 
+        $x_4$ & $0$   & $\dfrac{1}{2}$   & $0$   & $0$   & $1$   & $6$\\
+        $x_5$ & $0$   & $0$   & $1$   & $3$   & $2$   & $18$\\
+    \end{tabular}
+\end{table}
+\noindent
+Ma l'ultima coordinata per $x_2$ è pari a $2$, ma dovrebbe essere $0$. Basterà sostituire l'ultima riga con se stessa meno $2$ volte la penultima, ovvero:
+\vspace{1em}
+\noindent
+\begin{table}[H]
+    \rowcolors{1}{white}{white}
+    \setlength{\tabcolsep}{4pt}
+    \renewcommand{\arraystretch}{2.2}
+    \noindent
+    \centering
+    \begin{tabular}{c|ccc|cc|c}
+        & $x_3$ & $x_4$ & $x_5$ & $x_1$ & $x_2$ & \\
+        \hline
+        $z$   & $0$   & $0$   & $0$   & $-3$  & $-5$  & $0$\\
+        \hline
+        $x_3$ & $1$   & $0$   & $0$   & $1$   & $0$   & $4$\\ 
+        $x_4$ & $0$   & $\dfrac{1}{2}$   & $0$   & $0$   & $1$   & $6$\\
+        $x_5$ & $0$   & $-1$   & $1$   & $3$   & $0$   & $6$\\
+    \end{tabular}
+\end{table}
+\noindent
+Anche la prima riga, per $z$, deve essere modificata, in quanto la funzione obiettivo deve essere espressa unicamente in funzione delle variabili fuori base $x_1$ e $x_4$. Allora si sostituisce ad essa se stessa più $5$ volte la penultima riga, da cui:
+\vspace{1em}
+\noindent
+\begin{table}[H]
+    \rowcolors{1}{white}{white}
+    \setlength{\tabcolsep}{4pt}
+    \renewcommand{\arraystretch}{2.2}
+    \noindent
+    \centering
+    \begin{tabular}{c|ccc|cc|c}
+        & $x_3$ & $x_4$ & $x_5$ & $x_1$ & $x_2$ & \\
+        \hline
+        $z$   & $0$   & $\dfrac{5}{2}$   & $0$   & $-3$  & $0$  & $30$\\
+        \hline
+        $x_3$ & $1$   & $0$   & $0$   & $1$   & $0$   & $4$\\ 
+        $x_4$ & $0$   & $\dfrac{1}{2}$   & $0$   & $0$   & $1$   & $6$\\
+        $x_5$ & $0$   & $-1$   & $1$   & $3$   & $0$   & $6$\\
+    \end{tabular}
+\end{table}
+\noindent
+Ecco che quindi si è ottenuto esattamente ciò che si cercava. Riordinando il tableau si ottiene
+\vspace{1em}
+\noindent
+\begin{table}[H]
+    \rowcolors{1}{white}{white}
+    \setlength{\tabcolsep}{4pt}
+    \renewcommand{\arraystretch}{2.2}
+    \noindent
+    \centering
+    \begin{tabular}{|c|ccc|cc|c|}
+        & $x_3$ & $x_2$ & $x_5$ & $x_1$ & $x_4$ &\\
+        \hline
+        $z$ & $0$ & $0$ & $0$ & $-3$ & $\dfrac{5}{2}$ & $30$\\
+        \hline
+        $x_3$ & \cellcolor{red!50!white}$1$ & \cellcolor{red!50!white}$0$ & \cellcolor{red!50!white}$0$ & \cellcolor{blue!50!white}$1$ & \cellcolor{blue!50!white}$\dfrac{5}{2}$ & \cellcolor{orange!25!white}$4$\\
+        $x_2$ & \cellcolor{red!50!white}$0$ & \cellcolor{red!50!white}$1$ & \cellcolor{red!50!white}$0$ & \cellcolor{blue!50!white}$0$ & \cellcolor{blue!50!white}$\dfrac{1}{2}$ & \cellcolor{orange!25!white}$6$\\
+        $x_5$ & \cellcolor{red!50!white}$0$ & \cellcolor{red!50!white}$0$ & \cellcolor{red!50!white}$1$ & \cellcolor{blue!50!white}$3$ & \cellcolor{blue!50!white}$1$ & \cellcolor{orange!25!white}$6$\\
+        \hline
+    \end{tabular}
+\end{table}
+
+\vspace{1em}
+\noindent
+\textbf{Osservazione}: Partendo dal tableau, è immediato evincere che, se esso presenta una particolare configurazione, allora automaticamente è possibile affermare che la regione ammissibile è infinita e non esiste soluzione ottima.\\
+Ciò si capisce se facendo uscire una variabile dalla base, nessun'altra vi entra in quanto non si annulla mai, in quanto nella sua colonna del tableau si hanno solamente termini non positivi.
 
 \end{document}
