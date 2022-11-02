@@ -2289,8 +2289,13 @@ e quindi
 \vspace{1em}
 \noindent
 Per potere iterare il ragionamento conviene esprimere le soluzioni del sistema $Ax = b$, in funzione delle variabili che dopo l'aggiornamento hanno certamente valore nullo. Le equazioni associate alla componente $i$-ma della BFS e l'obiettivo si dovranno quindi riscrivere come:
-\[z=y_{0,0}-y_{0,k} \cdot \frac{y_{r,0}}{y_{r,k}} - \sum_{j \in \mathcal{R} - \{k\}} \left(y_{0,j}-y_{0,k} \cdot \frac{y_{r,j}}{y_{r,k}}\right) \cdot x_j + \frac{y_{0,k}}{y_{r,k}} \cdot x_{B_r}\]
-
+\begin{align*}
+    &z=y_{0,0}-y_{0,k} \cdot \frac{y_{r,0}}{y_{r,k}} - \sum_{j \in \mathcal{R} - \{k\}} \left(y_{0,j}-y_{0,k} \cdot \frac{y_{r,j}}{y_{r,k}}\right) \cdot x_j + \frac{y_{0,k}}{y_{r,k}} \cdot x_{B_r}&&\\
+    &x_{B_i} = y_{i,0} - y_{j,k} \cdot \frac{y_{r,0}}{y_{r,k}} - \sum_{j \in \mathcal{R}-\{k\}} \left(y_{i,j} - y_{i,k} \cdot \frac{y_{r,j}}{y_{j,k}}\right) \cdot x_j + \frac{y_{j,k}}{y_{r,k}} \cdot x_{B_r}&&\forall \in \in \mathcal{S}\\
+    &x_k = \frac{y_{r,0}}{y_{r,k}} - \sum_{j \in \mathcal{R} - \{k\}} \left(\frac{y_{r,j}}{y_{r,k}} \cdot x_j + \frac{1}{y_{r,k}} \cdot x_{B_r}\right)&&
+\end{align*}
+ovvero si è cambiata la base:
+\[\mathcal{S} \leftarrow \mathcal{S} \cup \{k\} - \{r\} \hspace{1em} \text{e} \hspace{1em} \mathcal{R} = \mathcal{R} \cup \{r\} - \{k\}\]
 % z = y00 − y0kyr0/yrk − xBi = yi0 − yjkyr0/yrk −
 % ∑
 % (y0j − y0kyrj/yrk)xj + y0k/yrkxBr (yij − yikyrj/yrk)xj + yjk/yrkxBr
@@ -2488,5 +2493,750 @@ Ecco che quindi si è ottenuto esattamente ciò che si cercava. Riordinando il t
 \noindent
 \textbf{Osservazione}: Partendo dal tableau, è immediato evincere che, se esso presenta una particolare configurazione, allora automaticamente è possibile affermare che la regione ammissibile è infinita e non esiste soluzione ottima.\\
 Ciò si capisce se facendo uscire una variabile dalla base, nessun'altra vi entra in quanto non si annulla mai, in quanto nella sua colonna del tableau si hanno solamente termini non positivi.
+
+\vspace{1em}
+\subsubsection{Iterazione e condizioni di ottimalità}
+Al cambiamento di base, si ridefiniscono i vettori $y_j$ e $y_0$ e si verifica l'ottimalità o meno della base, ovvero
+\begin{itemize}
+    \item se esistono dei coefficienti $y_{0,k} < 0$ e $y_{r,k} > 0$ si itera, ponendo attenzione al cycling se $y_{r,k} = 0$
+    \item se esistono dei coefficienti $y_{0,k} < 0$, ma non esiste alcun $y_{r,k} > 0$, il problema è illimitato
+    \item se non esiste alcun coefficiente $y_{0,k} < 0$ la soluzione correntemente in base è ottima
+\end{itemize}
+In questo modo, quindi, dato un problema di programmazione lineare, in forma standard una soluzione di base $x^*$, relativa alla base $B$, è ottima se si verificano le seguenti condizioni:
+\begin{enumerate}
+    \item $B^{-1} \cdot b = y_0 \geq 0$ implica l'ammissibilità
+    \item $c_B \cdot B^{-1} \cdot A_j - c_j \leq 0$ implica $y_{0,j} \geq 0, \forall j$, ossia la non migliorabilità
+\end{enumerate}
+In realtà la condizione $2$ può essere praticamente verificata per le sole variabili fuori base, infatti le variabili in base hanno per costruzione costi ridotti sempre nulli e quindi soddisfano certamente la condizione data. La condizione 2 quindi, diventa
+\[c_B \cdot B^{-1} \cdot N_j - c_j \leq 0 \hspace{1em} \text{ implica } \hspace{1em} y_{0,j} \geq 0, \hspace{1em} \forall j \in \mathcal{R}\]
+
+\newpage
+\begin{center}
+    24 Ottobre 2022
+\end{center}
+\subsection{Riepilogo operativo - Algoritmo del simplesso}
+L'algoritmo del simplesso fino ad ora esposto si articola in cinque fasi principali:
+\begin{enumerate}
+    \item \textbf{Inizializzazione}: Determinare una soluzione di base ammissibile;
+    \item \textbf{Verifica dell'ottimalità}: Se $y_{0,j} \geq 0, \forall j \in \mathcal{R}$, la soluzione corrente è ottima e l'algoritmo termina, altrimenti prosegue al passo successivo;
+    \item \textbf{Scelta della variabile entrante in base}: Scegliere una variabile fuori base $x_k$ tale che $y_{0,k} < 0$ e proseguire al passo successivo;
+    \item \textbf{Scelta della variabile uscente dalla base}: Scegliere una variabile $x_{B_r}$ tale che
+    \[\frac{y_{i,0}}{y_{i,r}} = \min \left\{\frac{y_{i,0}}{y_{i,k}} \hspace{0.5em} \text{tale che} \hspace{0.5em} k \in \mathcal{R}, \hspace{0.5em} \text{con} \hspace{0.5em} y_{i,k} > 0\right\}\]
+    Se $y_{i,k} < 0, \hspace{1em} \forall i$, la soluzione del problema è illimitata, e l'algoritmo termina (in quanto non vi è nessuna variabile uscente dalla base), altrimenti si procede al passo successivo;
+    \item \textbf{Pivoting}: Risolvere i vincoli di uguaglianza esprimendo le nuove variabili in base $x_k$ e $x_{B_i} \hspace{1em} \forall i \neq k$, in funzione delle nuove variabili fuori base $x_{B_i}$ e $x_j \hspace{1em} \forall j \in \mathcal{R} - \{k\}$. La nuova BFS si ottiene ponendo le nuove variabili fuori base a zero. Il procedimento ora si ripete a partire dal passo $2$.
+\end{enumerate}
+
+\vspace{1em}
+\noindent
+\textbf{Osservazione}: Nell'algoritmo del simplesso si distinguono due fasi
+\begin{enumerate}
+    \item La fase I consiste nel passo di inizializzazione in cui viene individuata una prima BFS;
+    \item La fase II consiste nel determinare la BFS ottima a partire dalla prima BFS.
+\end{enumerate}
+Mentre la fase II è stata già illustrata, la fase I viene illustrata in seguito. Inoltre, la verifica se il problema è illimitato può anche venire fatta durante la fase II controllando tutte le colonne associate a costi ridotti positivi (e quindi coefficienti nel tableau negativi); ovviamente, se le colonne sono numerose questa verifica può essere onerosa.
+
+\vspace{1em}
+\subsection{Fase I - Individuazione della prima BFS}
+In alcuni casi una prima base ammissibile è immediata. Si supponga, infatti,che il problema sia formulato come segue
+\begin{align*}
+    &\max z = cx\\
+    &Hx \leq b\\
+    &x \geq 0
+\end{align*}
+con $b \geq 0$; allora la sua trasformazione in forma standard introduce delle \textbf{variabili di slack} $s$ le cui corrispondenti colonne formano la prima base ammissibile, ottenendo
+\begin{align*}
+    &\max z = cx\\
+    &Hx  + Is = b\\
+    &x \geq 0, s \geq 0
+\end{align*}
+Riordinando le colonne si ottiene
+\[A=\left[I \vert H\right] \hspace{1em} \text{con} \hspace{1em} B=I \hspace{1em} \text{e} \hspace{1em} N=H\]
+in cui, chiaramente
+\[\text{rg}{A} = m \hspace{1em} \text{e} \hspace{1em} B{^-1} \cdot b \geq 0\]
+Si osservi che, in questo esempio, $B$ è la matrice identica, per la sua inversa è ancora la matrice identica, quindi $B^{-1} \cdot b = b$ che deve essere maggiore o uguale a $0$.
+
+\vspace{1em}
+\noindent
+\subsection{Forma canonica}
+Di seguito si espone la definizione di \textbf{forma canonica}:
+
+% Tabella per le definizione di concetti, etc...
+\vspace{1em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{FORMA CANONICA}}\\
+    \parbox{\linewidth}{Qualora un problema di programmazione lineare, ridotto in \textbf{forma standard}, presenti la matrice $A$ che si può esprimere come
+    \[A=\left[I \vert H\right] \hspace{1em} \text{con} \hspace{1em} B=I \hspace{1em} \text{e} \hspace{1em} N=H\]
+    allora il problema è detto essere espresso in \textbf{forma canonica} \vspace{3mm}}\\
+    \hline
+\end{tabularx}
+
+\vspace{2em}
+\noindent
+\textbf{Osservazione}: Si osservi che non è immediato esprimere un problema di programmazione lineare in forma canonica in presenza di disuguaglianze di verso opposto, infatti le variabili di surplus hanno coefficienti negativi, o in presenza di vincoli di uguaglianza.
+
+\vspace{2em}
+\noindent
+\textbf{Esempio}: Per esempio, si consideri il problema di programmazione lineare formalizzato come segue:
+\begin{align*}
+    & \min z = 4x_1+x_2\\
+    & 3x_1+x_2=3\\
+    & 4x_1+3x_2 \geq 6\\
+    & x_1+2x_2 \leq 4\\
+    &x_1,x_2 \geq 0
+\end{align*}
+Trasformando tale problema in forma standard, introducendo tanto variabili di slack, quanto di surplus, si ottiene
+\begin{align*}
+    & \max z = -4x_1-x_2\\
+    & 3x_1+x_2=3\\
+    & 4x_1+3x_2-x_3=6\\
+    & x_1+2x_2+x_4=4\\
+    &x_1,x_2,x_3,x_4 \geq 0
+\end{align*}
+Tuttavia, tale formulazione standard NON è una forma canonica, in quanto la matrice $A$ si presenta come segue
+\[
+    A = \left[
+    \rowcolors{1}{white}{white}
+    \begin{array}{cccc}
+        3 & 1 & 0 & 0\\
+        4 & 3 & -1 & 0\\
+        1 & 2 & 0 & 1
+    \end{array}
+\right]
+\]
+
+\vspace{1em}
+\noindent
+\textbf{Osservazione}: Se il problema è nella forma standard, ottenuto solo da vincoli di tipo $=$ e $\geq$, si introducono \textbf{al più} $m$ variabili artificiali $u$ e si formula il problema in modo tale da ricondurlo alla fase I:
+\begin{align*}
+    &\max z = cx&&\min w = Iu\\
+    &Ax = b& \rightarrow \textbf{ fase I}&Ax + Iu=b\\
+    &x \geq 0, s \geq 0&&x \geq0, u \geq 0
+\end{align*}
+Per il problema di fase I è immediato determinare una base iniziale ammissibile.\\
+Inoltre, il problema di fase I ammette una soluzione ottima $w^*$ non negativa per costruzione
+\begin{itemize}
+    \item se $w^* > 0$, allora il problema di fase I non ha soluzioni ammissibili $x$,$u$ tale che $u=0$ e quindi non esiste $x$ tale che
+    \[Ax+I0=b \hspace{1em} \rightarrow \hspace{1em} Ax=b\]
+    da cui il sistema $Ax = b$ non è compatibile e il problema di programmazione lineare non ha soluzioni ammissibili;
+    \item se $w^* = 0$, allora la componente della soluzione ottima $x^*$, $u^*$ è tale che $u=0$ e quindi $x^*$ è tale che
+    \[Ax^*+I0=b \hspace{1em} \rightarrow \hspace{1em} Ax^*=b\]
+    Poiché $x^*$ ha al più $m$ componenti non nulle essa può essere presa come prima BFS del problema originale.
+\end{itemize}
+
+\vspace{1em}
+\noindent
+\textbf{Esempio}: Si consideri, nuovamente, la seguente formulazione del problema di programmazione lineare introdotto in principio, già ridotto in forma standard:
+\begin{align*}
+    & \max z = -4x_1-x_2\\
+    & 3x_1+x_2=3\\
+    & 4x_1+3x_2-x_3=6\\
+    & x_1+2x_2+x_4=4\\
+    &x_1,x_2,x_3,x_4 \geq 0
+\end{align*}
+A tale problema si associa la matrice dei coefficienti seguente
+\[
+    A = \left[
+    \rowcolors{1}{white}{white}
+    \begin{array}{cccc}
+        3 & 1 & 0 & 0\\
+        4 & 3 & -1 & 0\\
+        1 & 2 & 0 & 1
+    \end{array}
+\right]
+\]
+in cui $m=3$. Dal momento che l'ultima colonna è già un vettore della base canonica (grazie alla presenza di una \textbf{variabile di slack}), in particolare $e_3$, è sufficiente introdurre due sole variabili artificiali, $u_1$ e $u_2$, ottenendo la forma canonica seguente
+\begin{align*}
+    & \min z = u_1+u_2\\
+    & 3x_1+x_2+u_1=3\\
+    & 4x_1+3x_2-x_3+u_2=6\\
+    & x_1+2x_2+x_4=4\\
+    &x_1,x_2,x_3,x_4,u_1,u_2 \geq 0
+\end{align*}
+Preferendo, tuttavia, massimizzare la funzione obiettivo, invece di minimizzarla, si procede alla trasformazione esposta nel seguito
+\begin{align*}
+    & \max z =-u_1-u_2\\
+    & 3x_1+x_2+u_1=3\\
+    & 4x_1+3x_2-x_3+u_2=6\\
+    & x_1+2x_2+x_4=4\\
+    &x_1,x_2,x_3,x_4,u_1,u_2 \geq 0
+\end{align*}
+Ecco che, quindi, si è già ottenuta una base iniziale, in quanto essa è data dalle variabili $u_1$, $u_2$ e $x_4$. Ecco che, quindi, può essere realizzato il tableau iniziale seguente:
+
+\vspace{1em}
+\noindent
+\begin{table}[H]
+    \rowcolors{1}{white}{white}
+    \setlength{\tabcolsep}{4pt}
+    \renewcommand{\arraystretch}{1.2}
+    \noindent
+    \centering
+    \begin{tabular}{|c|cccc|cc|c|}
+        & $x_1$ & $x_2$ & $x_3$ & $x_4$ & $u_1$ & $u_2$ &\\
+        \hline
+        $z$ & $0$ & $0$ & $0$ & $0$ & $1$ & $1$ & $0$\\
+        \hline
+        $u_1$ & $3$ & $1$ & $0$ & $0$ & $1$ & $0$ & $3$\\
+        $u_2$ & $4$ & $3$ & $-1$ & $0$ & $0$ & $1$ & $6$\\
+        $x_4$ & $1$ & $2$ & $0$ & $1$ & $0$ & $0$  & $4$\\
+        \hline
+    \end{tabular}
+\end{table}   
+
+\vspace{1em}
+\noindent
+in cui la riga dei coefficienti della funzione obiettivo è tale in quanto essa è $z=-u_1-u_2$. Attenzione che i vettori di base sono $u_1$, $u_2$ e $x_4$ e per poter esprimere il tableau rispetto alla base scelta, la funzione obiettivo deve essere espressa in funzione delle variabili fuori base $x_1$, $x_2$ e $x_3$.\\
+Sarà sufficiente, quindi, eseguire delle semplici operazioni elementari per ricondursi al tableau cercato. Facendo prima riga meno la seconda e prima riga meno la terza, si ottiene
+
+\vspace{1em}
+\noindent
+\begin{table}[H]
+    \rowcolors{1}{white}{white}
+    \setlength{\tabcolsep}{4pt}
+    \renewcommand{\arraystretch}{1.2}
+    \noindent
+    \centering
+    \begin{tabular}{|c|cccc|cc|c|}
+        & $x_1$ & $x_2$ & $x_3$ & $x_4$ & $u_1$ & $u_2$ &\\
+        \hline
+        $z$ & $-7$ & $-4$ & $1$ & $0$ & $0$ & $0$ & $-9$\\
+        \hline
+        $u_1$ & $3$ & $1$ & $0$ & $0$ & $1$ & $0$ & $3$\\
+        $u_2$ & $4$ & $3$ & $-1$ & $0$ & $0$ & $1$ & $6$\\
+        $x_4$ & $1$ & $2$ & $0$ & $1$ & $0$ & $0$  & $4$\\
+        \hline
+    \end{tabular}
+\end{table}
+
+% + x4
+% + u1
+% = 3 +u2 =6 = 4 x1,x2,x3,x4,u1,u2 ≥ 0
+% 8/18
+ 
+%   Esempio - Fase I
+%  9/18
+ 
+%   Esempio - Fase I
+%  10/18
+ 
+%   Esempio - Tableau iniziale problema originario (Fase II)
+%   si devono annullare questi coefficienti
+% XI X,, X3 X4
+% z (:i 1) o o o Xl 1 o 1/5 o3/5 X2 o 1 - 3/5 o 6/5 X4
+% oo111 base
+% XX XX4 lz3
+%        z
+% oo-1/5 o-18/5
+% Xl
+% X2
+% X4
+% 1 o 1/5 o
+% 3/5 o1 o6/5 - 3/5 oo111
+%     11/18
+ 
+%   Esempio - Radioterapia
+%  min z =0.4x1 + 0.5x2
+% 0.3x1 + 0.1x2 ≤ 2.7
+% 0.5x1 + 0.5x2 = 6 0.6x1 + 0.4x2 ≥ 6 x1,x2 ≥0
+% 12/18
+ 
+%   Esempio - Radioterapia
+%   13/18
+ 
+%   Esempio - Radioterapia
+%   14/18
+ 
+%   Non esiste soluzione ottima
+%  max z = x1 + x2
+% −x1 + x2 ≤ 1
+% x2 ≤ 2 x1,x2 ≥0
+%  15/18
+ 
+%   Non esiste soluzione ottima
+%      x1 x2 x3 x4
+%    z
+% −1 −1 0 0
+%   0
+%   x3 x4
+%   −1 1 1 0 0101
+%   1 2
+%     Possono entrare in base sia x1 che x2. Scegliendo x1 si vede che nessuna variabile può uscire dalla base:
+% x3 =1+x1 −x2;x4 =2−x2
+% Quindi la funzione obiettivo può crescere al’infinto: soluzione
+% illimitata.
+% Si verifichi che si ottiene lo stesso risultato facendo entrare in base
+% x2
+% 16/18
+ 
+%   Infinite soluzioni ottime
+%  max z = 2x1 + 3x2
+% 2x1 + 3x2 ≤ 6
+% x1 + x2 ≤ 2.5 −x1 + x2 ≤ 1 x1,x2 ≥0
+%  17/18
+ 
+%   Infinite soluzioni ottime
+%  Tableau finale quando all’inizio entra in base x2 x1 x2 x3 x4 x5
+%        z
+% 00100
+%   6
+%   x1 x2 x4
+%     1 0 1/5 0 −3/5 0 0 −2/5 1 1/5 0 1 1/5 0 2/5
+%   3/5 3/10 8/5
+%       Si osserva che z = 6−x3 +0∗x5
+% Facendo entrare in base x5 esce x4 (quindi ci sposta su un vertice
+% adiacente) ma il valore della funzione obiettivo non cambia.
+% Si determini il tableau che si ottiene facendo entrare in base x1. Si troverà che anche in questo caso un coefficiente della funzione obiettivo associato ad una variabile fuori base è nullo.
+% 18/18
+ 
+%  Thank you for your attention
+% 18/18
+
+
+%Siccome $B$ è la matrice identica, la sua inversa è ancora la matrice identica, per cui $B^{-1} \cdot b = b$
+
+%al più $m$ variabili artificiali $u$
+
+\newpage
+\begin{center}
+    27 Ottobre 2022
+\end{center}
+\subsection{Problema di produzione}
+Un'impresa produce $n$ beni diversi utilizzando $m$ materie prime diverse:
+\begin{itemize}
+    \item Sia $b_i$, con $i = 1,\dots,m$ la quantità disponibile dell'$i$-esima materia prima
+    \item Il $j$-esimo bene, con $j=1,\dots,n$ richiede $a_{i,j}$ unità dell'$i$-esima materia e determina un ricavo $c_j$ per unità prodotta.
+\end{itemize}
+L'impresa deve decidere quanto produrre di ciascun bene per massimizzare i ricavi totali.\\
+La scelta della variabile decisionale è semplice. Sia $x_j$, con $j = 1,\dots,n$ la quantità del $j$-esimo bene da produrre.\\
+Una formulazione primaria potrebbe essere la seguente:
+\begin{align*}
+    &\max z = c_1 \cdot x_1 + \dots + c_n \cdot x_n &\\
+    &a_{i,1} \cdot x_1 + \dots + a_{i_n} \cdot x_n \leq b_i & \text{con } i=1,\dots,m\\
+    &x_j \geq 0 & \text{con } j=1,\dots,n
+\end{align*}
+in cui le variabili decisionali sono la quantità di beni prodotti, ossia $x_j \in \mathbb{R}$ con $j=1,\dots,n$, assumendo che queste variabili siano continue.\\
+La funzione obiettivo da massimizzare è il profitto, dato da
+\[\sum_{j=1}^n c_j \cdot k_j\]
+Mentre i vincoli sono i seguenti:
+\begin{itemize}
+    \item Per ogni materiale estratto, la quantità di materiale utilizzato per la produzione non può superare la disponibilità di materiale, per cui
+    \[\sum_{j=1}^n a_{i,j} \cdot x_j \leq b_i \hspace{1em} \text{con} \hspace{1em} i=1,\dots,m\]
+    \item Per ogni bene, la quantità è sempre non negativa, ovvero
+    \[x_j \geq 0 \hspace{1em} \text{con} \hspace{1em} j=1,\dots,n\]
+\end{itemize}
+
+\vspace{1em}
+\noindent
+\textbf{Osservazione}: Nell'affrontare un problema di produzione, prima ancora di decidere cosa produrre per ottenere il massimo profitto, ci si dovrebbe chiedere se sia meglio produrre o se, viceversa, non sia conveniente vendere (o utilizzare in altro modo) le risorse disponibili.\\
+Si dovrebbe porre, quindi, la seguente domanda:
+\textbf{Qual è il prezzo minimo al quale tutte le risorse disponibili dovrebbero essere vendute piuttosto che prodotte?}
+A questa domanda si risponde con il \textbf{problema duale}:
+\begin{itemize}
+    \item nell'ipotesi di linearità, il profitto complessivo che si può ottenere dalla vendita delle risorse è pari alla somma dei profitti che si ottengono vendendo le singole risorse, queste ultime pari al prezzo unitario di vendita moltiplicato per la quantità di risorse disponibili.
+    \item un bene $P_1$ garantisce un profitto di $15$ e consuma un'unità di $R_p$, un'unità di $R_q$ e $2$ unità di $R_r$. Pertanto, per rendere conveniente vendere le risorse (o almeno rimanere alla pari) invece di produrre, la vendita complessiva di un'unità di $R_p$, un'unità di $R_q$ e $2$ unità di $R_r$ deve fornire un guadagno non inferiore a $15$.
+    \item i prezzi di vendita delle risorse devono essere non negativi.
+\end{itemize}
+Ecco che quindi la formulazione duale del problema introduce come \textbf{variabili decisionali}, il prezzo unitario di ogni risorsa
+\[\pi_i \in \mathbb{R} \hspace{1em} \text{con} \hspace{1em} i=p,q,r\]
+che sono variabili continue.\\
+La \textbf{funzione obiettivo} è il profitto ottenuto dalla vendita di tutte le risorse, ovvero
+\[2000\pi_p+1000\pi_q+3000\pi_r\]
+I \textbf{vincoli duali} da tenere in considerazione sono i seguenti:
+\begin{itemize}
+    \item Per ogni bene il guadagno ottenuto dalla vendita delle risorse necessarie per produrlo, non deve essere inferiore al profitto ottenibile dalla vendita del bene stesso, ovvero
+    \[\sum_{i=i}^{m} a_{i,j} \cdot \pi_i \geq c_j \hspace{1em} \text{con} \hspace{1em} j=1,2\]
+    \item Il prezzo di vendita della risorsa deve essere non negativo, da cui
+    \[\pi_i \geq 0 \hspace{1em} \text{con} \hspace{1em} i=p,q,r\]
+\end{itemize}
+per cui si ottiene
+\begin{align*}
+    &\min q = 2000\pi_p+1000\pi_q+3000\pi_r\\
+    &\pi_p+\pi_q+2\pi_r \geq 15\\
+    &\pi_p-0.5\pi_q+\pi_r \geq 10\\
+    &\pi_p,\pi_q,\pi_r \geq 0\\
+\end{align*}
+In generale, pertanto, il problema duale viene formalizzato come segue
+\begin{align*}
+    &\min \sum_{i=1}^{m} b_i \pi_i&\\
+    &\sum_{i=1}^m a_{i,j} \cdot \pi_i \geq c_j&\text{con } j=1,dots,n\\
+    &\pi_i \geq 0&\text{con } i=1,\dots,m
+\end{align*}
+e in forma matriciale si ha
+\begin{align*}
+    &\min b{^T} \pi\\
+    &A^T \pi \geq c\\
+    &\pi \geq 0
+\end{align*}
+È intuitivamente evidente che
+\begin{itemize}
+    \item ogni soluzione fattibile per il duale permette di realizzare un profitto non inferiore al massimo profitto ottenuto risolvendo il problema primale (cioè producendo). Quindi è conveniente vendere (o alla peggio non perdere) se si trova qualcuno disposto ad acquistare tutte le risorse e a pagarle complessivamente in modo da soddisfare i vincoli duali;
+    \item la soluzione ottima del duale non può essere inferiore alla soluzione ottima del primale (altrimenti ci sarebbero prezzi che, pur soddisfacendo i vincoli, renderebbero la produzione ancora conveniente).
+\end{itemize}
+
+\vspace{1em}
+\noindent
+\subsection{Problema primale e duale}
+Ad ogni problema di programmazione lineare (primale) è associato un problema duale, che presentano la corrispondenza seguente
+\begin{align*}
+    &\text{Problema primale (P)} && \text{Problema duale (D)}\\
+    &\max z=c_1x_1+\dots+x_nx_n   && \min w=b_1\pi_1+\dots+b_m\pi_m\\
+    &a_{1,1}x_1 + \dots + a_{1,n}x_n \leq b_i && a_{1,1}\pi_1+\dots+a_{m,1} \pi_m \geq c_1\\
+    &\vdots && \vdots\\
+    &a_{m,1}x_1 + \dots + a_{m,n}x_n \leq b_m && a_{1,n}\pi_1+\dots+a_{m,n} \pi_m \geq c_n\\
+    &x_1,\dots,x_n \geq 0 && \pi_1,\dots,\pi_m \geq 0\\
+    &m\text{ vincoli e } n \text{ variabili} && m \text{ variabili e } n \text{ vincoli}
+\end{align*}
+Pertanto il problema duale (D) ha tante variabili quanti sono i vincoli nel problema primale (P) e tanti vincoli quante sono le variabili nel problema primale (P).\\
+In forma di matrice, è facile capire vediamo che i vettori $b$ e $c$ si scambiano le posizioni e la matrice dei coefficienti $A$ viene trasposta.\\
+Pertanto si ottiene
+\begin{align*}
+    &\text{Problema primale (P)} && \text{Problema duale (D)}\\
+    &\max z=c^Tx   && \min w=b^T\pi\\
+    &Ax \leq b && A^T\pi \geq c\\
+    &x \geq 0 && \pi \geq 0\\
+    &x \in \mathbb{R}^n && \pi \in \mathbb{R}^m
+\end{align*}
+La dualità non deriva solo da giustificazioni economiche, ma anche dall'applicazione delle condizioni di \textbf{Kuhn-Tucker} ai problemi di programmazioni lineare o dal \textbf{rilassamento di Lagrange}.\\
+La dualità è importante perché
+\begin{itemize}
+    \item il problema duale corrisponde a una visione diversa dello stesso problema (per il quale si deve sempre cercare un'interpretazione economica della formulazione ottenuta);
+    \item su di essa si basano algoritmi, come il Dual Simplex e l'Algoritmo Primal-Dual, alternativo al Simplex (Primal), che sono utili per alcune classi di problemi;
+    \item in alcuni casi può essere conveniente risolvere il problema duale (D) invece di quello primale (P) (può essere meglio risolvere il problema con meno vincoli).
+\end{itemize}
+Si ottiene, quindi, la corrispondenza seguente
+
+\vspace{1em}
+\noindent
+\begin{table}[H]
+    \rowcolors{1}{white}{white}
+    \setlength{\tabcolsep}{4pt}
+    \renewcommand{\arraystretch}{1.2}
+    \noindent
+    \centering
+    \begin{tabular}{|c|c||c|c|}
+        PRIMALE & massimizzazione & minimizzazione & DUALE\\
+        \hline
+        \multirow{3}{4em}{vincoli} &$\leq b_i$&$\geq 0$& \multirow{3}{4em}{variabili}\\
+                                   &$\geq b_i$&$\leq 0$&\\ 
+                                   &$=b_i$&libere&\\
+        \hline
+        \multirow{3}{4em}{variabili} &$\geq b_i$&$\geq c_j$& \multirow{3}{4em}{vincoli}\\
+                                   &$\leq b_i$&$\leq c_j$&\\ 
+                                   &libere&=&\\
+        \hline
+    \end{tabular}
+\end{table}
+
+\vspace{1em}
+\noindent
+\subsection{Teorema di dualità (debole)}
+
+% Tabella per le definizione di concetti, etc...
+\vspace{1em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{TEOREMA DI DUALITÀ (DEBOLE)}}\\
+    \parbox{\linewidth}{Se $x$ è una soluzione ammissibile del problema primale e $\pi$ è una soluzione ammissibile del problema duale, allora
+    \[c^T x \leq b^T \pi\]
+    in quanto
+    \[c^T x \leq (A^T \pi)^T x = \pi^T Ax \leq \pi^T b=b^T \pi\]
+    \vspace{-1mm}}\\
+    \hline
+\end{tabularx}
+
+\vspace{1em}
+\noindent
+\subsubsection{Corollario sul problema duale}
+Il teorema precedente presenta il seguente corollario
+
+% Tabella per le definizione di concetti, etc...
+\vspace{1em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{COROLLARIO DEL TEOREMA DI DUALITÀ (DEBOLE)}}\\
+    \parbox{\linewidth}{Dal teorema di dualità (debole) segue che
+    \begin{itemize}
+        \item Se il valore ottimale nel problema primale è $+\infty$, allora il problema duale deve essere non ammissibile;
+        \item Se il valore ottimale nel problema duale è $-\infty$, allora il problema primale deve essere non ammissibile.
+    \end{itemize}
+    \vspace{1mm}}\\
+    \hline
+\end{tabularx}
+
+\vspace{2em}
+\noindent
+% \textbf{Dimostrazione}: Supponiamo che il valore ottimale nel problema primale sia +∞ e che il problema duale abbia una soluzione fattibile π. Per dualità debole, π soddisfa
+% bT π ≥ cT x per ogni primale fattibile x. Considerando il massimo su tutti gli x fattibili, si conclude che bT π ≥ +∞ . Questo è impossibile e dimostra che il duale non può avere una soluzione fattibile, stabilendo così la parte (a). La parte (b) segue con un'argomentazione simmetrica.
+
+\vspace{2em}
+\noindent
+Inoltre si ha che 
+
+% Tabella per le definizione di concetti, etc...
+\vspace{1em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{COROLLARIO DEL TEOREMA DI DUALITÀ (DEBOLE)}}\\
+    \parbox{\linewidth}{Siano %x e π soluzioni fattibili del primale e del duale, %rispettivamente, e si supponga che cT x = bT π. Allora x e π sono soluzioni ottimali del primale e del duale, rispettivamente.
+    \vspace{1mm}}\\
+    \hline
+\end{tabularx}
+
+\vspace{2em}
+\noindent
+\textbf{Dimostrazione}: %Siano x e π come nell'enunciato del corollario. Per ogni soluzione primale fattibile y, il teorema della dualità debole produce cT x = bT π ≥ cT y, il che dimostra che x è ottimale. La prova dell'ottimalità di π è simile.
+
+\vspace{1em}
+\noindent
+\subsection{Teorema di dualità (forte)}
+
+% Tabella per le definizione di concetti, etc...
+\vspace{1em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{TEOREMA DI DUALITÀ (FORTE)}}\\
+    \parbox{\linewidth}{Se un problema di programmazione lineare ha una soluzione ottimale, ce l'ha anche il suo duale e i rispettivi valori ottimali sono uguali.\vspace{3mm}}\\
+    \hline
+\end{tabularx}
+
+\vspace{2em}
+\noindent
+In altre parole, se $x^*$ è una soluzione ottima finita per il primale anche il duale ha una soluzione ottima finita $\pi^*$ ed è sempre vero che
+\[c^Tx^* = b^T\pi^*\]
+
+\vspace{1em}
+\noindent
+\subsection{Relazione tra problema primale e duale}
+Si ricordi che in un problema di programmazione lineare si verifica esattamente una delle tre possibilità seguenti:
+\begin{itemize}
+    \item Esiste una soluzione ottimale;
+    \item Il problema è "non vincolato", cioè il valore ottimale è $+\infty$ (per i problemi di massimizzazione) o $-\infty$ (per i problemi di minimizzazione);
+    \item Il problema è irrealizzabile
+\end{itemize}
+
+Questo porta a nove possibili combinazioni per il primale e il duale:
+Ottimo finito
+Non vincolato
+Ottimo finito Non vincolato Non fattibile
+Possibile
+Impossibile Impossibile
+Impossibile Impossibile Possibile
+Impossibile
+Possibile Possibile
+Tabella 2: Le diverse possibilità per il primale (righe) e il duale (colonne)
+
+\vspace{1em}
+\noindent
+\subsection{Condizioni di complementarietà}
+
+% Tabella per le definizione di concetti, etc...
+\vspace{1em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{CONDIZIONI DI COMPLEMENTARIETÀ}}\\
+    \parbox{\linewidth}{Siano $x$ e $\pi$ soluzioni fattibili del problema primale e di quello duale, rispettivamente. I vettori $x$ e $\pi$ sono soluzioni ottimali per i due rispettivi problemi \textbf{se e solo se}
+    \[\pi_i \cdot (b_i -A_{(i)}^T x = 0 \hspace{1em} \forall i\]
+    \[(\pi^TA^{(j)}-c_j) \cdot x_j = 0 \hspace{1em} \forall j\]
+
+    dove $A^{(j)}$ è la $j$-esima colonna e $A_{(i)}$ è l'$i$-esima riga della matrice $A$.\\
+    In altre parole la prima condizione è ciò che si ottiene introducendo le variabili di slack. Mentre la seconda condizione è ciò che si ottiene introducendo le variabili di surplus.
+    \vspace{3mm}}\\
+    \hline
+\end{tabularx}
+
+\newpage
+\begin{center}
+    28 Ottobre 2022
+\end{center}
+\subsection{Dualità e analisi di sensitività}
+Si consideri il problema formalizzato in forma standard
+\begin{align*}
+    &\min c^T c\\
+    &Ax=b\\
+    &x \geq 0
+\end{align*}
+che si chiama \textbf{problema primale}, e sia $x^*$ una soluzione ottimale, che si presume esista. Introduciamo un problema rilassato in cui il vincolo $Ax = b$ è sostituito da una penalità $p^T \cdot (b - Ax)$, dove $p$ è un vettore della stessa dimensione di $b$. Ci si trova, quindi, di fronte al problema
+\begin{align*}
+    &\min c^T x + p^T \cdot (b - Ax)\\
+    &x \geq 0    
+\end{align*}
+Sia $g(p)$ il costo ottimale per il problema rilassato, in funzione del vettore $p$. Il problema rilassato consente un maggior numero di opzioni rispetto a quelle presenti nel problema primale (avendo rimosso i vincoli), e ci si aspetta che $g(p)$ non sia più grande del costo ottimale $c^T x^*$.\\
+Infatti,
+\[g(p) = \underset{x \geq 0}{\min} \left[c^Tx+p^T(b-Ax)\right] \leq c^Tx^* + p^T(b-Ax^*) = c^Tx^*\]
+dove l'ultima uguaglianza deriva dal fatto che $x^*$ è una soluzione ammissibile del problema primario e soddisfa $Ax^x = b$ (per cui $b-Ax^*=0$). Pertanto, qualunque sia il valore della penalità $p$, essa porta a un limite inferiore $g(p)$ per il costo ottimale $c^T x^*$ del problema iniziale.
+
+\vspace{1em}
+\noindent
+\subsection{Problema duale}
+Il problema
+\[\max g(p)\]
+non soggetto ad alcun vincolo, può essere interpretato come una ricerca del limite inferiore più stretto possibile di questo tipo (cioè il limite inferiore che più si avvicina al valore della funzione obiettivo iniziale) ed è noto come \textbf{problema duale}.\\
+Dalla definizione di $g(p)$, si ha che
+\[g(p) = \underset{x \geq 0}{\min} \left[c^Tx+p^T(b-Ax)\right] = p^Tb + \underset{x \geq 0}{\min}(c^T - p^TA)x\]
+Si noti che
+\[
+    \underset{x \geq 0}{\min}(c^T - p^TA)x=\left\{
+        \rowcolors{1}{white}{white}
+        \begin{array}{lll}
+            0 & \text{se} & c^T - p^TA \geq 0\\
+            -\infty & \text{altrimenti} &\\
+        \end{array}
+    \right.
+\]
+Per massimizzare $g(p)$, quindi, bisogna considerare solamente i valori di $p$ per i quali $g(p)$ non è uguale a $-\infty$. Si può concludere, quindi, che il \textbf{problema duale} è uguale a
+\begin{align*}
+    \max p^T b\\
+    c^T - p^TA \geq 0 \rightarrow p^TA \leq c^T
+\end{align*}
+
+
+\vspace{1em}
+\noindent
+Nell'esempio, sono stati introdotti i vincoli di uguaglianza $Ax = b$ e ci si è ritrovati senza vincoli sul segno del vettore $p$. Se il problema primale avesse invece vincoli di disuguaglianza della forma $Ax \geq b$, questi potrebbero essere sostituiti da $Ax - s = b$, con $s \geq 0$. I vincoli di uguaglianza possono essere scritti nella forma
+\[
+   [A \vert-I] \cdot \left[
+        \rowcolors{1}{white}{white}
+        \begin{array}{c}
+            x\\
+            s
+        \end{array}
+    \right]=b
+\]
+che porta ai vincoli duali
+\[p^T \cdot [a \vert -I] \leq [c^T \vert 0^T]\]
+o equivalentemente,
+\[p^T A \leq c^T \hspace{1em} \text{con} \hspace{1em} p \geq 0\]
+... continua ...
+
+\vspace{1em}
+\subsection{Analisi di sensitività}
+Lo scopo principale dell'\textbf{analisi di sensibilità} è identificare i parametri sensibili (cioè quelli che non possono essere modificati senza cambiare la soluzione ottimale). I parametri sensibili sono quelli che devono essere stimati con particolare attenzione per minimizzare il rischio di ottenere una soluzione ottimale errata.\\
+I parametri del modello in esame sono $a_{i,j}$, $b_i$ e $c_j$ per $i = 1,\dots,m$ e $j = 1,\dots,n$:
+\begin{itemize}
+    \item I problemi di programmazione lineare spesso possono essere interpretati come l'allocazione di risorse alle attività.
+    \item Quando i vincoli sono in forma $\leq$, abbiamo interpretato i $b_i$ (i termini noti) come le quantità delle rispettive risorse rese disponibili per le attività in esame.
+    \item In molti casi, i valori di $b_i$ utilizzati nel modello iniziale possono rappresentare la decisione iniziale provvisoria del management su quanta parte delle risorse dell'organizzazione sarà fornita alle attività considerate nel modello.
+    \item Da questa prospettiva più ampia, alcuni dei valori di $b_i$ possono essere aumentati in un modello rivisto, ma solo se si riesce a convincere il management che questa revisione sarebbe vantaggiosa.
+\end{itemize}
+
+\vspace{1em}
+\noindent
+\subsection{Prezzo ombra}
+Di seguito si fornisce la definizione di \textbf{prezzo ombra}:
+
+% Tabella per le definizione di concetti, etc...
+\vspace{1em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{PREZZO ombra}}\\
+    \parbox{\linewidth}{Il prezzo ombra della risorsa $i$ (indicato con $Y_I^*$) misura il valore marginale di tale risorsa, cioè il tasso al quale la funzione obiettivo $z$ potrebbe aumentare aumentando (leggermente) la quantità di tale risorsa ($b_i$) resa disponibile.\vspace{3mm}}\\
+    \hline
+\end{tabularx}
+
+\vspace{1em}
+\noindent
+Nel caso di un vincolo funzionale in forma $=$ o $\geq$, il suo prezzo ombra è nuovamente definito come il tasso al quale $z$ potrebbe essere aumentato aumentando (leggermente) il valore di $b_i$, anche se l'interpretazione di $b_i$ ora sarebbe normalmente qualcosa di diverso dalla quantità di una risorsa resa disponibile.
+
+\vspace{2em}
+\noindent
+\textbf{Esempio}: Il grafico mostra che il prezzo ombra è $y_2^* = \dfrac{3}{2}$ per la risorsa 2. I due punti rappresentano le soluzioni ottimali per $b_2 = 12$ o $b_2 = 13$ e inserendo tali soluzioni nella funzione obiettivo si scopre che aumentando $b_2$ di $1$ aumenta $z$ di $y_2^* = \dfrac{3}{2}$.\\
+Ciò dimostra che $y_2^* = \dfrac{3}{2}$ è la velocità con cui $z$ potrebbe aumentare aumentando "leggermente" $b_2$. Tuttavia, dimostra anche il fenomeno comune che tale interpretazione vale solo per un piccolo aumento di $b_2$: una volta che $b_2$ viene aumentato oltre $18$, si esce dalla regione ammissibile e la soluzione ottimale rimarrebbe a $(0,9)$ senza ulteriori aumenti di $z$; in altre parole, $z=45$ per qualsiasi $b_2$ tale che $b_2 \geq 18$, per cui il vincolo $2x_2 = b_2$ diventa ridondante.
+
+\vspace{2em}
+\noindent
+\textbf{Osservazione}: Si noti che $y_1^* = 0$, poiché il vincolo sulla risorsa $1$, con $x_1 \leq 4$, non è vincolante per la soluzione ottimale $(2,6)$, c'è un surplus di tale risorsa; pertanto, aumentando $b_1$ oltre $4$ non si può ottenere una nuova soluzione ottimale con un valore di $z$ maggiore.\\
+Al contrario, i vincoli sulle risorse $2$ e $3$, ovvero
+\[2x_2 \leq 12 \hspace{1em} \text{e} \hspace{1em} 3x_1 + 2x_2 \leq 18\]
+sono \textbf{vincoli stringenti} (vincoli che si mantengono uguali nella soluzione ottimale). Poiché l'offerta limitata di queste risorse ($b_2 = 12$ e $b_3 = 18$) vincola $z$ a non aumentare ulteriormente, esse hanno prezzi ombra positivi Si può facilmente dimostrare che Possiamo facilmente dimostrare che $y_3^*= 1$.\\
+Gli economisti si riferiscono a tali risorse come a \textbf{beni scarsi}, mentre le risorse disponibili in eccedenza (come la risorsa $1$) sono \textbf{beni liberi} (ossia risorse con un prezzo ombra nullo).
+
+\vspace{1em}
+\noindent
+\subsection{Problema primale e duale}
+Ad ogni problema di programmazione lineare (primale) è associato un problema duale, che presentano la corrispondenza seguente
+\begin{align*}
+    &\text{Problema primale (P)} && \text{Problema duale (D)}\\
+    &\max z=3x_1+5x_2   && \min w=4 \pi_1+12\pi_2+18\pi_3\\
+    &x_1 \leq 4 && \pi_1+3\pi_3 \geq 0\\
+    &2x_2 \leq 12 && 2\pi_2+2\pi_3 \geq 5\\
+    &3x_1+2x_2 \leq 18 && \pi_1,\pi_2,\pi_3\\
+    &x_1,x_2 \geq 0 && \pi_1,\pi_2,\pi_3 \geq 0\\
+\end{align*}
+La soluzione ottima del problema duale è $x_1^*=2$, $x_2^*=6$ e $z^*=36$. Dalla dualità forte, si ha che $w^*=36$, ma come si possono determinare i valori delle variabili duali? Usando le condizioni di complementarietà.
+
+\vspace{1em}
+\noindent
+\subsection{Condizioni di complementarietà}
+Le condizioni di complementarietà sono le seguenti:
+\begin{align*}
+    &\pi_i^* \cdot (b_i-(A_{(i)})^Tx^*) = 0  & \forall i\\
+    &((x^*)^T A^{(j)} - c_j) \cdot x_j^* = 0 & \forall j
+\end{align*}
+che ne caso reale preso in esame si traducono in
+\begin{align*}
+    & \pi_1^* \cdot (4-x_1^*)=0 && 2 \cdot \pi_1^*=0\\
+    & \pi_2^* \cdot (12-2x_2^*)=0 && 0 \cdot \pi_2^*=0\\
+    & \pi_3^* \cdot (12-3x_1^*-2x_2^*)=0 && 0 \cdot \pi_3^*=0\\
+    & (\pi_1^*-2 \pi_3^* - 3) \cdot x_1^*=0 && 2 \cdot (\pi_1^*+3\pi_3^*-3)=0\\
+    & (2\pi_2^*+2 \pi_3^* - 5) \cdot x_2^*=0 && 6 \cdot (2\pi_2^*+2 \pi_3^* - 5)=0\\
+\end{align*}
+Da cui segue che
+\begin{align*}
+    & \pi_1=0 & \rightarrow && \pi_1^*=0\\
+    & (\pi_1^*+3\pi_3^*-3)=0 & \rightarrow && \pi_3^*=1\\
+    & (2\pi_2^*+2\pi_3^*-5)=0 & \rightarrow && \pi_2^*=\dfrac{3}{2}\\
+\end{align*}
+Infatti, $w^*=4 \cdot 0 + 12 \cdot \dfrac{3}{2} + 18 \cdot 1 = 36$. Non solo, ma è facile capire che
+\[y_i^* = \pi_i^* \hspace{1em} \text{per} \hspace{1em} i=1,2,3\]
+\textbf{per cui le variabili duali sono esattamente i prezzi ombra}.
+
+\vspace{2em}
+\noindent
+\textbf{Osservazione}: È stato dimostrato che ogni variabile duale ottimale rappresenta la velocità con cui la funzione obiettivo $z$ varia al variare del corrispondente valore del vettore dei termini noti.\\
+Se si varia un valore del vettore dei termini noti, il valore delle variabili duali ottimali rimane costante finché la soluzione ottimale si trova sull'intersezione degli stessi vincoli.\\
+Nell'esempio preso in esame
+\begin{itemize}
+    \item se $b_2 > 18$ la soluzione ottimale è sempre $(0,9)$. Pertanto, le duali ottimali sono $\left(0, 0, \dfrac{5}{2}\right)$
+    \item se $b_2$ varia nell'intervallo $6 < b_2 < 18$ la soluzione ottimale si trova sull'intersezione tra $2x_2 = b_2$ e $3x_1 + 2x_2 = 18$ e le variabili duali ottimali sono $\left(0, \dfrac{3}{2}, 1\right)$.
+    \item $0 < b_2 < 6$ la soluzione ottimale giace sull'intersezione tra $2x_2 = b_2$ e $x_1 = 4$. Le variabili duali ottimali sono $\left(3, \dfrac{5}{2}, 0 \right)$.
+    \item se $b_2 = 6$ o $b_2 = 18$, la soluzione è detta degenere, in quanto le variabili nulle sono più del numero di variabili fuori base o, in altre parole, vi è una variabile in base che si annulla.
+\end{itemize}
+
+\vspace{1em}
+\noindent
+\subsection{Variazione dei coefficienti della soluzione obiettivo}
+Il grafico mostra l'analisi della sensibilità di $c_1$ e $c_2$ per il problema. Partendo dalla linea della funzione obiettivo originale, in cui $c_1 = 3$, $c_2 = 5$ e la soluzione ottimale è $(2,6)$, le altre due linee nere mostrano gli estremi di quanto può cambiare la pendenza della linea della funzione obiettivo e mantenere ancora $(2,6)$ come soluzione ottimale. Quindi,
+\begin{itemize}
+    \item con $c_2 = 5$, l'intervallo consentito per $c_1$ è $0 \leq c_1 \leq 7.5$;
+    \item con $c_1 = 3$, l'intervallo consentito per $c_2$ è $c_2 \geq 2$.
+\end{itemize}
 
 \end{document}

@@ -47,3 +47,21 @@
 \contentsline {subsection}{\numberline {6.17}Verifica dell'ottimalità della soluzione corrente}{35}{}%
 \contentsline {subsection}{\numberline {6.18}Rispetto dell'ammissibilità}{36}{}%
 \contentsline {subsection}{\numberline {6.19}Cambio di base}{37}{}%
+\contentsline {subsubsection}{\numberline {6.19.1}Iterazione e condizioni di ottimalità}{40}{}%
+\contentsline {subsection}{\numberline {6.20}Riepilogo operativo - Algoritmo del simplesso}{41}{}%
+\contentsline {subsection}{\numberline {6.21}Fase I - Individuazione della prima BFS}{41}{}%
+\contentsline {subsection}{\numberline {6.22}Forma canonica}{42}{}%
+\contentsline {subsection}{\numberline {6.23}Problema di produzione}{45}{}%
+\contentsline {subsection}{\numberline {6.24}Problema primale e duale}{47}{}%
+\contentsline {subsection}{\numberline {6.25}Teorema di dualità (debole)}{48}{}%
+\contentsline {subsubsection}{\numberline {6.25.1}Corollario sul problema duale}{48}{}%
+\contentsline {subsection}{\numberline {6.26}Teorema di dualità (forte)}{48}{}%
+\contentsline {subsection}{\numberline {6.27}Relazione tra problema primale e duale}{48}{}%
+\contentsline {subsection}{\numberline {6.28}Condizioni di complementarietà}{49}{}%
+\contentsline {subsection}{\numberline {6.29}Dualità e analisi di sensitività}{50}{}%
+\contentsline {subsection}{\numberline {6.30}Problema duale}{50}{}%
+\contentsline {subsection}{\numberline {6.31}Analisi di sensitività}{51}{}%
+\contentsline {subsection}{\numberline {6.32}Prezzo ombra}{51}{}%
+\contentsline {subsection}{\numberline {6.33}Problema primale e duale}{52}{}%
+\contentsline {subsection}{\numberline {6.34}Condizioni di complementarietà}{52}{}%
+\contentsline {subsection}{\numberline {6.35}Variazione dei coefficienti della soluzione obiettivo}{53}{}%
