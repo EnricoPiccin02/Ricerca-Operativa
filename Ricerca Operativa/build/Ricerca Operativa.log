@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.27)  28 OCT 2022 09:57
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.27)  11 NOV 2022 10:35
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -689,20 +689,35 @@ File: ./img//Frontiera_vincolo_soluzioni_vertice.png Graphic file (type png)
 <use ./img//Frontiera_vincolo_soluzioni_vertice.png>
 Package pdftex.def Info: ./img//Frontiera_vincolo_soluzioni_vertice.png  used on input line 1196.
 (pdftex.def)             Requested size: 213.39568pt x 225.37662pt.
- [24] [25] [26] [27] [28] [29] [30] [31] [32] [33] [34] [35] [36] [37] [38] [39] [40] [41] [42] [43] [44] [45] [46] [47] [48] [49] [50] [51] [52] [53] (/Users/enricopiccin/Documents/Ricerca Operativa/build/Ricerca Operativa.aux) ) 
+ [24] [25] [26] [27] [28] [29] [30] [31] [32] [33] [34] [35] [36] [37] [38] [39] [40] [41] [42] [43] [44] [45] [46] [47] [48] [49] [50] [51] [52] [53]
+File: ./img//Frontiera_vincolo_soluzioni_vertice.png Graphic file (type png)
+<use ./img//Frontiera_vincolo_soluzioni_vertice.png>
+Package pdftex.def Info: ./img//Frontiera_vincolo_soluzioni_vertice.png  used on input line 3274.
+(pdftex.def)             Requested size: 213.39568pt x 225.37662pt.
+ [54] [55]
+Overfull \hbox (24.05562pt too wide) in paragraph at lines 3375--3375
+[]|\OT1/cmr/m/n/10 Primale|  
+ []
+
+
+Underfull \hbox (badness 1210) in paragraph at lines 3375--3375
+[]\OT1/cmr/m/n/10 Soluzione mag-gio-re
+ []
+
+[56] [57] [58] [59] [60] (/Users/enricopiccin/Documents/Ricerca Operativa/build/Ricerca Operativa.aux) ) 
 Here is how much of TeX's memory you used:
- 45155 strings out of 479719
- 1221325 string characters out of 5880574
- 2281511 words of memory out of 5000000
- 62581 multiletter control sequences out of 15000+600000
+ 45156 strings out of 479719
+ 1221335 string characters out of 5880574
+ 2281520 words of memory out of 5000000
+ 62582 multiletter control sequences out of 15000+600000
  479401 words of font info for 66 fonts, out of 8000000 for 9000
  319 hyphenation exceptions out of 8191
  115i,20n,489p,785b,2721s stack positions out of 10000i,1000n,20000p,200000b,200000s
  </Users/enricopiccin/Library/texlive/2022basic/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmbxti10.pfb></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on "/Users/enricopiccin/Documents/Ricerca Operativa/build/Ricerca Operativa.pdf" (53 pages, 718406 bytes).
+Output written on "/Users/enricopiccin/Documents/Ricerca Operativa/build/Ricerca Operativa.pdf" (60 pages, 738136 bytes).
 PDF statistics:
- 265 PDF objects out of 1000 (max. 8388607)
- 172 compressed objects within 2 object streams
+ 287 PDF objects out of 1000 (max. 8388607)
+ 187 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
  22 words of extra memory for PDF output out of 10000 (max. 10000000)
 

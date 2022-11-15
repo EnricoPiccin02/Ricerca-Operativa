@@ -3239,4 +3239,331 @@ Il grafico mostra l'analisi della sensibilità di $c_1$ e $c_2$ per il problema.
     \item con $c_1 = 3$, l'intervallo consentito per $c_2$ è $c_2 \geq 2$.
 \end{itemize}
 
+\newpage
+\begin{center}
+    10 Novembre 2022
+\end{center}
+Le condizioni di complementarietà valgono sempre per ogni base. Ossia per ogni base esiste sempre  una corrispondenza con una base duale.
+
+\vspace{1em}
+\noindent
+\textbf{Esercizio 1}: Si consideri il problema seguente
+\begin{align*}
+    &\max z = 3x_1 + 5x_2\\
+    & x_1 \leq 4\\
+    & 2x_2 \leq 12\\
+    & 3x_1 + 2x_2 \leq 18\\
+    & x_1,x_2 \geq 0
+\end{align*}
+Ovviamente in forma standard tal problema viene formalizzato come segue:
+
+\begin{align*}
+    &\max z = 3x_1 + 5x_2\\
+    & x_1 + s_1 = 4\\
+    & 2x_2 + s_3 = 12\\
+    & 3x_1 + 2x_2 + s_3 = 18\\
+    & x_1,x_2,s_1,s_2,s_3 \geq 0
+\end{align*}
+
+\vspace{1em}
+\noindent
+ovviamente la rappresentazione di tale problema è la seguente:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{Frontiera_vincolo_soluzioni_vertice.png}
+    \caption{Problema 1}
+    \label{fig:fig3}
+\end{figure}
+
+\vspace{1em}
+\noindent
+Per la determinazione della soluzione ottimale che massimizza la funzione obiettivo, sarà sufficiente individuare tutti i vertici della regione ammissibile (ponendo a $0$ di volta in volta $2$ variabili, che in $\mathbb{R}^2$ significa trovarsi su un vertice), per un totale di
+\[\binom{5}{2} = 10\]
+possibili soluzioni (anche se sono $8$ in quanto due vincoli paralleli) e calcolarne il corrispondente valore della funzione obiettivo:
+
+\vspace{1em}
+\noindent
+\begin{table}[H]
+    \rowcolors{1}{white}{white}
+    \setlength{\tabcolsep}{8pt}
+    \renewcommand{\arraystretch}{1.5}
+    \noindent
+    \centering
+    \begin{tabular}{c|ccccc|c}
+         & $x_1$ & $x_2$ & $s_1$ & $s_2$ & $s_3$ & $z$\\
+        \hline
+        $0$ & $0$ & $0$ & $4$ & $12$ & $18$ & $0$\\
+        $A$ & $0$ & $4$ & $4$ & $0$ & $6$ & $30$\\
+        $B$ & $2$ & $6$ & $2$ & $0$ & $0$ & $36$\\
+        $C$ & $4$ & $3$ & $0$ & $6$ & $0$ & $27$\\
+        $D$ & $4$ & $0$ & $0$ & $12$ & $6$ & $12$\\
+        $E$ & $0$ & $3$ & $4$ & $-6$ & $0$ & $45$\\
+        $F$ & $6$ & $0$ & $-2$ & $12$ & $0$ & $18$\\
+        $G$ & $4$ & $6$ & $0$ & $0$ & $-4$ & $42$\\
+    \end{tabular}
+\end{table}
+
+\vspace{1em}
+\noindent
+In cui, ovviamente, non possono essere considerate soluzioni ammissibili quelle in cui i coefficienti sono negative.
+
+\vspace{1em}
+\noindent
+Si realizzi, ora, il duale di tale problema:
+\begin{align*}
+    \min w = 4 y_1 + 12 y_2 + 18 y_3\\
+    y_1 + 3y_3 \geq 3\\
+    2y_2 + 2y_3 \geq 5\\
+    y_1,y_2,y_3 \geq 0
+\end{align*}
+che ridotto in forma standard diviene
+\begin{align*}
+    \min w = 4 y_1 + 12 y_2 + 18 y_3\\
+    y_1 + 3y_3 - r_1 = 3\\
+    2y_2 + 2y_3 - r_2 = 5\\
+    y_1,y_2,y_3,r_1,r_2 \geq 0
+\end{align*}
+Avendo in questo caso $3$ variabili incognite e $2$ vincoli non è possibile prendere in considerazione la rappresentazione grafica di tale problema. Per trovare la soluzione ottimale si pongono di volta in volta a $0$, $3$ variabili (che in $\mathbb{R}^3$ significa trovarsi in un vertice del poliedro descritto), per un totale di
+\[\binom{5}{3} = 10\]
+anche se ovviamente non saranno tutte, in quanto alcune basi sono non ammissibili. Da ciò si evince che
+
+\vspace{1em}
+\noindent
+\begin{table}[H]
+    \rowcolors{1}{white}{white}
+    \setlength{\tabcolsep}{8pt}
+    \renewcommand{\arraystretch}{1.5}
+    \noindent
+    \centering
+    \begin{tabular}{c|ccccc|c}
+         & $y_1$ & $y_2$ & $y_3$ & $r_1$ & $r_2$ & $z$\\
+        \hline
+        $0$ & $0$ & $0$ & $0$ & $-3$ & $-5$ & $0$\\
+        $A$ & $0$ & $\dfrac{5}{2}$ & $0$ & $-3$ & $6$ & $30$\\
+        $B$ & $0$ & $\dfrac{3}{2}$ & $1$ & $0$ & $0$ & $36$\\
+        $C$ & $-\dfrac{9}{2}$ & $0$ & $\dfrac{5}{2}$ & $0$ & $0$ & $27$\\
+        $D$ & $3$ & $0$ & $0$ & $0$ & $-5$ & $12$\\
+        $E$ & $0$ & $0$ & $\dfrac{5}{2}$ & $-\dfrac{3}{2}$ & $0$ & $45$\\
+        $F$ & $0$ & $0$ & $1$ & $0$ & $-3$ & $18$\\
+        $G$ & $\dfrac{3}{2}$ & $\dfrac{5}{2}$ & $0$ & $0$ & $0$ & $42$\\
+    \end{tabular}
+\end{table}
+
+\vspace{1em}
+\noindent
+in cui è immediato osservare che esiste una corrispondenza tra la base originaria e la base duale ottenuta in questo caso, in quanto i valori della funzione obiettivo ottenuti nel problema primale corrispondono a quelli ottenuti nel problema duale.\\
+Ovviamente le basi ammissibili, sia nel problema di partenza che in quello duale, sono tutte quelle in cui le variabili decisionali, comprese quelle fittizie, tutte non negative.\\
+Ovviamente la soluzione ottimale del problema duale è $36$ per il teorema di dualità forte. Non solo, ma in corrispondenza del valore $36$ della funzione obiettivo esiste una base ammissibile sia per il problema primale che duale. Ad ogni base ammissibile del problema primale, invece, la corrispondente base duale è non ammissibile. Nell'esempio considerato, inoltre, esiste un solo caso in cui tanto una base del problema primale è non ammissibile, tanto è non ammissibile anche per il problema duale corrispondente.\\
+Si osservi, inoltre, che per il problema primale di massimizzazione, sono ammissibili tutti i casi che sono minori della soluzione ottimale $36$. Tutti i casi in cui il valore della soluzione obiettivo è maggiore di $36$, a cui corrispondono basi non ammissibili per il problema primale, saranno ammissibili per il problema duale, in quanto essendo un problema di minimizzazione, si dovranno considerare soluzioni maggiori di quella ottimale, ossia maggiore di $36$.\\
+Si ottiene, quindi, la schematizzazione seguente:
+
+\vspace{1em}
+\noindent
+\begin{table}[H]
+    \rowcolors{1}{white}{white}
+    \setlength{\tabcolsep}{15pt}
+    \renewcommand{\arraystretch}{1.5}
+    \noindent
+    \centering
+    \begin{tabularx}{\textwidth}{@{}P@{}P|PP|@{}}
+        && \multicolumn{2}{c}{Duale}\\
+        && Ammissibile & Non Ammissibile\\
+        \hline
+        \multirow{2}{1em}{Primale} & Ammissibile &  \parbox{\linewidth}{\vspace{1em}\noindent Siamo nella soluzione ottima \vspace{1em}} &  \parbox{\linewidth}{\vspace{1em} \noindent Soluzione minore di $36$ \vspace{1em}}\\
+        & Non Ammissibile &  \parbox{\linewidth}{Soluzione maggiore di $36$ \vspace{1em}} & \parbox{\linewidth}{I coefficienti non sono tutti non negativi per entrambi \vspace{1em}}\\
+    \end{tabularx}
+\end{table}
+
+\vspace{1em}
+\noindent
+Le condizioni di complementarietà prevedono che date due variabili poste a $0$ nel problema primale, le corrispondenti variabili duali saranno non nulle e viceversa. Tali condizioni sono valide sempre, indipendentemente dal fatto che si considerino soluzioni di base ammissibili e non ammissibili.  
+
+\vspace{1em}
+\noindent
+\textbf{Esercizio 2}: Si consideri il problema seguente
+\begin{align*}
+    & \max z = 4x_1 + 2x_2\\
+    & 2x_1 \leq 16\\
+    & x_1 + 3x_2 \leq 17\\
+    & x_1 \leq 5\\
+    & x_1,x_2 \geq 0\\
+\end{align*}
+
+\vspace{1em}
+\noindent
+È molto semplice realizzare graficamente tale problema, in cui è immediato evincere che la soluzione ottima è $C(8,3) \rightarrow 37$.\\
+Si realizzi, ora, il problema duale corrispondente
+\begin{align*}
+    & \min w = 16 y_1 + 17y_2\\
+    & 2y_1 +y_2 \geq 4\\
+    & 3y_2 + y_3 \geq 2\\
+    & y_1,y_2,y_3 \geq 0
+\end{align*}
+
+\vspace{1em}
+\noindent
+Ma è immediato evincere quale sia la base duale corrispondente alla funzione obiettivo. Siccome la soluzione ottimale nel problema primale non è sul vincolo $x_1 \leq 5$, ossia $s_3 > 0$, ciò significa che la corrispondente variabile decisionale duale $y_3=0$. Allora da ciò è facile capire dalle equazioni seguenti
+\begin{align*}
+    & 2y_1 +y_2 \geq 4\\
+    & 3y_2 + y_3 \geq 2\\
+\end{align*}
+che i valori delle restanti variabili decisionali saranno
+\[y_2 = \dfrac{2}{3} \hspace{1em} \text{e} \hspace{1em} y_1 = \dfrac{5}{3}\]
+Ci si chiede, ora, quante unità supplementari della risorsa $1$ sono necessarie per aumentare di $15$ il valore di $z$. È noto che la funzione obiettivo $z$ vale $38$ in corrispondenza del valore $y_1^*=\dfrac{5}{3}$, ma si chiede che
+\[53 = z = 35 + y_1* \cdot \underbrace{\Delta b_1}_{15}\]
+Sapendo che il valore della variabili duale $y_1^*=\dfrac{5}{3}$, si ottiene che 
+\[\dfrac{5}{3} \cdot \Delta b_1 = 15 \hspace{1em} \rightarrow \hspace{1em} \Delta b_1 = 9\]
+per cui il primo vincolo di $\leq$ dovrà passare da $16$ a $16+9=25$.\\
+Ovviamente, però, è fondamentale capire che non è possibile aumentare indefinitamente il primo vincolo, in quando quando non vi è più intersezione con il secondo, il primo diviene ridondante e quindi la variabile duale sarebbe $0$.\\
+Spostando, quindi, a destra il primo vincolo, la nuova intersezione $C$ sarà data dall'intersezione del primo e del secondo vincolo, da cui
+\begin{align*}
+    &2x_1 = 25 & \rightarrow & x_1 = 12.5\\
+    &x_2+3x_2 = 17 & \rightarrow & x_2 = 1.5
+\end{align*}
+e sostituendo nella funzione obiettivo i due valori trovati si ottiene $z= 4 \cdot 12.5 + 2 \cdot 1.5 = 53$, ossia il valore cercato.
+
+\vspace{1em}
+\noindent
+\textbf{Osservazione}: Fondamentale osservare che la variabile duale $y_1$ vale $\dfrac{5}{3}$ solamente in un intorno di due intersezioni di vincoli, ossia quando il primo vincolo
+\[4 \leq b_1 \leq 34\]
+cioè persa la $x$ della intersezione a sinistra, ossia $B$, in cui $x=2$, si ha che $b_1=2x=4$, e tra l'intersezione del secondo vincolo obliquo con l'asse $x$ si ottiene $x=17$, per cui $b_1=2x=34$.
+
+\newpage
+\begin{center}
+    11 Novembre 2022
+\end{center}
+\textbf{Esercizio 1}: Si consideri il problema di programmazione lineare formalizzato come segue
+\begin{align*}
+    &\max z = 2x_1 - 2x_2 - x_3\\
+    &x_1 + x_2 + 2x_3 \leq 12\\
+    &x_1+ x_2 -x_3 \leq 1\\
+    &x_1,x_2,x_3 \geq 0
+\end{align*}
+Di fronte a tale problema si possono trovare due modalità di risoluzione
+\begin{itemize}
+    \item impiegare il metodo del simplesso, realizzando il tableau;
+    \item essendo il problema con $3$ variabili e $2$ vincoli, il problema duale avrà $2$ variabili e $3$ vincoli.
+\end{itemize}
+Si sceglie, ovviamente, la seconda strada, per cui
+\begin{align*}
+    \min w = 12 y_1 + y_2\\
+    y_1 + y_2 \geq 2\\
+    y_1+y_2 \geq -2\\
+    2y_1-y_2 \geq -1
+\end{align*}
+Si realizza la rappresentazione grafica dei vincoli e della funzione obiettivo, prestando attenzione ad individuare la corretta regione ammissibile. È facile capire che la regione ammissibile è infinita, in cui si individuano due vertici ammissibili
+\[A=\left(\dfrac{1}{3},\dfrac{5}{3}\right) \hspace{1em} \text{e} \hspace{1em} B=(2,0)\]
+a cui corrispondono i seguenti valori della funzione obiettivo
+\[w_A=\dfrac{17}{3} \hspace{1em} \text{e} \hspace{1em} w_B=24\]
+ovviamente il minimo si ha in $A$.\\
+Per il teorema di dualità forte si ha che anche
+\[z^*=\dfrac{17}{3}\]
+per determinare, ora, i valori delle variabili decisionali delle variabili duali si usano le condizioni di complementarietà. Siccome si ha che $y_1 \neq 0$ e $y_2 \neq 0$ è immediato che le variabili di slack saranno $0$. Non solo, ma siccome la soluzione ottima del problema duale sta nell'intersezione dei vincoli $b_1$ e $b_3$, in cui le variabili di surplus saranno $=0$, da cui le variabili $x_1^*$ e $x_3^*$ saranno non nulle, mentre $x_2^*=0$. Ciò permette facilmente di risolvere il sistema seguente
+\begin{align*}
+    &x_1+ 2x_3 = 12\\
+    &x_1-x_3 = 1\\
+\end{align*}
+che permette di ottenere $x_1=\dfrac{14}{3}$ e $x_2 = \dfrac{11}{3}$ che produce proprio il valore $x^*=\dfrac{17}{3}$.
+
+\vspace{1em}
+\noindent
+\textbf{Esercizio 2}: Si consideri il problema formalizzato nel seguente modo:
+\begin{align*}
+    &\max z = 6x_1 + 8x_2\\
+    &5x_1 + 2x_2 \leq 20\\
+    &x_1 - 2x_2 \leq 10\\
+    &x_1,x_2 \geq 0
+\end{align*}
+è immediato ricavare il duale
+\begin{align*}
+    &\min w = 20y_1 + 10y_2\\
+    &5y_1 + y_2 \geq 6\\
+    &2y_1 - 2y_2 \geq 8\\
+    &y_1,y_2 \geq 0
+\end{align*}
+Realizzando graficamente i due problemi appena descritti si ottiene facilmente che nel problema primale vi sono in totale $6$ vertici, tra ammissibili e non ammissibili, così come nel problema duale, come ci si aspettava dal calcolo
+\[\binom{4}{2}=6\]
+in cui vi sono $2$ variabili decisionali e $2$ variali fittizie, con sempre $2$ vincoli.\\
+Si ottiene la schematizzazione seguente:
+
+\vspace{1em}
+\noindent
+\begin{table}[H]
+    \rowcolors{1}{white}{white}
+    \setlength{\tabcolsep}{8pt}
+    \renewcommand{\arraystretch}{1.5}
+    \noindent
+    \centering
+    \begin{tabular}{l|ccccc|ccccc|}
+        Vertice & $x_1$ & $x_2$ & $s_1$ & $s_2$ & $z$ & $w$ & $y_1$ & $y_2$ & $r_1$ & $r_2$\\
+        \hline
+        $0$ & $0$ & $0$ & $10$ & $0$ & $0$ & $0$ & $0$ & $-4$ & $-6$\\
+        $A$ & $0$ & $5$ & $10$ & $0$ & $40$ & $40$ & $0$ & $4$ & $-2$ & $0$\\
+        $B$ & $\dfrac{5}{2}$ & $\dfrac{15}{4}$ & $0$ & $0$ & $45$ & $45$ & $\dfrac{1}{2}$ & $\dfrac{3}{2}$ & $0$ & $0$\\
+        $C$ & $4$ & $0$ & $0$ & $6$ & $24$ & $24$ & $\dfrac{6}{5}$ &$0$ & $0$ & $-\dfrac{28}{5}$\\
+        $D$ & $0$ & $10$ & $0$ & $-10$ & $80$ & $80$ & $4$ & $0$ & $14$ & $0$\\
+        $E$ & $10$ & $0$ & $-30$ & $0$ & $60$ & $60$ & $0$ & $6$ & $0$ & $4$\\
+    \end{tabular}
+\end{table}
+in cui per il primo problema, ovviamente, le basi ammissibili sono solamente le prime $4$.\\
+Viceversa, per il problema duale, si avrà che le basi ammissibili per il primale saranno non ammissibili per il duale e viceversa (anche se potrebbero essere tutte e due non ammissibili). L'unica corrispondenza si avrà nel caso della soluzione ottima. Le condizioni di complementarietà sono:
+\begin{align*}
+    &x_1 r_1 = 0\\
+    &x_2 r_2 = 0\\
+    &s_1 y_1 = 0\\
+    &s_2 y_2 = 0
+\end{align*}
+per cui se un fattore è $\neq 0$, l'altro dovrà essere $=0$ e viceversa.
+
+\vspace{1em}
+\noindent
+\textbf{Esercizio 3}: Sia dato il problema seguente
+\begin{align*}
+    &\max z = 2x_1 - 7x_2 + 4x_3\\
+    & x_2 + 2x_2 + x_2 \leq 10\\
+    & 3x_1 + 3x_2 + 2x_3 \leq 10\\
+    & x_1,x_2,x_3 \geq 0
+\end{align*}
+Si ottiene il problema duale seguente
+\begin{align*}
+    &\min w = 10y_1 + 10 y_2\\
+    & y_1 + 3y_2 \geq 2\\
+    & 2y_1 + 3y_2 \geq -7\\
+    & y_1 + 2y_2 \geq 4\\
+    & y_1,y_2 \geq 0
+\end{align*}
+Realizzando il grafico del problema duale si ottiene facilmente che il numero di vertici totali è
+\[\binom{4}{3} = 4\]
+Dovendo dimostrare che la soluzione ottima del problema primale deve essere $z^* \leq 25$, sarà sufficiente trovare una soluzione ammissibile del problema duale che vale $25$ (o anche meno); allora per dualità le soluzioni ammissibili del problema primale, compresa la soluzione ottima, dovranno essere $\leq 25$ (o comunque minore di ogni valore della funzione obiettivo del problema duale in corrispondenza di una base ammissibile).
+
+\vspace{1em}
+\noindent
+\textbf{Esercizio 4}: Si consideri il problema seguente
+\begin{align*}
+    &\max z = x_1 + 2x_2\\
+    &x_1 + 3x_2 \leq 8\\
+    &x_1 - x_2 \leq 4\\
+    &x_1,x_2 \geq 0
+\end{align*}
+Dalla rappresentazione grafica appare evidente che i vertici ammissibili trovati sono
+\begin{align*}
+    &A = \left(0,\dfrac{3}{5}\right) & \rightarrow & z=\dfrac{20}{3}\\
+    &B=(2,2) & \rightarrow & z=6\\
+    &C=(1,1) & \rightarrow & z=1
+\end{align*}
+Nell'ipotesi in cui il primo vincolo venga aumentato di $\delta_1=1$, mentre tutti gli altri vincoli rimangono costanti, per calcolare il prezzo ombra corrispondente, ossia il valore della variabile duale associata al primo vincolo, si ottiene che
+\begin{align*}
+    &x_1 + 3x_2 = 9\\
+    &x_1 - x_2 = 4\\
+\end{align*}
+in cui si è potuto mettere il segno di $=$ in quando si è nell'intersezione di due vincoli, per cui $s_1$ e $s_2$ sono entrambi nulli. Si ottiene che $x_1=\dfrac{21}{4}$ e $x_2=\dfrac{5}{4}$.\\
+Ne segue che, dato il problema duale
+\begin{align*}
+    &\min z = 8y_1 + 5y_2\\
+    &y_1 + y_2 \geq 1\\
+    &3y_1 - y_2 \geq 2\\
+    &y_1,y_2 \geq 0
+\end{align*}
+Siccome $x_1 \neq 0$ e $x_2 \neq 0$, per le condizioni di complementarietà, segue che $r_1=0$ e $r_2=0$. È fa
 \end{document}
