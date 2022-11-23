@@ -3566,4 +3566,249 @@ Ne segue che, dato il problema duale
     &y_1,y_2 \geq 0
 \end{align*}
 Siccome $x_1 \neq 0$ e $x_2 \neq 0$, per le condizioni di complementarietà, segue che $r_1=0$ e $r_2=0$. È fa
-\end{document}
+
+\newpage
+\begin{center}
+    18 Novembre 2022
+\end{center}
+\subsection{Problemi di programmazione intera}
+Per risolvere un problema di programmazione intera, non è possibile procedere tramite \textbf{enumerazione}, per cui vengono identificate tutte le soluzioni praticabili e viene scelta la migliore.\\
+Ovviamente, tale processo potrebbe non essere praticabile. Per esempio, per risolvere il TSP (Travelling Salesman Problem) in un grafo completo con $n$ nodi ci sono $(n - 1)!$ tour fattibili. Quindi,
+
+\vspace{1em}
+\noindent
+\begin{table}[H]
+    \rowcolors{1}{white}{white}
+    \setlength{\tabcolsep}{8pt}
+    \renewcommand{\arraystretch}{1.5}
+    \noindent
+    \centering
+    \begin{tabular}{c|c}
+       $n$ & $n!$\\
+       \hline
+       $10$   & $3.6 \times 10^6$\\
+       $100$  & $9.33 \times 10^{157}$\\
+       $1000$ & $4.02 \times 10^{2567}$\\
+    \end{tabular}
+\end{table}
+Per cui è opportuno trovare delle soluzioni migliori.
+
+\vspace{2em}
+\noindent
+\textbf{Esempio}: Nel problema TSP (Travelling Salesman Problem) viene fornito un insieme di noti $\mathcal{V} = \{1,\dots,n\}$ che sarebbero le città e un insieme di archi $\mathcal{A}$. Gli archi rappresentano le coppie ordinate di città tra cui è possibile viaggiare direttamente.\\
+Per $(i,j) \in \mathcal{A}$ si ha che $c_{i,j}$ è il tempo di percorrenza diretto dalla città $i$ alla città $j$.\\
+Il problema TSP mira a trovare un tour, partendo dalla città $1$, che visiti ogni altra città esattamente una volta e poi ritorni alla città di partenza e impieghi il minor tempo di viaggio totale.
+
+% Tabella per le definizione di concetti, etc...
+\vspace{1em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{TRAVELLING SALESMAN PROBLEM (TSP)}}\\
+    \parbox{\linewidth}{Un tour che visita tutti i nodi esattamente una volta è detto tour \textbf{hamiltoniano}. Il TSP identifica il tour hamiltoniano di costo minimo. \vspace{3mm}}\\
+    \hline
+\end{tabularx}
+
+\vspace{1em}
+\noindent
+\subsubsection{Formulazione del TSP}
+Le variabili decisionali sono
+\[x_{i,j} = \left\{
+    \rowcolors{1}{white}{white}
+    \begin{array}{lll}
+        1 & \text{se} & j \text{ segue immediatamente } i \text{ nel tour}\\
+        0 & \text{altrimenti}
+    \end{array}
+\right.\]
+per cui $x \in \{0,1\}^{\vert \mathcal{A} \vert}$. La funzione obiettivo, ovviamente, è
+\[\min \sum_{(i,j) in \mathcal{A}} c_{i,j} \cdot x_{i,j}\]
+Per quanto riguarda i vincoli, si deve richiedere che bisogna entrare e uscire da ogni città una e una sola volta, da cui
+\begin{align*}
+    &\sum_{i : (i,j) \in \mathcal{A}} x_{i,j} = 1 \hspace{1em} \forall j \in V\\
+    &\sum_{j : (i,j) \in \mathcal{A}} x_{i,j} = 1 \hspace{1em} \forall i \in V\\
+\end{align*}
+Tuttavia, i vincoli di cui sopra non sono sufficienti a definire i tour, poiché sono soddisfatti anche dai sottocicli. Per eliminare i sottocicli, quindi, in ogni ciclo deve esserci un arco che va da $\{1,2,3\}$ al suo complementare $\{4,5,6\}$ e un arco che va da $\{4,5,6\}$ al suo complementare $\{1,2,3\}$. In generale, per qualsiasi $U \subseteq V$ con
+\[2 \leq \vert U \vert \leq \vert V \vert - 2\]
+i vincoli seguenti
+\[\sum_{\{(i,j) \in \mathcal{A} : i \in U, j \in V-U\}} x_{i,j} \geq 1\]
+sono soddisfatti da tutti i cicli, ma ogni sottociclo ne viola almeno uno, in quanto il numero di vincoli è molto elevato, dal momento che il numero di sottoinsiemi è $2^{\vert V \vert}$.\\
+Un modo alternativo per eliminare i sottocicli è quello di introdurre vincoli
+\[\sum_{\{(i,j) \in \mathcal{A} : i \in U, j \in U\}} x_{i,j} \leq \vert U \vert - 1 \hspace{1em} \forall U \subset V : 2 \leq \vert U \vert \leq \vert V \vert -2\]
+Ma ancora una volta si necessita di un vincolo per ogni $U \subset V$ tale che $2 \leq \vert U \vert \leq \vert V \vert - 2$. Per qualunque formulazione dei vincoli, il numero dei vincoli è prossimo a $2^{\vert V \vert}$, o più precisamente
+\[\dfrac{1}{2} \cdot \left[\binom{\vert V \vert}{2} + \binom{\vert V \vert}{3} + \dots + \binom{\vert V \vert}{\vert V \vert - 2} \right]\]
+
+\vspace{1em}
+\subsubsection{Risoluzione di un problema di programmazione intera}
+Un modo per risolvere un problema di programmazione intera è quella di disattendere i vincoli di integrità delle variabili: non sapendo risolvere un problema di programmazione intera si considera tale problema come uno di programmazione continua.\\
+Si consideri il seguente problema:
+\begin{align*}
+    &\max z = 1.00x_1 + 0.64x_2\\
+    &50x_1 + 31x_2 \leq 250\\
+    &3x_1 - 2x_2 \geq -4\\
+    &x_1, x_2 \geq 0 \text{ interi}
+\end{align*}
+Allora
+\begin{itemize}
+    \item la soluzione ottimale intera è $(5,0)$;
+    \item la soluzione ottimale senza considerare i vincoli di integrità delle variabili è
+    \[\left(\dfrac{376}{193}, \dfrac{950}{193}\right) = (1.948, 4.922)\]
+\end{itemize}
+Ovviamente non è possibile utilizzare il simplesso per risolvere un problema di programmazione intera, in quanto la regione ammissibile non è un poliedro e non esiste nemmeno il concetto di vertice.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{problema-programmazione-intera.png}
+    \caption{FRappresentazione di un problema di programmazione intera}
+    \label{fig:fig2}
+\end{figure}
+
+\vspace{1em}
+\noindent
+Ci si potrebbe chiedere se non sia possibile arrotondare per eccesso e/o per difetto la soluzione lineare, in modo tale da ricondursi ad una soluzione intera
+\begin{itemize}
+    \item la parte intera superiore $(\lceil 1.948 \rceil,\lceil 4,922 \rceil) = (2, 5)$ non è ammissibile (il primo vincolo è violato);
+    \item la parte intera inferiore $(\lfloor 1.948 \rfloor, \lfloor 4.922 \rfloor) = (1, 4)$ non è ammissibile (il secondo vincolo è violato);
+    \item la scelta mista $(\rfloor 1.948 \lfloor, \lceil 4.922 \rceil) = (1, 5)$ non è ammissibile (il secondo vincolo è violato).
+    \item la scelta mista $(\lceil 1.948 \rceil, \lfloor 4.922 \rfloor) = (2, 4)$ è ammissibile ma non ottima: $z(2, 4) = 4.56$, mentre $z(5, 0) = 5$. 
+\end{itemize}
+Non solo, nessun arrotondamento dà come risultato $z(5, 0)$, per cui, in conclusione, la soluzione lineare sembra essere inutile per trovare la soluzione intera.
+
+\vspace{1em}
+\subsubsection{Ottimalità}
+Dato un problema di programmazione intera, come è possibile dimostrare che un dato punto $x^*$ è ottimale?\\
+Tale domanda è fondamentale in quanto si è visto che l'enumerazione delle soluzioni potrebbe non essere possibile, mentre ignorare i vincoli di integrità delle variabili potrebbe non fornire informazioni utili.
+Bisogna, quindi trovare delle alternative (cioè degli algoritmi) per risolvere un problema di programmazione intera.
+
+\vspace{1em}
+\subsubsection{Limiti}
+L'approccio più comune per risolvere i problemi di programmazione intera è quello di trovare sequenze di limiti fino a quando non sono \quotes{abbastanza vicini}, per cui si definisce
+
+% Tabella per le definizione di concetti, etc...
+\vspace{1em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{LIMITE SUPERIORE}}\\
+    \parbox{\linewidth}{Se $z$ è il valore ottimo di un problema di progrmmazione intera, un limite superiore è un valore $\overline{z}$ tale che $\overline{z} \geq z$. \vspace{3mm}}\\
+    \hline
+\end{tabularx}
+
+% Tabella per le definizione di concetti, etc...
+\vspace{1em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{LIMITE INFERIORE}}\\
+    \parbox{\linewidth}{Se $z$ è il valore ottimo di un problema di progrmmazione intera, un limite inferiore è un valore $\underline{z}$ tale che $\underline{z} \leq z$. \vspace{3mm}}\\
+    \hline
+\end{tabularx}
+
+\vspace{1em}
+\noindent
+Idealmente, si vorrebbe trovare $\overline{z}$ e $\underline{z}$ tali che $\underline{z} = z = \overline{z}$.\\
+Da un punto di vista meramente pratico, qualsiasi algoritmo cercherà una sequenza decrescente di limiti superiori
+\[\overline{z_1} > \overline{z_2} > \dots > \overline{z_s} \geq z\]
+e una sequenza crescente di limiti inferiori 
+\[\underline{z_1} < \underline{z_2} < \dots < \underline{z_t} \leq z\]
+e ci si ferma quando
+\[\overline{z_s} - \underline{z_t} \leq \epsilon\]
+dove $\epsilon$ è un valore appropriato non negativo.
+
+\vspace{2em}
+\noindent
+\textbf{Osservazione 1}: Si osservi che ogni soluzione ammissibile $\hat x \in X$ fornisce un limite inferiore (o primale) $z = c(\hat x) \leq z$.\\
+Per il problema
+\begin{align*}
+    &\max z = 1.00x_1 + 0.64x_2\\
+    &50x_1 + 31x_2 \leq 250\\
+    &3x_1 - 2x_2 \geq -4\\
+    &x_1, x_2 \geq 0 \text{ interi}
+\end{align*}
+si è visto che arrotondando la soluzione lineare ottimale, ossia $\hat x = (2, 4)$ è una soluzione ammissibile tale che $z = c(\hat x) = 4.56 \leq z$.
+
+\vspace{2em}
+\noindent
+\textbf{Osservazione 2}: La ricerca di limiti superiori potrebbe essere meno ovvia. L'idea più comune è quella di sostituire un problema di programmazione intera \quotes{difficile} con un problema di ottimizzazione più semplice, il cui valore ottimale sia almeno pari a $z$. Il problema più semplice può essere ottenuto con un \quotes{\textbf{rilassamento}}, cioè 
+\begin{itemize}
+    \item allargando l'insieme delle soluzioni ammissibili in modo da ottimizzare su un insieme più ampio;
+    \item sostituendo la funzione obiettivo con una funzione che abbia ovunque lo stesso valore o un valore maggiore.
+\end{itemize}
+
+% Tabella per le definizione di concetti, etc...
+\vspace{1em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{RILASSAMENTO}}\\
+    \parbox{\linewidth}{Un problema
+    \[(RP) x^R = \max \{f(x) : x \in T \subseteq \mathbb{R}^n\}\]
+    è un \textbf{problema di rilassamento} di
+    \[(IP)z = \max \{c(x) :  x \in X \subseteq \mathbb{Z}^n\}\]
+    se
+    \begin{itemize}
+        \item $X \subseteq T$;
+        \item $f(x) \geq c(x) \hspace{1em} \forall x \in X$.
+    \end{itemize}
+    \vspace{1mm}}\\
+    \hline
+\end{tabularx}
+
+\vspace{1em}
+In questo modo, se $x^*$ è la soluzione ottimale di un problema di programmazione intera, xon $x^* \in X \subseteq T$ e con $x = c(x^*) \leq f(x^*)$; pertanto, come $x^* \in T$, allora $f(x^*)$ è un limite inferiore per $x^R$, e quindi
+\[z \leq f(x^*) \leq z^R\]
+per cui $z^R$ è un limite superiore.
+
+\vspace{1em}
+\subsubsection{Rilassamento lineare}
+Per programma intero
+\[\max\{cx : x \in X = P \cap \mathbb{Z}^n\}\]
+con formulazione
+\[P = \{x \in \mathbb{R}_+^n : Ax \leq b\}\]
+il \textbf{rilassamento di programmazione lineare} è il programma lineare
+\[z^{LP} = \max\{cx : x \in P\}\]
+Poiché $X = P \cap \mathbb{Z}^n \subseteq P$ e la funzione obiettivo è invariata, si tratta chiaramente di un rilassamento.
+
+\vspace{2em}
+\noindent
+\textbf{Esempio 1}: Si consideri il seguente esempio di rilassamento
+\begin{align*}
+    & \text{Problema di programmazione intera originario} & & \text{Rilassamento lineare}\\
+    &\max z = 1.00x_1 + 0.64x_2 && \max z^{LP} = 1.00x_1 + 0.64x_2\\
+    &50x_1 + 31x_2 \leq 250 && 50x_1 + 31x_2 \leq 250\\
+    &3x_1 - 2x_2 \geq -4 && 3x_1 - 2x_2 \geq -4\\
+    &x_1, x_2 \geq 0 \text{ interi} &&x_1, x_2 \geq 0
+\end{align*}
+Allora, per quanto osservato, si ha che
+\begin{itemize}
+    \item la soluzione intera ottimale è $(5, 0)$ e $z = 5$;
+    \item La soluzione ottimale del rilassamento lineare è \[\left(\dfrac{376}{193}, \dfrac{950}{193}\right) \hspace{1em} \text{e} \hspace{1em} z^{LP} = \dfrac{948}{193} = 5.098\]
+\end{itemize}
+Allora è noto che il limite inferiore è $\underline{z} = 4.560$ e il limite superiore è $\overline{z}=5.098$. Il valore ottimale $z$ è quindi compreso tra
+\[\underline{z} = 4.560 \leq z \leq 5.098 = \overline{z}\]
+In effetti, $z = 5$. Le informazioni che si ottengono trascurando i vincoli di integrità delle variabili possono essere, quindi, davvero molto utili.
+
+\vspace{2em}
+\textbf{Esempio 2}: Si consideri il seguente problema di programmazione intera
+\begin{align*}
+    &z=\max 4x_1 - x_2\\
+    &7x_1 - 2x_2 \leq 14\\
+    &x_2 \leq 3\\
+    &2x_1 - 2x_2 \leq 3\\
+    &x_1, x_2 \geq 0 \text{ interi}
+\end{align*}
+È facile vedere che $(2,1)$ è una soluzione ammissibile, e quindi si ottiene il limite inferiore $\underline{z}=7$. La soluzione ottimale del rilassamento lineare è $x^* = \left(\dfrac{20}{7},3\right)$ che produce il limite superiore $\overline{z} = \dfrac{59}{7} = 8.43$.\\
+Poiché \textbf{tutti i coefficienti della funzione obiettivo sono interi} (cioè $(4,-1)$), anche il valore ottimale $z$ deve essere intero. Quindi, è possibile considerare come limite superiore $\overline{z} = \lfloor 8,43 \rfloor = 8$. Quindi
+\[\underline{z}=7 \leq z \leq 8 = \overline{z}\]
+\end{document} 

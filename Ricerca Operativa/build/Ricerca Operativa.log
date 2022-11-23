@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.27)  11 NOV 2022 10:35
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.27)  18 NOV 2022 09:56
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -704,20 +704,26 @@ Underfull \hbox (badness 1210) in paragraph at lines 3375--3375
 []\OT1/cmr/m/n/10 Soluzione mag-gio-re
  []
 
-[56] [57] [58] [59] [60] (/Users/enricopiccin/Documents/Ricerca Operativa/build/Ricerca Operativa.aux) ) 
+[56] [57] [58] [59] [60] [61]
+<./img//problema-programmazione-intera.png, id=220, 915.42pt x 734.745pt>
+File: ./img//problema-programmazione-intera.png Graphic file (type png)
+<use ./img//problema-programmazione-intera.png>
+Package pdftex.def Info: ./img//problema-programmazione-intera.png  used on input line 3663.
+(pdftex.def)             Requested size: 213.39568pt x 171.27489pt.
+ [62 <./img//problema-programmazione-intera.png>] [63] [64] [65] (/Users/enricopiccin/Documents/Ricerca Operativa/build/Ricerca Operativa.aux) ) 
 Here is how much of TeX's memory you used:
- 45156 strings out of 479719
- 1221335 string characters out of 5880574
- 2281520 words of memory out of 5000000
- 62582 multiletter control sequences out of 15000+600000
+ 45165 strings out of 479719
+ 1221702 string characters out of 5880574
+ 2281529 words of memory out of 5000000
+ 62590 multiletter control sequences out of 15000+600000
  479401 words of font info for 66 fonts, out of 8000000 for 9000
  319 hyphenation exceptions out of 8191
  115i,20n,489p,785b,2721s stack positions out of 10000i,1000n,20000p,200000b,200000s
  </Users/enricopiccin/Library/texlive/2022basic/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmbxti10.pfb></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on "/Users/enricopiccin/Documents/Ricerca Operativa/build/Ricerca Operativa.pdf" (60 pages, 738136 bytes).
+Output written on "/Users/enricopiccin/Documents/Ricerca Operativa/build/Ricerca Operativa.pdf" (65 pages, 1092125 bytes).
 PDF statistics:
- 287 PDF objects out of 1000 (max. 8388607)
- 187 compressed objects within 2 object streams
+ 305 PDF objects out of 1000 (max. 8388607)
+ 198 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
- 22 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 27 words of extra memory for PDF output out of 10000 (max. 10000000)
 
