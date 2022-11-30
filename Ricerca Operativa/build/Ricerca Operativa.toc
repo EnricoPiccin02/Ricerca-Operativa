@@ -71,3 +71,15 @@
 \contentsline {subsubsection}{\numberline {6.36.3}Ottimalità}{63}{}%
 \contentsline {subsubsection}{\numberline {6.36.4}Limiti}{63}{}%
 \contentsline {subsubsection}{\numberline {6.36.5}Rilassamento lineare}{64}{}%
+\contentsline {subsection}{\numberline {6.37}Matrice totalmente unimodulare}{66}{}%
+\contentsline {subsection}{\numberline {6.38}Soluzione intera con matrice totalmente unimodulare}{66}{}%
+\contentsline {subsection}{\numberline {6.39}Problema del flusso di rete a costo minimo}{67}{}%
+\contentsline {section}{\numberline {7}Teoria dei giochi - Strategie pure}{69}{}%
+\contentsline {subsection}{\numberline {7.1}Giochi a somma nulla}{69}{}%
+\contentsline {subsection}{\numberline {7.2}Gioco}{70}{}%
+\contentsline {subsection}{\numberline {7.3}Strategie}{71}{}%
+\contentsline {subsection}{\numberline {7.4}Matrice del gioco}{71}{}%
+\contentsline {subsection}{\numberline {7.5}Punto di sella}{72}{}%
+\contentsline {subsection}{\numberline {7.6}Equilibrio di Nash}{72}{}%
+\contentsline {subsection}{\numberline {7.7}Dilemma del prigioniero}{74}{}%
+\contentsline {subsection}{\numberline {7.8}Strategie miste}{75}{}%

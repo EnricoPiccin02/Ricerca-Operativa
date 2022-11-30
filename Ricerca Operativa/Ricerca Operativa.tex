@@ -3811,4 +3811,670 @@ In effetti, $z = 5$. Le informazioni che si ottengono trascurando i vincoli di i
 È facile vedere che $(2,1)$ è una soluzione ammissibile, e quindi si ottiene il limite inferiore $\underline{z}=7$. La soluzione ottimale del rilassamento lineare è $x^* = \left(\dfrac{20}{7},3\right)$ che produce il limite superiore $\overline{z} = \dfrac{59}{7} = 8.43$.\\
 Poiché \textbf{tutti i coefficienti della funzione obiettivo sono interi} (cioè $(4,-1)$), anche il valore ottimale $z$ deve essere intero. Quindi, è possibile considerare come limite superiore $\overline{z} = \lfloor 8,43 \rfloor = 8$. Quindi
 \[\underline{z}=7 \leq z \leq 8 = \overline{z}\]
+
+\newpage
+\begin{center}
+    24 Novembre 2022
+\end{center}
+Quando si deve risolvere un problema di programmazione intera, la prima cosa che si fa è provare a risolvere il problema di programmazione lineare associato.\\
+Tuttavia, un punto di partenza naturale nella risoluzione di programmi interi lineari
+\[(IP) \hspace{1em} \max\{cx : Ax \leq b, \hspace{1em} x \in \mathbb{Z}^n_+\}\]
+con dati interi $(A,b)$ è chiedersi quando si avrà la fortuna che il rilassamento di programmazione lineare
+\[(LP) \hspace{1em} \max\{cx : Ax \leq b, \hspace{1em} x \in \mathbb{R}^n_+\}\]
+avrà una soluzione ottimale che è intera.
+
+\vspace{1em}
+\subsection{Matrice totalmente unimodulare}
+Di seguito si fornisce la definizione di \textbf{matrice totalmente unimodulare}:
+
+% Tabella per le definizione di concetti, etc...
+\vspace{1em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{MATRICE TOTALMENTE UNIMODULARE}}\\
+    \parbox{\linewidth}{Una matrice $A$ è \textbf{totalmente unimodulare} (TU) se ogni sottomatrice quadrata di $A$ ha determinante $+1$, $-1$ o $0$.\\
+    In particolare, se $A$ è TU, allora $a_{i,j} \in \{+1,-1,0\}$.
+    \vspace{3mm}}\\
+    \hline
+\end{tabularx}
+
+\vspace{2em}
+\noindent
+\textbf{Osservazione 1}: In particolare si ha che $A$ è una matrice TU \textbf{se e solo se}
+\begin{itemize}
+    \item la matrice trasposta $A^T$ è TU;
+    \item la matrice $[A|I]$ è TU.
+\end{itemize}
+
+\vspace{2em}
+\noindent
+\textbf{Osservazione 2}: In particolare si ha che una matrice $A$ è TU se
+\begin{enumerate}
+    \item $a_{i,j} \in \{+1,-1,0\}$;
+    \item ogni colonna contiene al massimo due coefficienti non nulli, cioè
+    \[\sum_{i=1}^m \vert a_{i,j} \vert \leq 2\]
+    \item esiste una partizione $(M_1,M_2)$ delle $M$ righe tale che ogni colonna $j$ contenente due coefficienti non nulli soddisfa
+    \[\sum_{i \in M_1} a_{i,j} - \sum_{i \in M_2} a_{i,j}=0\]
+\end{enumerate}
+In cui la condizione $3$ significa che se i coefficienti non nulli sono nella riga $i$ e $k$, e se $a_{i,j} = -a_{k,j}$ allora $\{i,k\} \in M_1$ o $\{i,k\} \in M_2$, mentre se
+$a_{i,j}=a_{k,j}$ con $i\in M_1$ e $k\in M_2$ o viceversa.
+
+\vspace{1em}
+\noindent
+\subsection{Soluzione intera con matrice totalmente unimodulare}
+Si espone di seguito un risultato fondamentale
+
+% Tabella per le definizione di concetti, etc...
+\vspace{1em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{SOLUZIONE INTERA CON MATRICE TOTALMENTE UNIMODULARE}}\\
+    \parbox{\linewidth}{Il problema di programmazione lineare
+    \[\max\{cx : Ax \leq b, \hspace{1em} x \in \mathbb{R}^n_+\}\]
+    ha una soluzione ottimale intera per tutti i vettori interi $b$ per i quali ha un valore ottimale finito \textbf{se e solo se} $A$ è totalmente unimodulare.\vspace{3mm}}\\
+    \hline
+\end{tabularx}
+
+\vspace{1em}
+\noindent
+\subsection{Problema del flusso di rete a costo minimo}
+Dato un digrafo $D = (V, A)$ con capacità degli archi $h_{i,j}$ per tutti $(i, j) \in A$, richieste $b_i$ (afflussi positivi o deflussi negativi) in ogni nodo $i\in V$, e costi unitari di flusso $c_{i,j}$ per tutti $(i,j) \in A$, il \textbf{problema del flusso di rete a costo minimo} consiste nel trovare un flusso fattibile che soddisfi tutte le richieste al costo minimo.\\
+La formulazione è la seguente
+\begin{align*}
+    &\min \sum_{(i,j) \in A} c_{i,j} \cdot x_{i,j}\\
+    &\sum_{k \in V^*(i)} x_{i,k} - \sum_{k \in V^-(i)} x_{k,i} = b_i \hspace{1em} \forall i \in V\\
+    & 0 \leq x_{i,j} \leq h_{i,j} \hspace{1em} \forall (i,j) \in A\\
+\end{align*}
+dove $x_{i,j}$ denota il flusso nell'arco $(i,j)$,
+con
+\[V^+(i) = \{k : (i,k) \in A\} \hspace{1em} \text{e} \hspace{1em} V^-(i) = \{k : (k, i) \in A\}\]
+
+\vspace{1em}
+\noindent
+La formalizzazione permette di ottenere il risultato seguente, in cui ad ogni riga corrisponde un nodo e le colonne rappresentano gli archi della forma $x_{i,j}$ che avranno segno positivo se sono uscenti, negativo se entranti e nullo se nessuno dei due.
+
+\vspace{1em}
+\noindent
+\begin{table}[H]
+    \rowcolors{1}{white}{white}
+    \setlength{\tabcolsep}{8pt}
+    \renewcommand{\arraystretch}{1.5}
+    \noindent
+    \centering
+    \begin{tabular}{ccccccccccc}
+        $x_{1,2}$ & $x_{1,4}$ & $x_{2,3}$ & $x_{3,1}$ & $x_{3,2}$ & $x_{3,5}$ & $x_{3,6}$ & $x_{4,5}$ & $x_{5,1}$ & $x_{5,3}$ & $x_{6,5}$\\
+        \hline
+    \end{tabular}
+\end{table}
+
+\vspace{1em}
+\noindent
+I vincoli aggiuntivi sono i vincoli di capacità $0 \leq x_{i,j} \leq h_{i,j}$.
+
+\vspace{2em}
+\noindent
+\textbf{Osservazione}: Per ogni colonna vi devono essere almeno due termini non negativi e i termini non negativi devono appartenere alla medesima classe. Ma questo è ovvio in quanto ogni arco ha molteplicità $1$ ed entra in un nodo ed esce da un altro, per cui la matrice sarà sempre totalmente unimodulare.
+
+% Tabella per le definizione di concetti, etc...
+\vspace{1em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{MATRICE TOTALMENTE UNIMODULARE PER PROBLEMA DI FLUSSO DI RETE A COSTO MINIMO}}\\
+    \parbox{\linewidth}{La matrice di vincoli $A$ di un problema di flusso di rete a costo minimo è totalmente unimodulare.
+    \vspace{3mm}}\\
+    \hline
+\end{tabularx}
+
+\vspace{2em}
+\noindent
+\textbf{Dimostrazione}: La matrice $A$ è della forma
+\[\binom{C}{I}\]
+dove $C$ deriva dai vincoli di conservazione del flusso e $I$ è una matrice identica derivante dai vincoli di capacità, avente ordine $n$.\\
+È quindi sufficiente dimostrare che $C$ è TU. Le condizioni sufficienti per la totale unimodularità della proposizione precedentemente esposta sono soddisfatte con $M_1 = M$ e $M_2 = \varnothing$.
+
+% Tabella per le definizione di concetti, etc...
+\vspace{1em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{COROLLARIO}}\\
+    \parbox{\linewidth}{In un problema di flusso di rete a costo minimo, se le richieste $\{b_i\}$ e le capacità $\{h_{i,j}\}$ sono interi
+    \begin{itemize}
+        \item ogni punto estremo è intero;
+        \item i vincoli $(2)$ e $(3)$ descrivono l'insieme convesso dei flussi fattibili interi.
+    \end{itemize}
+    Tale corollario, quindi, significa che il rilassamento lineare del problema del flusso di rete a costo minimo fornisce sempre una soluzione intera a condizione che tutte le capacità $\{h_{i,j}\}$ e le richieste $\{b_i\}$ siano integrali.
+    \vspace{3mm}}\\
+    \hline
+\end{tabularx}
+
+\vspace{2em}
+\noindent
+\textbf{Esempio}: Esempi tipici di particolari casi di problemi di flusso di rete a costo minimo sono
+\begin{itemize}
+    \item \textbf{Problema del percorso più breve}\\
+    Dato un digrafo $D = (V, A)$, due nodi distinti $s, t \in V$, e costi degli archi non negativi $c_{i,j}$ per $(i, j) \in A$, trovare un percorso di costo minimo $s - t$.
+
+    \item \textbf{Problema del flusso massimo}\\
+    Dato un digrafo $D = (V, A)$, due nodi distinti $s, t \in V$, e capacità non negative $h_{i,j}$ per $(i, j) \in A$, trovare un percorso di flusso massimo da $s$ a $t$.
+
+    \item \textbf{Problema del trasporto}\\
+    Siano presenti $m$ fornitori e $n$ consumatori. Il fornitore $i$-esimo può fornire $a_i$ unità di un certo bene e il consumatore $j$-esimo ha una domanda di $b_j$ unità. Se $c_{i,j}$ è il costo di trasporto di un'unità di bene dall'$i$-esimo fornitore al $j$-esimo consumatore, il problema consiste nel trasportare i beni dai fornitori ai consumatori al costo minimo.
+
+    \item \textbf{Problema dell'assegnazione}\\
+    È un caso speciale del problema del trasporto, in cui il numero di fornitori è uguale al numero di consumatori, ogni fornitore ha un'offerta unitaria e ogni consumatore ha una domanda unitaria.
+\end{itemize}
+
+\newpage
+\begin{center}
+    25 Novembre 2022
+\end{center}
+\section{Teoria dei giochi - Strategie pure}
+Fino a questo momento sono stati analizzati prevalentemente problemi in cui il decisore era unico. Si considerino, ora, casi in cui si abbiano più decisori che agiscono sullo stesso sistema, ma con interessi fra loro non coincidenti, cioè in situazioni di conflitto.\\
+Il risultato di ogni decisore viene a dipendere dalle sue scelte ma anche da quelli degli altri decisori, il che è appunto ciò che accade in situazioni di conflitto: il primo tentativo sistematico di studiare questi problemi è stato condotto dal matematico \textbf{Von Neumann} negli anni che precedettero la seconda guerra mondiale e ha dato vita ad una fortunata branca della matematica applicata nota con il nome di \textbf{teoria dei giochi}.
+
+% Tabella per le definizione di concetti, etc...
+\vspace{1em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{TEORIA DEI GIOCHI}}\\
+    \parbox{\linewidth}{In un gioco ciascuno dei decisori che vengono normalmente chiamati \textbf{giocatori} ha una funzione obiettivo (che può essere un costo o un beneficio) detto spesso \textbf{funzione di payoff}.\\
+    Esistono giochi anche con $n$ giocatori ognuno dei quali fa le sue scelte conoscendo completamente o solo in parte (informazione incompleta) le caratteristiche del problema.\\
+    Un gioco è detto \textbf{deterministico} se in esso non interviene il caso, per cui il risultato di un gioco deterministico, cioè il valore delle varie funzioni di payoff
+    \[f_i(x_1,x_2,\dots,x_n)\]
+    per tutti gli $n$ giocatori, è perfettamente noto una volta che siano note le scelte dei vari giocatori.\\
+    Se ogni giocatore ha a disposizione un numero infinito di scelte il gioco si dice \textbf{continuo} per distinguerlo dal caso, detto \textbf{discreto}, in cui le variabili hanno numero finito di possibili valori e quindi anche il gioco presenta un numero finito di possibili conclusioni. A seconda del tipo di situazione si possono avere
+    \begin{itemize}
+        \item Casi di conflitto puro;
+        \item Casi in cui è possibile la cooperazione tra i giocatori;
+        \item Casi in cui alcuni giocatori posso coalizzarsi con altri.
+    \end{itemize}
+    \vspace{1mm}}\\
+    \hline
+\end{tabularx}
+
+\vspace{1em}
+\subsection{Giochi a somma nulla}
+Di seguito si espone il significato di \textbf{giochi a somma nulla}:
+
+% Tabella per le definizione di concetti, etc...
+\vspace{1em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{GIOCHI A SOMMA NULLA}}\\
+    \parbox{\linewidth}{Se la somma delle funzioni di payoff di tutti i giocatori è uguale a $0$ si dirà che si tratta di un gioco a \textbf{somma nulla}.\\
+    Se invece è diversa da $0$ si dirà che il gioco è a \textbf{somma non nulla}.\\
+    Esiste una sostanziale differenza tra questi due casi: nel secondo infatti può accadere che si abbiano soluzioni vantaggiose per tutti gli $n$ giocatori, purché questi cooperino, mentre nel primo caso ciò è escluso: qualcuno vince qualcun altro perde.
+    \vspace{3mm}}\\
+    \hline
+\end{tabularx}
+
+\vspace{2em}
+\noindent
+\textbf{Osservazione}: Nel caso particolare di \textbf{due giocatori}, se risulta
+\[f_1 + f_2 = 0\]
+e quindi $f_1=-f_2$: si dice, in questo caso, che il gioco è \textbf{a due persone} e \textbf{a somma nulla}. In questo caso non è possibile né la cooperazione né la coalizione fra i due giocatori perché ciò che un giocatore vince viene perso dall'altro.
+
+\vspace{2em}
+\noindent
+\textbf{Esempio}: Lucy e Linus giocano. Ciascuno di loro compie l'azione di mostrare contemporaneamente all'altro uno o due dita: Linus paga a Lucy tanti centesimi quant'è la somma delle dita.\\
+Si tratta di un gioco con scarse probabilità di successo poiché nessuna persona sana di mente accetterebbe il ruolo di Linus. Le coppie di strategie possibili sono quattro e precisamente, indicando prima la scelta di Lucy e poi quella di Linus:
+\begin{itemize}
+    \item $1$ dito - $1$ dito;
+    \item $1$ dito - $2$ dita;
+    \item $2$ dita - $1$ dito;
+    \item $2$ dita - $2$ dita;
+\end{itemize}
+Il gioco si esaurisce con una coppia di mosse dei due giocatori dopodiché si può stabilire il risultato.\\
+Le vincite di Lucy (che poi sono le perdite di Linus) si possono esprimere mediante una matrice $2 \times 2$ molto semplice (sulle righe sono elencate le mosse di Lucy e sulle colonne quelle di Linus), come mostrato di seguito:
+
+\vspace{1em}
+\noindent
+\begin{table}[H]
+    \rowcolors{1}{white}{white}
+    \setlength{\tabcolsep}{8pt}
+    \renewcommand{\arraystretch}{1.5}
+    \noindent
+    \centering
+    \begin{tabular}{|lc|cc|}
+        \hline
+        &  & \multicolumn{2}{c|}{Linus}\\
+        &  & $1d$ & $2d$\\
+        \hline
+        \multirow{3}{*}{\vspace{1em} Lucy \vspace{2em}} & $1d$ & $2$ & $3$\\
+                              & $2d$ & $3$ & $4$\\
+        \hline
+    \end{tabular}
+\end{table} 
+
+\vspace{1em}
+\noindent
+In ogni partita se Lucy sceglie la strategia $1d$ (cioè mostra un dito) il minimo che vince e $2$, se sceglie $2d$ (cioè mostra due dita) il minimo che vince è $3$. Per ogni strategia di Lucy esiste un valore minimo della sua vincita indipendentemente dalle scelte di Linus. Il massimo di questi minimi è detto \textbf{max-min} che significa, appunto, massimo dei minimi (delle vincite). Nell' esempio considerato, il max-min è 3 e Lucy lo ottiene giocando $2d$.\\
+Dal punto di vista di Linus, se egli sceglie di giocare $1d$ può perdere al massimo $3$. Se sceglie di giocare $2d$ può perdere al massimo $4$. Il minimo di questi massimi è quindi $3$ e Linus lo tiene giocando $1d$: questo valore viene detto \textbf{min-max}, cioè il minimo dei massimi (delle perdite).\\
+In conclusione, a Lucy conviene sempre giocare $2d$, mentre a Linus converrà sempre giocare $1d$: a entrambi conviene fare la scelta corrispondente alla mossa che dà il \textbf{max-min} o il \textbf{min-max} rispettivamente, per tutte le partite future. La casella che corrisponde alle due strategie dà come risultato $+3$ per Lucy e $-3$ per Linus: nessuno dei due ha interesse a modificare la sua scelta durante le varie partite del gioco perché peggiorerebbe il suo risultato. Questa casella rappresenta quindi un punto di equilibrio per il gioco.
+
+\vspace{1em}
+\subsection{Gioco}
+Di seguito si espone la definizione di \textbf{gioco}:
+
+% Tabella per le definizione di concetti, etc...
+\vspace{1em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{GIOCO}}\\
+    \parbox{\linewidth}{Un gioco è un insieme di partite fatte seguendo un sistema di regole; una partita è un insieme di azioni dette \textbf{mosse} fatte secondo le \textbf{regole}, che si conclude con un risultato per ciascuno dei partecipanti, detti \textbf{giocatori}.\\
+    Le \textbf{regole} devono essere non ambigue e non contraddittorie e devono permettere di precisare lo stato iniziale e quello finale del gioco. Ogni gioco è quindi analizzabile in linea di principio con un sistema in grado di evolversi nel tempo, compiendo una serie di transizioni definite dalle regole del gioco.
+    \vspace{3mm}}\\
+    \hline
+\end{tabularx}
+
+\vspace{1em}
+\subsection{Strategie}
+Di seguito si espone la definizione di \textbf{strategia}:
+
+% Tabella per le definizione di concetti, etc...
+\vspace{1em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{STRATEGIA}}\\
+    \parbox{\linewidth}{Una strategia è costituita da uno o più principi di scelta in base ai quali il giocatore decide l'insieme delle azioni secondo cui sviluppare il gioco.\\
+    Una strategia deve essere in grado di determinare le scelte di tutte le situazioni che possono presentarsi. Quindi una strategia è l'insieme dei principi che determinano le mosse durante il gioco:
+    \begin{itemize}
+        \item se una strategia adotta a priori la decisione di fare sempre la stessa scelta per tutte le partite, essa viene detta \textbf{pura};
+        \item se la scelta viene fatta di volta in volta in base allo sviluppo del gioco o qualche altro criterio, si parla di \textbf{strategia mist}a.
+    \end{itemize}
+    \vspace{1mm}}\\
+    \hline
+\end{tabularx}
+
+\vspace{1em}
+\subsection{Matrice del gioco}
+Per giochi a due persone a somma nulla, se sono di tipo discreto, essi sono completamente descritti assegnando una sola matrice che è detta \textbf{matrice del gioco}.
+A ogni coppia di strategie è possibile associare una funzione di beneficio (cioè una vincita) o di costo (cioè una perdita) che dipende dalle scelte dei due giocatori: di solito si preferisce usare solo la funzione di beneficio del primo giocatore (che è anche la funzione di costo del secondo), indicando in essa con segno \quotes{$-$} i benefici negativi (cioè i costi) per lui.\\
+Dato un gioco di tipo discreto con due giocatori $A$ e $B$, a somma nulla, se il giocatore $A$ dispone di $m'$ scelte $a_1, a_2, \dots, a_{m'}$ e il giocatore B di $m''$ scelte $b_1, b_2, \dots, b_{m''}$ il gioco si dice $m' \times m''$ dalle dimensioni della matrice del gioco che lo rappresenta.\\
+La matrice è descritta dal punto di vista di $A$. Se ci si riferisce a $B$ si dovrà cambiare segno a tutti gli elementi della matrice. Da ora in poi si chiameranno tali elementi con $c_{i,j}$, per $1 \leq i \leq m'$ e $1 \leq j \leq m''$.
+
+\vspace{1em}
+\noindent
+\begin{table}[H]
+    \rowcolors{1}{white}{white}
+    \setlength{\tabcolsep}{8pt}
+    \renewcommand{\arraystretch}{1.5}
+    \noindent
+    \centering
+    \begin{tabular}{|c|cccc|}
+        \hline
+         & $b_1$ & $b_2$ & $\dots$ & $b_{m''}$\\
+        \hline
+        $a_1$ & $c_{1,1}$ & $c_{1,2}$ & $\dots$ & $c_{1,m''}$\\
+        $a_2$ & $c_{2,1}$ & $c_{2,2}$ & $\dots$ & $c_{2,m''}$\\
+        $\vdots$ & $\vdots$ & $\vdots$ & $\ddots$ & $\vdots$\\
+        $a_{m'}$ & $c_{m',1}$ & $c_{m',2}$ & $\dots$ & $c_{m',m''}$\\
+        \hline
+    \end{tabular}
+\end{table} 
+
+\vspace{1em}
+\begin{enumerate}
+    \item $A$ gioca cercando di vincere il più possibile, ma sa che $B$ cerca di minimizzare le perdite. Quindi $A$ determina riga per riga la sua \textbf{vincita nel caso peggiore}, cioè determina il valore minimo di ogni riga. Sia $v_i$ la vincita peggiore nella riga $i$-esima, cioè
+    \[v_i = \underset{j={1,\dots,m''}}{\min} c_{i,j} \hspace{1em} \text{per} \hspace{1em} i=1,\dots,m'\]
+    Siccome $A$ vuole vincere il massimo possibile qualunque cosa faccia $B$, egli sceglie una strategia (cioè la riga) che gli dà il massimo valore di $v_i$, cioè la vincita massima del caso peggiore. In definitiva secondo questa logica è possibile definire le vincite di $A$ nel modo seguente:
+    \[v^\circ=\underset{i={1,\dots,m'}}{\max} v_{i} = \underset{i={1,\dots,m'}}{\max} \left(\underset{j={1,\dots,m''}}{\min} c_{i,j}\right)\]
+    Il valore $c^\circ$ viene chiamato \textbf{valore inferiore del gioco} o valore di \textbf{max-min} per $A$: con questa strategia egli non può vincere meno di $v^\circ$.
+
+    \item $B$ gioca cercando di perdere il meno possibile. Quindi $B$ determina colonna per colonna la sua perdita maggiore, cioè determina il valore massimo di ogni colonna. Sia $w_j$ la perdita maggiore nella colonna $j$-esima, cioè
+    \[w_j = \underset{i={1,\dots,m'}}{\max} c_{i,j} \hspace{1em} \text{per} \hspace{1em} j=1,\dots,m''\]
+    Siccome $B$ vuole perdere il meno possibile qualunque cosa faccia $A$, egli sceglie una strategia (cioè la colonna) che gli dà il minimo valore di $w_j$ , cioè la perdita minima del caso peggiore. Si possono quindi definire le perdite di B nel modo seguente:
+    \[w^\circ=\underset{j={1,\dots,m''}}{\in} w_{i} = \underset{j={1,\dots,m''}}{\min} \left(\underset{i={1,\dots,m'}}{\max} c_{i,j}\right)\]
+    Il valore $w^\circ$ viene chiamato \textbf{valore superiore del gioco} o valore di \textbf{min-max} per $B$: con questa strategia egli non può perdere più di $w^\circ$.
+\end{enumerate}
+
+\vspace{1em}
+\noindent
+\textbf{Esempio}: Si consideri il gioco a somma nulla $3 \times 4$ cui viene associata la seguente matrice delle vincite:
+
+\vspace{1em}
+\noindent
+\begin{table}[H]
+    \rowcolors{1}{white}{white}
+    \setlength{\tabcolsep}{8pt}
+    \renewcommand{\arraystretch}{1.5}
+    \noindent
+    \centering
+    \begin{tabular}{|c|cccc|}
+        \hline
+         & $b_1$ & $b_2$ & $b_3$ & $b_4$\\
+        \hline
+        $a_1$ & $2$ & $-3$ & $6$ & $2$\\
+        $a_2$ & $-1$ & $-5$ & $-6$ & $8$\\
+        $a_3$ & $3$ & $4$ & $3$ & $1$\\
+        \hline
+    \end{tabular}
+\end{table}
+
+\vspace{1em}
+\subsection{Punto di sella}
+Può succedere che $v^\circ=w^\circ$ e cioè che il valore inferiore e il valore superiore coincidono. Quando ciò accade si è in presenza di un \textbf{punto di sella}.
+
+% Tabella per le definizione di concetti, etc...
+\vspace{1em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{VALORE OTTIMO}}\\
+    \parbox{\linewidth}{Si dice punto di sella di una matrice a due dimensioni l'elemento della matrice (se esiste) che è contemporaneamente il minimo della sua riga e il massimo della sua colonna. Lo si indica con $<<{^\circ}>>$ e lo si chiama valore ottimo del gioco.\vspace{3mm}}\\
+    \hline
+\end{tabularx}
+
+\vspace{1em}
+\subsection{Equilibrio di Nash}
+Se un gioco possiede un punto di sella le strategie di $A$ e di $B$ che lo determinano sono dette strategie ottime e la soluzione (cioè il punto di sella) è un punto di equilibrio.
+
+% Tabella per le definizione di concetti, etc...
+\vspace{1em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{PUNTO DI EQUILIBRIO}}\\
+    \parbox{\linewidth}{Un \textbf{punto di equilibrio} o \textbf{punto di Nash} è una coppia di strategie pure che determinano una soluzione nella quale nessuno dei due giocatori ha interesse a spostarsi se non lo fa anche il suo avversario.\vspace{3mm}}\\
+    \hline
+\end{tabularx}
+
+\vspace{1em}
+\noindent
+La coppia di strategie che determinano un punto di equilibrio costituiscono la soluzione ottima del gioco.\\
+In altre parole se esiste un punto di equilibrio è conveniente giocare sempre la coppia di strategie pure che lo realizzano.\\
+I punti di equilibrio rappresentano infatti situazioni di stabilità nel senso che, una volta che i due giocatori hanno deciso di giocare le strategie di equilibrio, nessuno dei due è più interessato a muoversi.
+
+\vspace{1em}
+\noindent
+\textbf{Esempio 1}: Si consideri il gioco con la seguente matrice
+
+\vspace{1em}
+\noindent
+\begin{table}[H]
+    \rowcolors{1}{white}{white}
+    \setlength{\tabcolsep}{8pt}
+    \renewcommand{\arraystretch}{1.5}
+    \noindent
+    \centering
+    \begin{tabular}{|c|ccc|}
+        \hline
+         & $b_1$ & $b_2$ & $b_3$\\
+        \hline
+        $a_1$ & $2$ & $1$ & $4$\\
+        $a_2$ & $2$ & $0$ & $1$\\
+        \hline
+    \end{tabular}
+\end{table}
+
+\vspace{1em}
+\noindent
+Si osserva che nessun elemento della prima riga è inferiore a quello corrispondente della seconda riga. Si dice quindi che la prima riga è \textbf{dominante}, allora il primo giocatore sceglie certamente la prima riga, e $v^\circ=1$.\\
+Analogamente si osserva che la seconda colonna domina le altre due (ha tutti i coefficienti più piccoli di quelli corrispondenti sulle altre colonne) e quindi consente la minor perdita. Il secondo giocatore sceglie certamente la seconda colonna, e $w^\circ = 1$.\\
+$c_{1,2}$ è il minimo della sua riga e il massimo della sua colonna: in altre parole è un punto di equilibrio di Nash.
+\[c_{1,2} = \underset{i}{\max} \underset{j}{\min} c_{i,j} = \underset{j}{\min} \underset{i}{\max} c_{i,j} = 1\]
+
+\vspace{1em}
+\noindent
+\textbf{Esempio 2}: Si consideri il gioco con la seguente matrice
+
+\vspace{1em}
+\noindent
+\begin{table}[H]
+    \rowcolors{1}{white}{white}
+    \setlength{\tabcolsep}{8pt}
+    \renewcommand{\arraystretch}{1.5}
+    \noindent
+    \centering
+    \begin{tabular}{|c|ccc|c}
+        \hline
+         & $b_1$ & $b_2$ & $b_3$ & ${\min}$\\
+        \hline
+        $a_1$ & $-3$ & $-2$ & $6$ & $-3$\\
+        $a_2$ & $2$ & $0$ & $2$   & $0$\\
+        $a_3$ & $5$ & $-2$ & $-4$ & $-4$\\
+        \hline
+        ${\max}$ & $5$ & $0$ & $6$
+    \end{tabular}
+\end{table}
+
+\vspace{1em}
+\noindent
+In questo caso, no c'è nessuna riga o colonna dominante. Tuttavia, $c_{2,2}$ è il minimo della sua riga e il massimo della sua colonna. Pertanto è un punto di equilibrio di Nash.
+\[c_{2,2} = \underset{i}{\max} \underset{j}{\min} c_{i,j} = \underset{j}{\min} \underset{i}{\max} c_{i,j} = 0\]
+
+\vspace{1em}
+\noindent
+\textbf{Esempio 3}: Si consideri il gioco con la seguente matrice
+
+\vspace{1em}
+\noindent
+\begin{table}[H]
+    \rowcolors{1}{white}{white}
+    \setlength{\tabcolsep}{8pt}
+    \renewcommand{\arraystretch}{1.5}
+    \noindent
+    \centering
+    \begin{tabular}{|c|ccc|c}
+        \hline
+         & $b_1$ & $b_2$ & $b_3$ & ${\min}$\\
+        \hline
+        $a_1$ & $0$ & $-2$ & $2$ & $-2$\\
+        $a_2$ & $5$ & $4$ & $-3$ & $-3$\\
+        $a_3$ & $2$ & $3$ & $-4$ & $-4$\\
+        \hline
+        ${\max}$ & $5$ & $4$ & $2$
+    \end{tabular}
+\end{table}
+
+\vspace{1em}
+\noindent
+Si osserva che 
+\[v^\circ = \underset{i}{\max} \underset{j}{\min} c_{i,j} = -2\]
+mentre
+\[w^\circ = \underset{j}{\min} \underset{i}{\max} c_{i,j} = 2\]
+quindi $v^\circ \neq w^\circ$: infatti $v^\circ=c_{1,2}$, mentre $w^\circ=c_{3,1}$. Si ottiene un \textbf{gioco instabile} o \textbf{ciclico}.\\
+Si supponga che ogni giocatore sappia che l'altro gioca in maniera razionale (minor perdita). Se quindi $B$ si aspetta che $A$ scelga $a_1$, $B$ sceglierà $b_2$. Ma sospettando ciò $A$ gioca $a_2$ e quindi $B$ giocherà $b_3$, ma allora $A$ sceglie $a_1$ e si ritorna al punto di partenza.
+
+\vspace{1em}
+\noindent
+\subsection{Dilemma del prigioniero}
+Due malfattori, accusati di aver commesso una serie di delitti, vengono catturati e rinchiusi in due celle separate, senza alcuna possibilità di comunicazione.\\
+Entrambi sanno che le prove contro di loro non sono conclusive e conoscono bene il sistema giudiziario del loro paese, che tiene in grande considerazione la confessione dell'imputato.\\
+Ogni prigioniero ha due alternative: non confessare $(N)$ oppure confessare $(C)$; se entrambi non confessano $(N,N)$ sanno che potranno venire accusati solo di qualche reato minore e ognuno dovrà scontare un anno di prigione. Se entrambi confessano $(C,C)$ verranno condannati a $8$ anni di prigione dal momento che il giudice commina una pena inferiore al massimo previsto ($10$ anni). Se invece un prigioniero non confessa e l'altro sì, il primo riceverà il massimo della pena ($10$ anni) mentre colui che ha tradito il compagno se la caverà con mezzo anno di prigione.\\
+Il gioco presenta pertanto la seguente tabella di perdite:
+
+\vspace{1em}
+\noindent
+\begin{table}[H]
+    \rowcolors{1}{white}{white}
+    \setlength{\tabcolsep}{8pt}
+    \renewcommand{\arraystretch}{1.5}
+    \noindent
+    \centering
+    \begin{tabular}{|c|cc|}
+        \hline
+         & $N$ & $C$\\
+        \hline
+        $N$ & $1,1$ & $10,\dfrac{1}{2}$\\
+        $C$ & $\dfrac{1}{2},10$ & $8,8$\\
+        \hline
+    \end{tabular}
+\end{table}
+
+\vspace{1em}
+\noindent
+È interessante notare che l'unico punto di equilibrio del gioco è la coppia di strategie $(C,C)$ che dà risultati peggiori per entrambi giocatori rispetto alla coppia $(N,N)$ che non è un punto di equilibrio.
+Infatti ogni prigioniero preso singolarmente, nella situazione $(N,N)$, ha interesse a confessare dal momento che ciò migliora la sua posizione qualsiasi sia la scelta del'altro su cui egli non può influire.\\
+Il caso $(N,N)$, che consente complessivamente il risultato migliore, si ha solo se ciascuno è disposto a sacrificare qualcosa rispetto la propria situazione ottimale (mezzo anno di prigione) e se ha fiducia nel fatto che lo farà anche un altro, cioè i due giocatori devono cooperare.
+
+\newpage
+\begin{center}
+    28 Novembre 2022
+\end{center}
+Si è visto che nella teoria dei giochi vi sono due giocatori, il primo cercherà di massimizzare le vincite e il secondo di minimizzare le perdite. Non sempre c'è un equilibrio delle giocate: se c'è equilibrio il gioco termina, altrimenti si cicla all'infinita perseguendo la giocata migliore.\\
+Tuttavia, esistono anche altre strategie di gioco, che prevedono di associare ad ogni scelta una probabilità.
+
+\vspace{1em}
+\noindent
+\subsection{Strategie miste}
+Si indichi con $x(i)$ la probabilità che il primo giocatore scelga la strategia $i$-esima, in cui $i=1,\dots,m$. Si indica, invece, con $y(j)$ la probabilità che il secondo giocatore scelga la strategia $j$-esima, in cui $j=1,\dots,n$.\\
+Ovviamente, per definizione di probabilità si ha che
+\[\sum_i x(i) = 1 \hspace{1em} \text{e} \hspace{1em} \sum_j y(j) = 1\]
+e naturalmente si ha che $x(i) \geq 0$ $\forall i$, così come $y(j) \geq 0$ $\forall j$.\\
+Indicando con $p(i,j)$ gli elementi della matrice $A$, associato ad una vincita del giocatore $A$, oppure ad una perdita del giocatore $B$, si osserva che
+\[\underset{x}{\max} \underset{y}{\min} \sum_i \sum_j x(i) \cdot y(j) \cdot p(i,j) = \underset{y}{\min} \underset{x}{\max} \sum_i \sum_j x(i) \cdot y(j) \cdot p(i,j)\]
+ed è sempre vero che tale uguaglianza è verificata. Ciò suggerisce, quindi, che con le strategie miste l'equilibrio esiste sempre.
+
+\vspace{2em}
+\noindent
+\textbf{Esempio}: Si consideri il gioco con la seguente matrice
+
+\vspace{1em}
+\noindent
+\begin{table}[H]
+    \rowcolors{1}{white}{white}
+    \setlength{\tabcolsep}{8pt}
+    \renewcommand{\arraystretch}{1.5}
+    \noindent
+    \centering
+    \begin{tabular}{|c|ccc|c}
+        \hline
+         & $y_1$ & $y_2$ & $y_3$ & ${\min}$\\
+        \hline
+        $x_1$ & $0$ & $-2$ & $2$ & $-2$\\
+        $x_2$ & $5$ & $4$ & $-3$ & $-3$\\
+        \hline
+        ${\max}$ & $5$ & $4$ & $2$
+    \end{tabular}
+\end{table}
+
+\vspace{1em}
+\noindent
+Con questa schematizzazione è facile evincere che
+\[v_0 = \underset{i}{\max} \underset{j}{\min} p(i,j) = -2 \hspace{1em} \text{e} \hspace{1em} w_0 = \underset{j}{\min} \underset{i}{\max} p(i,j) = 2\]
+Siccome la probabilità di ogni scelta è non negativa e la loro somma è sempre $1$, si evince che
+\[x_1+x_2=1 \hspace{1em} \text{e} \hspace{1em} y_1+y_2+y_3=1\]
+in cui è evidente come $x_2=1-x_1$.\\
+Si ottiene che
+\[\underset{x}{\max} \underset{j}{\min} x_1 y_1 p_{1,1} + x_1 y_2 p_{1,2} + x_1 y_3 p_{1,3} + x_2 y_1 p_{2,1} + x_2 y_2 p_{2,2} + x_2 y_3 p_{2,3}\]
+che per la relazione $x_2=1-x_1$ può essere riscritta come
+\[\underset{x}{\max} \underset{j}{\min} x_1 y_1 p_{1,1} + x_1 y_2 p_{1,2} + x_1 y_3 p_{1,3} + (1-x_1) \cdot y_1 p_{2,1} + (1-x_1) \cdot y_2 p_{2,2} + (1-x_1) \cdot y_3 p_{2,3}\]
+raccogliendo opportunamente si può scrivere
+\[(x_1 p_{1,1} - x_1 p_{2,1} + p_{2,1}) y_1 + (x_1 p_{1,2} - x_1 p_{2,2} + p_{2,2}) y_2 + (x_1 p_{1,3} - x_1 p_{2,3} + p_{2,3}) y_3\]
+Sostituendo opportunamente i valori di $p_{i,j}$ si ottiene
+\[(-5 x_1 +5) y_1 + \left[(-2-4) x_1 + 4\right] y_2 + \left[(2+3) x_1 - 3\right] y_3 = (-5x_1 + 5) y_1 + (-6x_1 + 4) y_2 + (5x_1-3)y_3\]
+Si sono, quindi, ottenute delle rette in funzione di $x_1$, che possono essere rappresentate in un piano $xy$, annullando prima $x_1$ e poi vedendo quando il prodotto si può annullare con $x_1 \neq 0$. Pertanto
+\begin{enumerate}
+    \item $(-5 x_1 +5) y_1$ interseca gli assi in $(0,5)$ e $(1,0)$;
+    \item $(-6x_1 + 4) y_2$ interseca gli assi in $(0,4)$ e $\left(\dfrac{2}{3},0\right)$;
+    \item $(5x_1-3) y_3$ interseca gli assi in $(0,-3)$ e $\left(\dfrac{3}{5},0\right)$.
+\end{enumerate}
+Individuando, ora, per ciascun $x_1$ del piano qual'è la retta che ha il valore minimo corrispondente, andando a scegliere di volta in volta la retta di interesse: si ottiene, quindi, una spezzata di cui si può individuare il valore massimo, che sta sempre in un vertice: questa sarebbe la probabilità di giocare la prima scelta che massimizza il la vincita. Per trovare tale punto $x_1^*$ si calcola l'intersezione della seconda e della terza retta
+\[
+    \left\{
+        \rowcolors{1}{white}{white}
+        \begin{array}{l}
+            -6x_1+4=y\\
+            5x_1-3=y
+        \end{array}
+    \right. \hspace{1em} \rightarrow \hspace{1em} x_1^*=\dfrac{7}{11} \hspace{1em} \text{e} \hspace{1em} x_2^*=\dfrac{4}{11}
+\]
+Il valore della vincita corrispondente a tale scelta sarà
+\[5x_1^*-3=5 \cdot \dfrac{35}{11}-\dfrac{33}{11} = \dfrac{2}{11}\]
+
+\vspace{2em}
+\noindent
+\textbf{Osservazione}: In questo caso sono stati trovati i valori di probabilità ottimi per il primo giocatore, nella condizione in cui il primo presenti due scelte possibili. Ma in generale, quando si hanno più di $2$ scelte per ciascun giocatore, si deve risolvere un vero e proprio problema di programmazione lineare.\\
+Pertanto, ponendosi dal punto di vista del primo giocatore, egli deve eseguire
+\[underset{x}{\max} \underset{j}{\min} \sum_i \sum_j x(i) y(j) p(i,j)\]
+in cui vi sono dei vincoli imposti dal problema ed esposti in precedenza
+\begin{itemize}
+    \item $x(i) \geq 0$ con $i=1,\dots,m$
+    \item $\displaystyle{\sum_{i=1}^m x(i) = 1}$
+    \item $\displaystyle{\sum_{y=1}^n y(j) = 1}$
+\end{itemize}
+Lavorando rispetto al minimo sulle colonne, un primo problema richiede che
+\[\underset{j}{\min} \sum_i x(i) \cdot p(i,j)\]
+ossia la minima vincita attesa per il primo giocatore, denotato come $u$. Ma siccome si cerca il massimo valore possibile della minima vincita attesa, ovvero si cerca
+\begin{align*}
+    &\max u\\
+    &\sum_j x(i) p(i,j) \geq u \hspace{1em} \forall j
+    &\sum_i x(i)=1\\
+    &x(i) \geq 0 \hspace{1em} \forall j
+\end{align*}
+in cui il secondo vincolo deriva, ovviamente, dal fatto che $u$ è la minima vincita attesa, per cui tutte le altre vincite saranno maggiori di $u$. Gli ultimi due vincoli riguardano la probabilità, che è sempre non negativa e siccome una scelta viene sempre fatta, la probabilità somma a $1$.\\
+Si noti, infine, che questo è uno e un solo problema, in cui $u$ è una variabile decisionale come le altre, solo che non presenta il vincolo di non negatività come le altre variabili decisionali.\\
+Se ora si risolvesse il problema precedente con questa formalizzazione si otterrebbe
+\[x^*(1)=\dfrac{7}{11} \hspace{1em} x^*(2)=\dfrac{4}{11} \hspace{1em} u^*=\dfrac{2}{11}\]
+
+\vspace{2em}
+\noindent
+Se ora si volesse realizzare il duale di tale problema, si potrebbe riscriverlo in forma standard come segue
+\begin{align*}
+    &\max u\\
+    &\sum_j x(i) p(i,j)-u\geq 0 \hspace{1em} \forall j\\
+    &\sum_i x(i)=1\\
+    &x(i) \geq 0 \hspace{1em} \forall i
+\end{align*}
+e volendo avere dei vincoli di $\leq$ si ottiene
+\begin{align*}
+    &\max u\\
+    &-\sum_j x(i) p(i,j)+u\leq 0 \hspace{1em} \forall j\\
+    &\sum_i x(i)=1\\
+    &x(i) \geq 0 \hspace{1em} \forall i
+\end{align*}
+In questa forma, allora, è possibile realizzare il problema duale; per cui
+\begin{align*}
+    &\min v\\
+    &\sum_j y(j)=1\\
+    &y(j) \geq 0 \hspace{1em} \forall j\\
+    &-\sum_j y(j) p(i,j)+v\geq 0 \hspace{1em} \forall j\\
+\end{align*}
+che può essere riscritto come
+\begin{align*}
+    &\min v\\
+    &\sum_j y(j) \cdot p(i,j) \leq v\\
+    &\sum_j y(j) = 1\\
+    &y(j) \geq 0 \hspace{1em} \forall j\\
+\end{align*}
+che è esattamente il problema del secondo giocatore. Per il teorema di dualità forte si ha che il $\max u = \min v$, che è esattamente la relazione scritta all'inizio della dissertazione. Si osservi, infine, che esiste sempre la soluzione ottima finita primale che deve corrispondere alla soluzione ottima finita duale.
 \end{document} 
