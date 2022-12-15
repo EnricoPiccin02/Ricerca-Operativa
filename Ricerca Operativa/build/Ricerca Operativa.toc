@@ -83,3 +83,11 @@
 \contentsline {subsection}{\numberline {7.6}Equilibrio di Nash}{72}{}%
 \contentsline {subsection}{\numberline {7.7}Dilemma del prigioniero}{74}{}%
 \contentsline {subsection}{\numberline {7.8}Strategie miste}{75}{}%
+\contentsline {section}{\numberline {8}Formulazione generale di un problema di programmazione non-lineare}{78}{}%
+\contentsline {subsection}{\numberline {8.1}Programmazione frazionaria}{78}{}%
+\contentsline {subsection}{\numberline {8.2}Condizioni di Kuhn-Tucker}{79}{}%
+\contentsline {subsection}{\numberline {8.3}Condizioni di Kuhn-Tucker sufficienti}{81}{}%
+\contentsline {subsection}{\numberline {8.4}Programmazione quadratica}{81}{}%
+\contentsline {subsection}{\numberline {8.5}Metodo del simplesso modificato}{82}{}%
+\contentsline {section}{\numberline {9}Ottimizzazione}{90}{}%
+\contentsline {subsection}{\numberline {9.1}Algoritmi di ottimizzazione}{90}{}%

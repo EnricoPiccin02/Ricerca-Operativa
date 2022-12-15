@@ -4477,4 +4477,671 @@ che può essere riscritto come
     &y(j) \geq 0 \hspace{1em} \forall j\\
 \end{align*}
 che è esattamente il problema del secondo giocatore. Per il teorema di dualità forte si ha che il $\max u = \min v$, che è esattamente la relazione scritta all'inizio della dissertazione. Si osservi, infine, che esiste sempre la soluzione ottima finita primale che deve corrispondere alla soluzione ottima finita duale.
+
+\newpage
+\begin{center}
+    1 Dicembre 2022
+\end{center}
+\section{Formulazione generale di un problema di programmazione non-lineare}
+Si vuole determinare l'insieme delle variabili $x \in \mathbb{R}^n$ soluzione del problema
+\begin{align*}
+    &\max f(x)\\
+    &g(x) \leq b\\
+    &x\geq 0
+\end{align*}
+con $b \in \mathbb{R}^m$. Purtroppo, non esiste un metodo generale per risolvere un qualunque problema di programmazione non lineare.
+
+\vspace{1em}
+\noindent
+\subsection{Programmazione frazionaria}
+Si supponga che la funzione obiettivo sia una funzione frazionaria, cioè il rapporto di due funzioni
+\[\max f(x)= \frac{f_1(x)}{f_2 (x)}\]
+con $f_2(x) \neq 0$, $\forall x \in \mathbb{R}^n$. Per semplicità si consideri il caso in cui sia $f_1(x)$ che $f_2(x)$ sono
+lineari, cioè
+\begin{align*}
+    &f_1(x)=c^T x + c_0\\
+    &f_2(x)=d^T x + d_0\\
+\end{align*}
+con $f_2(x) > 0$, $\forall x \in \mathbb{R}^n$.\\
+Si consideri, a questo punto, il problema formulato come segue
+\[
+    \max f(x) = \dfrac{c^T x + c_0}{d^T x + d_0}\\
+    A x \leq b\\
+    x \geq 0
+\]
+Si introduce, quindi, la variabile $y$, definita come segue
+\[y=\dfrac{x}{d^T x + d_0}\]
+e lo scalare
+\[t=\dfrac{1}{d^T x + d_0}\]
+da cui $y=tx$. La funzione obiettivo, quindi, diventa
+\[\max f(x) = c^T y + x_0 t\]
+Moltiplicando per $t$ (che è positivo, in quanto $f(x) > 0$ per ipotesi) ambedue i termini nei vincoli si ha
+\begin{align*}
+    &A y \leq b t\\
+    &y \geq 0
+\end{align*}
+e si ottiene, così, il seguente problema di programmazione lineare
+\begin{align*}
+    &\max f(x) = c^T y + x_0 t\\
+    &Ay - bt \leq 0\\
+    &y \geq 0, t \geq 0\\
+\end{align*}
+
+\vspace{1em}
+\subsection{Condizioni di Kuhn-Tucker}
+Si espongono di seguito le \textbf{condizioni di Kuhn-Tucker}:
+
+% Tabella per le definizione di concetti, etc...
+\vspace{1em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{CONDIZIONI DI KUHN-TUCKER}}\\
+    \parbox{\linewidth}{Esistono delle condizioni \textbf{necessarie} che devono essere soddisfatte dalla soluzione ottima di un qualunque problema di programmazione non lineare, le \textbf{condizioni di Kuhn-Tucker (KKT)}.\\
+    Non si dimostrano rigorosamente tali condizioni, ma si illustra nel seguito una dimostrazione intuitiva. \vspace{3mm}}\\
+    \hline
+\end{tabularx}
+
+\vspace{2em}
+\noindent
+\textbf{Dimostrazione}: Si supponga di avere una regione ammissibile e una funzione obiettivo (in verde le linee di livello) come nella Figura \ref{fig:fig4} seguente
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{dimostrazione-khun-tucker-1.png}
+    \caption{Dimostrazione delle condizioni di Kuhn-Tucker - 1}
+    \label{fig:fig4}
+\end{figure}
+
+\vspace{1em}
+\noindent
+in cui il valore ottimo si ha nel punto $A$. Si osservi che nel punto $A$ il $\nabla f$ è compreso tra i gradienti di $g_2(x) = b_2$ e di $g_3(x) = b_3$, come illustrato nella Figura \ref{fig:fig5} seguente
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{dimostrazione-khun-tucker-2.png}
+    \caption{Dimostrazione delle condizioni di Kuhn-Tucker - 2}
+    \label{fig:fig5}
+\end{figure}
+
+\vspace{1em}
+\noindent
+Quindi se $A$ è il punto della soluzione ottima, deve verificarsi che $\nabla f$ sia una combinazione lineare di $\nabla g_2$ e $\nabla g_3$. Devono cioè esistere dei valori $\lambda_2$ e $\lambda_3$ tali che
+\[\nabla f = \lambda_2 \nabla g_2 + \lambda_3 \nabla g_3 \hspace{1em} \text{ in } A \hspace{1em} \text{con} \hspace{1em} \lambda_2, \lambda_3 \geq 0\]
+Quindi se $x_0$ è la soluzione ottima di un problema di programmazione lineare, deve certamente essere verificata la condizione
+\[
+    \left\{
+        \rowcolors{1}{white}{white}
+        \begin{array}{lll}
+            \nabla f(x_0) - \lambda^T \nabla g(x_0) = 0 & \text{con} & g(x) \in \mathbb{R}^m, \lambda \in \mathbb{R}^m\\
+            \lambda \geq 0\\
+        \end{array}
+    \right.
+\]
+Così facendo, però, sono state prese in considerazione tutte le $g$, ossia tutti i vincoli, mentre si era osservato che $\nabla f$ è combinazione lineare solamente dei gradienti di $g_2$ e $g_3$. Per ottenere la medesimo espressione, basta porre $\lambda_1 = \lambda_4 = \lambda_5 = \dots = \lambda_m = 0$, mentre $\lambda_2, \lambda_3 \geq 0$.\\
+La condizione sugli scalari $\lambda_i$, con $i = 1,\dots, m$ può essere espressa come
+\[\lambda^T \cdot \left[g(x_0) - b\right] = 0\]
+Infatti se $g_i(x_0) - b_i  \neq 0$, cioè $x_0$ non appartiene a tale vincolo, allora deve essere $\lambda_i = 0$.\\
+Se invece $g_i(x_0) - b_i = 0$, cioè $x_0$ è un punto del vincolo (come $g_2$ e $g_3$ nell'esempio preso in considerazione), allora basterà che sia $\lambda_i \geq 0$.\\
+Dato che $x_0$ è ammissibile sarà $g_i(x_0) - b_i \leq 0$, $\forall i$, quindi se $\lambda_i = 0$ dovrà essere $g_i(x_0) - b_i \leq 0$; se invece $\lambda_i \neq 0$ sarà sicuramente $g_i(x_0) - b_i = 0$.\\
+Analogamente la condizione $x \geq 0$ si esprime con
+\[
+    \left\{
+        \rowcolors{1}{white}{white}
+        \begin{array}{lll}
+            x_0^T \cdot \left[\nabla f(x_0) - \lambda^T \cdot \nabla g(x_0)\right] = 0\\
+            \nabla f(x_0) - \lambda^T \cdot \nabla g(x_0) \leq 0
+        \end{array}
+    \right.
+\]
+
+\vspace{1em}
+\noindent
+Siano, allora
+\[f(x), g_1 (x), g_2 (x), \dots , g_m (x)\]
+funzioni differenziabili che soddisfano condizioni di regolarità (ossia il gradiente è non nullo in ogni punto).\\
+Il punto 
+\[x^* = (x_1^* , x_2^* , \dots , x_m^*){^T}\]
+è una soluzione ottima per un problema di programmazione non lineare solo se esistono $m$ numeri reali $\lambda_1, \lambda_2, \dots, \lambda_m$ tali che tutte le seguenti condizioni KKT sono soddisfatte:
+\begin{align*}
+    &1.&x_j^* > 0 &\rightarrow& \dfrac{\partial f(x_i^*)}{\partial x_j} - \sum_{i=1}^m \lambda_i \cdot \dfrac{\partial g_i(x_i^*)}{\partial x_j} = 0 & j = 1,\dots,n\\
+    &2.&x_j^* = 0 &\rightarrow& \dfrac{\partial f(x_i^*)}{\partial x_j} - \sum_{i=1}^m \lambda_i \cdot \dfrac{\partial g_i(x_i^*)}{\partial x_j} \leq 0 & j = 1,\dots,n\\
+    &3.&\lambda_i > 0 &\rightarrow& g_i(x^*)-b_i=0 & i = 1,\dots,m\\
+    &4.&\lambda_i = 0 &\rightarrow& g_i(x^*)-b_i \leq 0 & i = 1,\dots,m\\
+    &5.&x_j^* \geq 0 & & & j= 1,\dots,n\\
+    &6.&\lambda_i \geq 0 & & & i = 1,\dots,m\\
+\end{align*}
+Tali condizioni possono essere espresse in forma più compatta
+\begin{enumerate}
+    \item $x^T \cdot \left[\nabla f(x) - \lambda^T \cdot \nabla g(x)\right] = 0$
+    \item $\nabla f(x) - \lambda^T \cdot \nabla g(x) \leq 0$
+    \item $\lambda^T \cdot (g(x) - b) = 0$
+    \item $g(x) - b \leq 0$
+    \item $x \geq 0$
+    \item $\lambda \geq 0$
+\end{enumerate}
+
+\vspace{1em}
+\subsection{Condizioni di Kuhn-Tucker sufficienti}
+Di seguito si espone la casistica in cui le condizioni di Kuhn-Tucker, oltre ad essere necessarie, sono anche sufficienti:
+
+% Tabella per le definizione di concetti, etc...
+\vspace{1em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{CONDIZIONI DI KUHN-TUCKER NECESSARIE}}\\
+    \parbox{\linewidth}{Sia $f(x)$ una funzione concava e siano $g_1(x), g_2 (x), \dots , g_m (x)$ funzioni convesse (cioè il problema considerato è un problema di programamzione convessa). Allora $x^*$ è una soluzione ottima del problema di programamzione non lineare \textbf{se e solo se} soddisfa tutte le condizioni KKT. \vspace{3mm}}\\
+    \hline
+\end{tabularx}
+
+\vspace{1em}
+\subsection{Programmazione quadratica}
+Un problema di programmazione quadratica è definito come
+\begin{align*}
+    &\max f(x) = c^T x - \dfrac{1}{2} x^T Qx\\
+    & Ax \leq b\\
+    & x \geq 0
+\end{align*}
+con $Q$ matrice simmetrica, cioè $q_{i,j} = q_{j,i}$. Se la funzione obiettivo è concava questo problema si può risolvere con il \textbf{metodo del simplesso modificato}.\\
+Un modo per verificare la concavità della funzione obiettivo è quello di verificare l'equivalente condizione che $x^T Q x \geq 0$ per ogni $x$, e cioè che Q sia una matrice semi-definita positiva.\\
+Poiché $\nabla f = c - Qx$ e $\nabla g = A$, le condizioni KKT diventano
+\begin{enumerate}
+    \item $x^T \cdot \left[\nabla f(x) - \lambda^T \cdot \nabla g(x)\right] = 0 \hspace{2em} \rightarrow \hspace{2em} x^T \cdot \left[x-Qx - A^T \lambda\right] = 0$
+    \item $\nabla f(x) - \lambda^T \cdot \nabla g(x) \leq 0 \hspace{2em} \rightarrow \hspace{2em} x-Qx - A^T \lambda \leq 0$
+    \item $\lambda^T \cdot (g(x) - b) = 0 \hspace{3em} \rightarrow \hspace{3em} \lambda^T \cdot \left[Ax - b\right] = 0$
+    \item $g(x) - b \leq 0 \hspace{3em} \rightarrow \hspace{3em} Ax - b \leq 0$
+    \item $x \geq 0$
+    \item $\lambda \geq 0$
+\end{enumerate}
+Si introducano, ora, le variabili di slack $y$ e $v$ rispettivamente per le condizioni $2$ e $4$. Si ottiene, così
+\begin{align*}
+    &y=Qx - c + A^t \lambda\\
+    &v=b-Ax
+\end{align*}
+da cui
+\begin{align*}
+    &x^T y = 0\\
+    &\lambda^T v = 0\\
+    &Qx + A^T \lambda - y = c\\
+    &Ax + v = b\\
+    &x,\lambda,y,v \geq 0\\
+\end{align*}
+Poiché tutte le variabili decisionali sono non negative le condizioni di ortogonalità (o complementarità), cioè le due prime condizioni, possono anche essere scritte nella forma
+\[x^T t + \lambda^T v = 0\]
+Poiché si è ipotizzato che la funzione obiettivo del problema originario sia concava e poiché i vincoli sono lineari e quindi convessi, le condizioni necessarie di KKT sono anche sufficienti.\\
+Quindi $x$ sarà una soluzione ottima \textbf{se e solo se} esistono valori di $y$, $\lambda$, $v$ tali che (insieme a $x$) soddisfano contemporaneamente tali condizioni.
+
+\vspace{1em}
+\subsection{Metodo del simplesso modificato}
+Il \textbf{metodo del simplesso modificato} è basato sull'osservazione che, a eccezione della condizione di complementarità, le condizioni KKT nella forma ottenuta sopra non sono altro che vincoli lineari.\\
+Inoltre la condizione di complementarità richiede semplicemente che \textbf{non è ammissibile che entrambe le variabili complementari siano variabili di base} (le sole variabili strettamente positive).\\
+Pertanto, il problema si riduce a determinare una soluzione di base ammissibile iniziale per un qualsivoglia problema di programmazione lineare con questi vincoli, con questa ulteriore restrizione sulla scelta delle variabili di base.\\
+Nel caso banale in cui $c \leq 0$ e $b \geq 0$, le variabili di base iniziali sono gli elementi di $y$ e $v$ e quindi la soluzione desiderata è $x = 0$, $\lambda = 0$, $y = -c$ e $v = b$.
+Negli altri casi, occorre modificare il problema introducendo una variabile artificiale in ciascuna delle equazioni cui $c_j > 0$ oppure $b_i < 0$ allo scopo di usare queste variabili artificiali come variabili di base iniziali per il problema modificato (si noti che questa scelta di variabili di base iniziali soddisfa le condizioni di complementarità poiché $x = 0$, $\lambda = 0$ in quanto sono variabili fuori base).\\
+Successivamente si userà la prima fase del metodo del simplesso per determinare la soluzione di base ammissibile per il problema reale, cioè si applicherà il metodo del simplesso (con una piccola modifica) al seguente problema di programmazione lineare
+\[\min z = \sum_j z_j\]
+soggetto ai vincoli lineari ottenuti dalle condizioni KKT, con l'aggiunta delle variabili artificiali. La sola variazione del metodo del simplesso è la modifica della procedura per la selezione di una variabile entrante.
+
+% Tabella per le definizione di concetti, etc...
+\vspace{1em}
+\rowcolors{1}{black!5}{black!5}
+\setlength{\tabcolsep}{14pt}
+\renewcommand{\arraystretch}{2}
+\noindent
+\begin{tabularx}{\textwidth}{@{}|P|@{}}
+    \hline
+    {\textbf{REGOLA DI SCELTA DELLA VARIABILE ENTRANTE}}\\
+    \parbox{\linewidth}{Quando si sceglie una variabile entrante non si deve tener conto delle variabili fuori base la cui variabile complementare è già una variabile di base. La scelta è ristretta alle altre variabili fuori base secondo il criterio standard utilizzato dal metodo del simplesso. \vspace{3mm}}\\
+    \hline
+\end{tabularx}
+
+\newpage
+\begin{center}
+    2 Dicembre 2022
+\end{center}
+\vspace{1em}
+\noindent
+Si espongono, nel seguito, alcuni esempi di programmazione secondo le leggi di KKT.
+
+\vspace{2em}
+\noindent
+\textbf{Esempio 1}: Si calcoli
+\begin{align*}
+    &\max f(x) = \dfrac{8x_1+6x_2-5}{-4x_1+2x_2-40}\\
+    &x_1+x_2 \leq 10\\
+    &3x_1-5x_2 \leq 6\\
+    &x_1,x_2 \geq 0
+\end{align*}
+Si introducono, allora la variabile $y$ e lo scalare $t$ come segue
+\[y=\dfrac{x}{d^T x + d_0} \hspace{1em} \text{e} \hspace{1em} t=\dfrac{1}{d^T x + d_0}\]
+che si traduce, quindi in
+\[y_1 = \dfrac{x_1}{-4x_1 + 2x_2 - 40} \hspace{1em} \text{e} \hspace{1em} y_2=\dfrac{x_2}{-4x_1 +2x_2 - 40} \hspace{1em} \text{e} \hspace{1em} t=\dfrac{1}{-4x_1+2x_2-40}\]
+per cui si ottiene
+\begin{align*}
+    &\max z = 8y_1 + 6y_2 - 5t\\
+    &x_1 t + x_2 t \leq 10 t\\
+    &3x_1t-5x_1 t \leq 6t\\
+    &x_1,x_2 \geq 0
+\end{align*}
+in cui la seconda e la terza condizione derivano dal fatto che sono stati moltiplicati i vincoli per $t$. Tuttavia, tutto ciò ha significato e i segni delle disuguaglianze rimangono inalterati solamente se il denominatore $-4x_1+2x_2-40$ è strettamente positivo; per capirlo, allora, si considerano i vincoli del problema
+\begin{align*}
+    &x_1+x_2 \leq 10\\
+    &3x_1-5x_2 \leq 6\\
+    &x_1,x_2 \geq 0
+\end{align*}
+e ci si chiede se con tale regione ammissibile il denominatore si effettivamente positivo o meno. Non è difficile capire che con tali condizioni il denominatore $-4x_1+2x_2-40$ è sempre negativo. Pertanto il segno delle disuguaglianze precedentemente esposte è sbagliato, ossia è invertito, per cui si sostituisce il $\leq$ con $\geq$, da cui
+\begin{align*}
+    &\max z = 8y_1 + 6y_2 - 5t\\
+    &x_1 t + x_2 t \geq 10 t\\
+    &3x_1t-5x_1 t \geq 6t\\
+    &x_1,x_2 \geq 0, t \leq 0
+\end{align*}
+
+\vspace{2em}
+\noindent
+\textbf{Osservazione}: Una delle condizioni necessarie di Kuhn-Tucker afferma che
+\[\lambda^T \cdot \left[g(x) - b\right]=0\]
+e siccome si sta risolvendo un problema che impone il vincolo $g(x) \leq b$ e $\lambda \geq 0$, allora il prodotto $\lambda^T \cdot \left[g(x) - b\right]$ è sempre negativo: l'unica possibilità per cui sia uguale a zero è che $\lambda_i \cdot (g_i(x)-b_i) = 0$ $\forall i$.
+
+\vspace{2em}
+\noindent
+\textbf{Esempio 2}: Si consideri il seguente problema
+\begin{align*}
+    &\max f(x) = \log(x_1+1)+x_2\\
+    &2x_1 + x_2 \leq 3\\
+    &x_1, x_2 \geq 0
+\end{align*}
+Com'è noto, le condizioni di Kuhn-Tucker possono essere scritte come
+\begin{align*}
+    &1.&x_j^* > 0 &\rightarrow& \dfrac{\partial f(x_i^*)}{\partial x_j} - \sum_{i=1}^m \lambda_i \cdot \dfrac{\partial g_i(x_i^*)}{\partial x_j} = 0 & j = 1,\dots,n\\
+    &2.&x_j^* = 0 &\rightarrow& \dfrac{\partial f(x_i^*)}{\partial x_j} - \sum_{i=1}^m \lambda_i \cdot \dfrac{\partial g_i(x_i^*)}{\partial x_j} \leq 0 & j = 1,\dots,n\\
+    &3.&\lambda_i > 0 &\rightarrow& g_i(x^*)-b_i=0 & i = 1,\dots,m\\
+    &4.&\lambda_i = 0 &\rightarrow& g_i(x^*)-b_i \leq 0 & i = 1,\dots,m\\
+    &5.&x_j^* \geq 0 & & & j= 1,\dots,n\\
+    &6.&\lambda_i \geq 0 & & & i = 1,\dots,m\\
+\end{align*}
+Tali condizioni, rispetto al problema considerato, si traducono in
+\begin{align}
+    & \dfrac{1}{x_1+1} - \lambda - 2 \lambda \leq 0\\
+    & x_1 \cdot \left(\dfrac{1}{x_1+1} - 2 \lambda\right) = 0\\
+    & 1 - \lambda \leq 0\\
+    & x_2 \cdot (1-\lambda) = 0\\
+    & \lambda \cdot (2x_1+x_2-3) = 0\\
+    & 2x_1+x_2 \leq 3\\
+    & x_1 \geq 0, x_2 \geq 0, \lambda \geq 0
+\end{align}
+Dalla disequazione $(3)$ si evince che $\lambda \geq 1$, per cui in base alla $(5)$ è facile capire che $2x_1 + x_2 = 3$. Siccome dalla $(3)$ è noto che $\lambda \geq 1$, si può osservare dalla $(1)$ che
+\[\dfrac{1}{x_1 + 1} - 2 \lambda < 0\]
+Ciò, implica, dalla $(2)$ che $x_1=0$, per cui $2x_1+x_2=3 \rightarrow x_2=3$ e quindi dalla $(4)$ $\lambda=1$.
+
+\vspace{2em}
+\noindent
+\textbf{Esempio 3}: Si consideri il seguente problema
+\begin{align*}
+    &\max f(x) = x_1+2x_2-x_2^3\\
+    &x_1 + x_2 \leq 1\\
+    &x_1, x_2 \geq 0
+\end{align*}
+Allora le condizioni di Kuhn-Tucker sono le seguenti
+\begin{align}
+    & 1 - \lambda \leq 0\\
+    & x_1 \cdot (1-\lambda) = 0\\
+    & 2 - 3x_2^2 - \lambda \leq 0\\
+    & x_2 \cdot (2-3x_2^2-\lambda) =0\\
+    & \lambda \cdot (x_1+x_2-1)=0\\
+    & x_1 + x_2 \leq 1\\
+    & x_1,x_2,\lambda \geq 0
+\end{align}
+Dalla $(1)$ è immediato che $\lambda \geq 1$, per cui dalla $(5)$ si capisce che $x_1+x_2 = 1$.\\
+Si formulino, ora, delle ipotesi esecutive. Si supponga, allora che $x_1 > 0$, allora dalla $(1)$ segue che $\lambda=1$; allora dalla $(3)$ segue che $2x_2^2 \geq 1$, per cui $x_2 \neq 0$ e quindi $x_2 > 0$. Dalla $(4)$ si ottiene che, quindi che
+\[2-3x_2^2 - \lambda = 0 \hspace{1em} \rightarrow \hspace{1em} x_2 = \dfrac{1}{\sqrt{3}} \hspace{1em} \text{in quanto} \hspace{1em} x_2 > 0\]
+Allora si ottiene che
+\[x_1 = \dfrac{\sqrt{3}-1}{\sqrt{3}} \hspace{1em} \text{e} \hspace{1em} x_2=\dfrac{1}{\sqrt{3}} \hspace{1em} \text{e} \hspace{1em} \lambda=1\]
+Questa è una soluzione che concorda con le ipotesi assunte dal problema; tuttavia bisogna anche considerare l'ipotesi che $x_1=0$; siccome $\lambda \geq 1$ dalla $(1)$, si ottiene dalla $(5)$ che $x_2=1$; ma ciò implica, per la $(4)$ che
+\[2-3x_2^3-\lambda=0 \hspace{1em} \rightarrow \hspace{1em} \lambda=-1\]
+che è assurdo, per cui $x_1 \neq 0$.
+
+\vspace{2em}
+\noindent
+\textbf{Esempio 4}: Si consideri il seguente problema
+\begin{align*}
+    &\max f(x) = 20 x_1 + 10x_2\\
+    &x_1^2 + x_2^2 \leq 1\\
+    &x_2 + 2x_2 \leq 2\\
+    &x_1, x_2 \geq 0
+\end{align*}
+Siccome si hanno due vincoli, si dovranno considerare sia $\lambda_1$ che $\lambda_2$; allora le condizioni sono
+\begin{align}
+    & 20 - 2 \lambda_1 x_2 - \lambda_1 \leq 0\\
+    & x_1 \cdot (20 - 2\lambda_1 x_2 - x_2) = 0\\
+    & 10 - 2 \lambda_1 x_2 - 2 \lambda_2 \leq 0\\
+    & x_2 \cdot (10 - 2 \lambda_1 x_2 - 2 \lambda_2) = 0\\
+    & x_1^2+x_2^2 \leq 1\\
+    & x_2 \cdot (\lambda_1 + 2x_2 - 2) = 0
+    & x_1+2x_2 \leq 2\\
+    & x_1,x_2,\lambda_1,\lambda_2 \geq 0
+\end{align}
+In questo caso più complesso sono da formulare tutte le ipotesi su $\lambda_1$ e $\lambda_2$. Allora si procede come segue
+\begin{enumerate}
+    \item se $\lambda_1=\lambda_2=0$ si ottiene dalla $(1)$ una contraddizione, per cui è assurdo;
+    \item se $\lambda_1=0$ e $\lambda_2>0$, allora dalla $(1)$ si ha che $\lambda_2 \geq 20$ e dalla $(3)$ si ha che $\lambda_2 \geq 5$. Dalla $(7)$ si ha che
+    \[x_1+2x_2=2 \hspace{1em} \rightarrow \hspace{1em} x_1=2-2x_2\]
+    Dalla $(6)$ si evince che 
+    \[4-8x_2+4x_2^2+x_2^2=1 \hspace{1em} \rightarrow \hspace{1em} 5x^2-8x_2+3 \leq 0\]
+    Risolvendo l'equazione associata si ottiene che gli estremi sono
+    \[x_2=1 \hspace{1em} \text{oppure} x_2=\dfrac{3}{5}\]
+    per cui la disequazione è verificata per $x \in \left[\dfrac{3}{5},1\right]$. Tuttavia, per ciascuno di tali valori $x_1 > 0$ e quindi si ottiene dalla $(2)$ e dalla $(5)$ che $\lambda_2=5$ e $\lambda_2=20$, che è impossibile.
+    \item Nell'ipotesi in cui $\lambda_1>0$ e $\lambda_2=0$. Pertanto, essendo $\lambda_1>0$, dalla $(5)$ che
+    \[x_1^2+x_2^2=1\]
+    Non solo, ma dalla $(1)$ e dalla $(3)$ si ottiene che
+    \begin{align*}
+      & 20-2\lambda_1 x_1 \leq 0 \hspace{1em} \rightarrow \hspace{1em} x_1 > 0\\
+      & 10-2\lambda_1 x_2 \leq 0 \hspace{1em} \rightarrow \hspace{1em} x_2 > 0\\
+    \end{align*}
+    Ciò permette di sfruttare la $(2)$ e la $(4)$ per affermare che
+    \[10 = \lambda_1 x_1 \hspace{1em} \text{e} \hspace{1em} 5=\lambda_1 x_2\]
+    ovvero
+    \[\lambda_1 x_1 = 2 \lambda_1 x_2 \hspace{1em} \rightarrow \hspace{1em} x_1=2x_2\]
+    da ciò segue che
+    \[x_1^2+x_2^2 = 1 \hspace{1em} \rightarrow \hspace{1em} x_2 = \dfrac{1}{\sqrt{5}}\hspace{1em} \rightarrow \hspace{1em} x_1=\dfrac{2}{\sqrt{5}}\]
+    È facile capire che
+    \[5=\lambda_1 x_2 \hspace{1em} \rightarrow \hspace{1em} \lambda_1=5 \sqrt{5}\]
+\end{enumerate}
+
+
+\newpage
+\begin{center}
+    5 Dicembre 2022
+\end{center}
+\vspace{1em}
+\noindent
+\textbf{Esempio 1}: Si consideri il problema formalizzato come segue
+\begin{align*}
+    & \max f(x) = c{^T} x - \dfrac{1}{2} x{^T} Q x\\
+    & Ax \leq b\\
+    & x \geq 0\\
+\end{align*}
+Allora le condizioni di Kuhn-Tucker si formalizzano come
+\begin{align*}
+    &Q^T x + A^T U - y = c{^T}\\
+    & Ax + v = b\\
+    &x{^T} y + x{^T} u = 0\\
+    &x,y,v,u \geq 0\\
+\end{align*}
+Si risolva, allora, il problema
+\begin{align*}
+    & \max f(x) = 3x_1 - x_1^2 - 4x_2 - x_2^2\\
+    & x_1+x_2 \leq 2\\
+    & x_1,x_2 \geq 0\\
+\end{align*}
+Allora è immediato evincere che
+\begin{align*}
+    &A=\left[1 \hspace{1em} 1\right]\\
+    &b=\left[2\right]\\
+    &c=\left[8 \hspace{1em} 4\right]
+\end{align*}
+Per conoscere $Q$ si deve calcolare
+\[\dfrac{1}{2} \cdot \left[
+    \rowcolors{1}{white}{white}
+    \begin{array}{cc}
+        x_1 & x_2\\
+    \end{array}
+\right] \cdot \left[
+    \rowcolors{1}{white}{white}
+    \begin{array}{cc}
+        q_{1,1} & q_{1,2}\\
+        q_{2,1} & q_{2,2}\\
+    \end{array}
+\right] \cdot \left[
+    \rowcolors{1}{white}{white}
+    \begin{array}{cc}
+        x_1\\
+        x_2
+    \end{array}
+\right] = \dfrac{1}{2} \cdot \left(...continua...\right)\]
+per cui è facile capire che
+\[Q=\left[
+    \rowcolors{1}{white}{white}
+    \begin{array}{cc}
+        2 & 0\\
+        0 & 2\\
+    \end{array}
+\right]\]
+Pertanto le condizioni di Kuhn Tucker divengono
+\[
+    \left\{
+    \rowcolors{1}{white}{white}
+    \begin{array}{l}
+        2x_1 + u - y_2 = 8\\
+        2x_2 + u - y_2 = 4\\
+        x_1+x_2+v=2\\
+        x_1 y_1 + x_2 y_2 + v u = 0\\
+        x,y,u,v \geq 0\\
+    \end{array}
+    \right.
+\]
+Si adotta, ora, il metodo del simplesso, ponendo a $0$ le variabili $x_1,x_2,u$. Si devono, allora, introdurre delle variabili artificiali ai soli vincoli che presentano delle variabili in base negative
+\[
+    \left\{
+    \rowcolors{1}{white}{white}
+    \begin{array}{l}
+        \min z_1+z_2
+        2x_1 + u - y_2 + z_1 = 8\\
+        2x_2 + u - y_2 + z_2 = 4\\
+        x_1+x_2+v=2\\
+        x_1 y_1 + x_2 y_2 + v u = 0\\
+        x,y,u,v,z \geq 0\\
+    \end{array}
+    \right.
+\]
+Con il metodo del simplesso modificato bisogna stare attenti a fare in modo che quando si fa entrare, per esempio, $x_1$ in base, anche $y_1$ non lo sia, altrimenti l'ultima uguaglianza non è più verificata.
+
+\vspace{1em}
+\noindent
+\textbf{Esempio 2}: Si consideri il problema formalizzato come segue
+\begin{align*}
+    &\max f(x) = 20 x_1 - 20 x_1^2 + 50x_2 - 50 x_2 + 18 x_2 x_2\\
+    x_1 + x_2 \leq 6\\
+    x_1 + 4x_2 \leq 18\\
+    x_1, x_2 \geq 0\\
+\end{align*}
+Allora si ha che
+\[A = \left[
+    \rowcolors{1}{white}{white}
+    \begin{array}{cc}
+        1 & 1\\
+        1 & 4\\
+    \end{array}
+\right]
+\]
+mentre
+\[b = \left[
+    \rowcolors{1}{white}{white}
+    \begin{array}{cc}
+        6\\
+        18
+    \end{array}
+\right] \hspace{1em} \text{e} \hspace{1em} c\left[
+    \rowcolors{1}{white}{white}
+    \begin{array}{cc}
+        20\\
+        50
+    \end{array}
+\right]\]
+Per trovare la matrice $Q$ si deve calcolare
+\[\dfrac{1}{2} \cdot \left[
+    \rowcolors{1}{white}{white}
+    \begin{array}{cc}
+        x_1 & x_2\\
+    \end{array}
+\right] \cdot \left[
+    \rowcolors{1}{white}{white}
+    \begin{array}{cc}
+        q_{1,1} & q_{1,2}\\
+        q_{2,1} & q_{2,2}\\
+    \end{array}
+\right] \cdot \left[
+    \rowcolors{1}{white}{white}
+    \begin{array}{cc}
+        x_1\\
+        x_2
+    \end{array}
+\right] = [..continua...]\]
+Essendo $Q$ una matrice quadrata simmetrica, si ottiene
+\[Q=\left[
+    \rowcolors{1}{white}{white}
+    \begin{array}{cc}
+        40  & -18\\
+        -18 & 40
+    \end{array}
+\right]\]
+Allora le condizioni di Kuhn-Tucker divengono:
+\[\left[
+    \rowcolors{1}{white}{white}
+    \begin{array}{cc}
+        40 & -18\\
+        -18 & 40
+    \end{array}
+\right] \cdot \left[
+    \rowcolors{1}{white}{white}
+    \begin{array}{cc}
+        x_1\\
+        x_2
+    \end{array}
+\right] + \left[
+    \rowcolors{1}{white}{white}
+    \begin{array}{cc}
+        1 & 1\\
+        1 & 4
+    \end{array}
+\right] \cdot \left[
+    \rowcolors{1}{white}{white}
+    \begin{array}{cc}
+        u_1\\
+        u_2
+    \end{array}
+\right] - \left[
+    \rowcolors{1}{white}{white}
+    \begin{array}{cc}
+        y_1\\
+        y_2
+    \end{array}
+\right] = \left[
+    \rowcolors{1}{white}{white}
+    \begin{array}{cc}
+        18\\
+        50
+    \end{array}
+\right]\]
+a cui segue
+\[
+    \left[
+    \rowcolors{1}{white}{white}
+    \begin{array}{cc}
+        1 & 1\\
+        1 & 4
+    \end{array}
+    \right] \cdot \left[
+        \rowcolors{1}{white}{white}
+        \begin{array}{cc}
+            x_1\\
+            x_2
+        \end{array}
+    \right] + \left[
+        \rowcolors{1}{white}{white}
+        \begin{array}{cc}
+            v_1\\
+            v_2
+        \end{array}
+    \right] = \left[
+        \rowcolors{1}{white}{white}
+        \begin{array}{cc}
+            6\\
+            18
+        \end{array}
+    \right]
+\]
+Si procederà, allora, alla risoluzione del problema seguente
+\begin{align*}
+    &\min z_1+z_2\\
+    &40x_1 - 18x_2 + u_1 + u_2 - y_1 + z_1=20\\
+    &-18x_1 + 18x_2 + u_1 + 4 u_2 - y_2 + z_2 = 50\\
+    &\lambda_1+x_2+v_1=6\\
+    &x_1+4x_2+v_2=18\\
+    &x_1y_1+v_1u_1+v_2u_2=0\\
+    &x_1,x_2,y_1,y_2,u_1,u_2,v_1,v_2,z_1,z_2\geq 0
+\end{align*}
+Se ora si riesce a minimizzare $z_1+z_2$ tale per cui la loro somma è $0$, una qualsiasi soluzione che soddisfa i vincoli è una soluzione ammissibile.
+
+\newpage
+\section{Ottimizzazione}
+com'è noto, un problema di ottimizzazione del tipo $\min f(x)$ può essere di due tipologie:
+\begin{itemize}
+    \item se $x \in \mathbb{R}^n$ è un problema non vincolato;
+    \item se $x \in S \subseteq \mathbb{R}^n$ è un problema vincolato.
+\end{itemize}
+In tale contesto, un \textbf{problema di programmazione convessa} è un problema di ottimizzazione con una funzione obiettivo $f(x)$ convessa e una regione ammissibile convessa.
+La La programmazione lineare è un caso speciale di programmazione convessa, in quanto essendo la funzione obiettivo lineare, essa è anche convessa; non solo, ma la regione ammissibile è un insieme convesso in quanto intersezione di disuguaglianze lineari.\\
+La \textbf{programmazione quadratica}, invece, è a metà strada tra la programmazione lineare e la programmazione non lineare in quanto la funzione obiettivo è quadratica, mentre i vincoli sono lineari.\\
+
+\vspace{1em}
+\noindent
+\textbf{Osservazione}: se le variabili non sono continue (o reali), si possono distinguere due tipologie di programmazione
+\begin{itemize}
+    \item programmazione intera lineare, in cui la regione ammissibile non è convessa;
+    \item programmazione intera non lineare, per cui la funzione obiettivo è non lineare e/o i vincoli sono non lineari.
+\end{itemize}
+
+\vspace{1em}
+\subsection{Algoritmi di ottimizzazione}
+Al fine di trovare trovare l'ottimo, sono necessari degli algoritmi, i quali, a seconda della precisione con la quale forniscono la soluzione, si dividono in
+\begin{itemize}
+    \item algoritmi esatti, i quali, se il tempo e la memoria sono sufficienti, forniscono sempre la soluzione ottimale, come l'algoritmo del simplesso per la programmazione continua lineare o l'algoritmo B and B per la programmazione intera lineare; è chiaro che un algoritmo esatto potrebbe essere lento, soprattutto per la programmazione lineare;
+    \item algoritmi approssimativi, i quali non è detto forniscano la soluzione ottima, ma è noto l'errore massimo che si può commettere; la loro esecuzione potrebbe essere veloce (una complessità polinomiale) per LP - iterativo (NLP; minimi locali)
+\end{itemize}
+
+
+
+- Euristica
+- Non si sa nemmeno qual è l'errore rispetto all'ottimo
+- Potrebbe essere veloce (polinomiale) per LP - diversi approcci (NLP; minimi locali)
+
+Sappiamo tutto all'inizio?
+- Ottimizzazione deterministica (senza incertezza)
+- Ottimizzazione in condizioni di incertezza - Programmazione stocastica
+- Ottimizzazione robusta
+- Ottimizzazione e apprendimento automatico
+"L'interazione tra ottimizzazione e apprendimento automatico è uno degli sviluppi più importanti della moderna scienza computazionale. Le formulazioni e i metodi di ottimizzazione si stanno rivelando fondamentali nella progettazione di algoritmi per estrarre conoscenze essenziali da enormi volumi di dati."
+(da Optimization for Machine Learning, a cura di Suvrit Sra, Sebastian Nowozin e Stephen J. Wright, 2011)
+
+È tutto qui? NO!
+- Ottimizzazione a obiettivo singolo
+- Ottimizzazione multi-obiettivo (2-4 funzioni obiettivo)
+- Ottimizzazione multi-obiettivo (> 4 funzioni obiettivo)
+- Programmazione stocastica multi-obiettivo per un problema di selezione di un fornitore di tipo misto integrale (M. Ekhtiari e S. Poursafary, 2013)
+
+Classificazione sintetica
+- Funzione obiettivo
+- Singola, multipla, multipla
+- Convesso (lineare), non convesso
+- Regione fattibile
+- NO: non vincolata
+- SÌ: convessa (equazioni lineari), non convessa
+- Variabili: continue, intere (binarie)
+- Parametri: deterministici, incerti (distribuzione prob. nota, ignota)
+- Per ogni problema, è necessario un algoritmo su misura
+- Tempo di calcolo
+- Qualità della soluzione: ottimale globale o locale, approssimativa o euristica
+
+
+Tradotto con www.DeepL.com/Translator (versione gratuita)
+
+
 \end{document} 

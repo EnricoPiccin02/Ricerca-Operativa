@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.27)  28 NOV 2022 16:01
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.27)  5 DEC 2022 15:49
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -710,20 +710,40 @@ File: ./img//problema-programmazione-intera.png Graphic file (type png)
 <use ./img//problema-programmazione-intera.png>
 Package pdftex.def Info: ./img//problema-programmazione-intera.png  used on input line 3663.
 (pdftex.def)             Requested size: 213.39568pt x 171.27489pt.
- [62 <./img//problema-programmazione-intera.png>] [63] [64] [65] [66] [67] [68] [69] [70] [71] [72] [73] [74] [75] [76] [77] (/Users/enricopiccin/Documents/Ricerca Operativa/build/Ricerca Operativa.aux) ) 
+ [62 <./img//problema-programmazione-intera.png>] [63] [64] [65] [66] [67] [68] [69] [70] [71] [72] [73] [74] [75] [76] [77] [78]
+<./img//dimostrazione-khun-tucker-1.png, id=276, 293.095pt x 214.8025pt>
+File: ./img//dimostrazione-khun-tucker-1.png Graphic file (type png)
+<use ./img//dimostrazione-khun-tucker-1.png>
+Package pdftex.def Info: ./img//dimostrazione-khun-tucker-1.png  used on input line 4554.
+(pdftex.def)             Requested size: 213.39568pt x 156.39154pt.
+<./img//dimostrazione-khun-tucker-2.png, id=277, 313.67188pt x 200.24812pt>
+File: ./img//dimostrazione-khun-tucker-2.png Graphic file (type png)
+<use ./img//dimostrazione-khun-tucker-2.png>
+Package pdftex.def Info: ./img//dimostrazione-khun-tucker-2.png  used on input line 4565.
+(pdftex.def)             Requested size: 213.39568pt x 136.2372pt.
+ [79 <./img//dimostrazione-khun-tucker-1.png> <./img//dimostrazione-khun-tucker-2.png>] [80] [81] [82] [83] [84] [85] [86] [87] [88] [89]
+Underfull \hbox (badness 10000) in paragraph at lines 5090--5093
+
+ []
+
+[90] (/Users/enricopiccin/Documents/Ricerca Operativa/build/Ricerca Operativa.aux)
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+ ) 
 Here is how much of TeX's memory you used:
- 45165 strings out of 479719
- 1221702 string characters out of 5880574
- 2281529 words of memory out of 5000000
- 62590 multiletter control sequences out of 15000+600000
+ 45184 strings out of 479719
+ 1222396 string characters out of 5880574
+ 2282547 words of memory out of 5000000
+ 62607 multiletter control sequences out of 15000+600000
  479401 words of font info for 66 fonts, out of 8000000 for 9000
  319 hyphenation exceptions out of 8191
  115i,20n,489p,785b,2721s stack positions out of 10000i,1000n,20000p,200000b,200000s
  </Users/enricopiccin/Library/texlive/2022basic/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmbxti10.pfb></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2022basic/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on "/Users/enricopiccin/Documents/Ricerca Operativa/build/Ricerca Operativa.pdf" (77 pages, 1142385 bytes).
+Output written on "/Users/enricopiccin/Documents/Ricerca Operativa/build/Ricerca Operativa.pdf" (90 pages, 1344252 bytes).
 PDF statistics:
- 350 PDF objects out of 1000 (max. 8388607)
- 228 compressed objects within 3 object streams
+ 395 PDF objects out of 1000 (max. 8388607)
+ 256 compressed objects within 3 object streams
  0 named destinations out of 1000 (max. 500000)
- 27 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 37 words of extra memory for PDF output out of 10000 (max. 10000000)
 
